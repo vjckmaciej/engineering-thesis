@@ -1,0 +1,35 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /user
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+      settings:
+        web-allow-others: true
+  datasource:
+    url: jdbc:h2:mem:testdb
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: true
+
+management:
+  endpoint:
+    health:
+      enabled: 'true'
+  endpoints:
+    enabled-by-default: 'false'
+
+logging:
+  file:
+    path: /
+    name: user_logs.txt
