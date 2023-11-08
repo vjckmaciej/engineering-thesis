@@ -13,6 +13,7 @@
     <module>results-service</module>
     <module>user-service</module>
     <module>visit-service</module>
+    <module>commons</module>
   </modules>
 
   <name>backend</name>
@@ -60,6 +61,17 @@
       <groupId>io.springfox</groupId>
       <artifactId>springfox-boot-starter</artifactId>
       <version>3.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>2.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-models</artifactId>
+      <version>2.2.15</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.mapstruct</groupId>
