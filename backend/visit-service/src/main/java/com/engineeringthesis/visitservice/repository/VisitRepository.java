@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface VisitRepository extends JpaRepository<Visit, Long> {
     Visit save(Visit visit);
 
-    Optional<Visit> findVisitByVisitId(Long visitId);
+    Optional<Visit> findByVisitId(Long visitId);
 
     boolean existsByVisitId(Long visitId);
 
