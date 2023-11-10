@@ -8,14 +8,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PatientRepository extends JpaRepository<Patient, Long>  {
+public interface PatientRepository extends JpaRepository<Patient, Long> {
     Patient save(Patient patient);
 
     Optional<Patient> findByPatientId(Long patientId);
 
+    Optional<Patient> findByPesel(String pesel);
+
     boolean existsByPatientId(Long patientId);
+
+    boolean existsByPesel(String PESEL);
 
     List<Patient> findAll();
 
-    List<Patient> deleteByPatientId(Long patientId);
+    void deleteByPatientId(Long patientId);
+
+    void deleteByPesel(String pesel);
 }

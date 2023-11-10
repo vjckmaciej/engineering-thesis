@@ -7,9 +7,9 @@ import org.mapstruct.Mapping;
 
 @Mapper
 public interface PatientMapper {
-    @Mapping(target = "doctorId", source = "prenatalDoctor.doctorId")
+    @Mapping(target = "doctorId", source = "pregnancyDoctor.doctorId")
     Patient patientDTOToPatient(PatientDTO patientDTO);
 
-    @Mapping(target = "prenatalDoctor.doctorId", source = "doctorId")
+    @Mapping(target = "pregnancyDoctor.doctorId", source = "doctorId")
     PatientDTO patientToPatientDTO(Patient patient);
 }

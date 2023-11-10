@@ -32,9 +32,15 @@ public class Patient {
     private LocalDate birthDate;
 
     @Column
+    private String pesel;
+
+    @Column
     private String phoneNumber;
+
+    @Column(updatable = false)
+    private LocalDate registryDate;
 
     @ManyToOne
     @JoinColumn(name = "doctorId")
-    private Doctor prenatalDoctor;
+    private Doctor pregnancyDoctor;
 }

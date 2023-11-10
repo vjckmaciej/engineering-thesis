@@ -1,9 +1,9 @@
 package com.engineeringthesis.visitservice.controller;
 
+import com.engineeringthesis.commons.model.CrudResponse;
 import com.engineeringthesis.visitservice.dto.VisitDTO;
 import com.engineeringthesis.visitservice.entity.Visit;
 import com.engineeringthesis.visitservice.mapper.VisitMapper;
-import com.engineeringthesis.commons.model.CrudResponse;
 import com.engineeringthesis.visitservice.service.VisitService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

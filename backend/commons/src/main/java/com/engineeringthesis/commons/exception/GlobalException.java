@@ -1,5 +1,6 @@
 package com.engineeringthesis.commons.exception;
 
+import com.engineeringthesis.commons.exception.response.ExceptionResponse;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 

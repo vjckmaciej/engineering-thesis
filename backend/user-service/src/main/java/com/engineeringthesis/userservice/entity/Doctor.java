@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -15,7 +16,7 @@ import java.util.List;
 @Table(name = "DOCTORS")
 public class Doctor {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "doctorId", nullable = false)
     private Long doctorId;
 
@@ -26,8 +27,17 @@ public class Doctor {
     private String lastName;
 
     @Column
+    private LocalDate birthDate;
+
+    @Column
+    private String pesel;
+
+    @Column
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "prenatalDoctor")
+    @Column(updatable = false)
+    private LocalDate registryDate;
+
+    @OneToMany(mappedBy = "pregnancyDoctor")
     private List<Patient> patients;
 }

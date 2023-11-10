@@ -1,4 +1,4 @@
-package com.engineeringthesis.commons.exception;
+package com.engineeringthesis.commons.exception.response;
 
 public enum ExceptionCode {
     DATA_SAVE_001,

@@ -1,5 +1,7 @@
 package com.engineeringthesis.visitservice.entity;
 
+import com.engineeringthesis.userservice.entity.Doctor;
+import com.engineeringthesis.userservice.entity.Patient;
 import com.engineeringthesis.visitservice.model.VisitStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,7 +18,7 @@ import java.time.LocalDateTime;
 @Table(name = "VISITS")
 public class Visit {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "visitId", nullable = false)
     private Long visitId;
 
@@ -28,4 +30,12 @@ public class Visit {
 
     @Column
     private String doctorRecommendations;
+
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
+
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
 }

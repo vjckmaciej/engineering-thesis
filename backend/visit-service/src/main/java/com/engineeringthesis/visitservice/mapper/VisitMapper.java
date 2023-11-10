@@ -4,7 +4,7 @@ import com.engineeringthesis.visitservice.dto.VisitDTO;
 import com.engineeringthesis.visitservice.entity.Visit;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = VisitController.class)
+@Mapper
 public interface VisitMapper {
     Visit visitDTOToVisit(VisitDTO visitDTO);
 
