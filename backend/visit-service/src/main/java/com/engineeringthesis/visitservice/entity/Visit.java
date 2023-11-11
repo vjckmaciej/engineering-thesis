@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Data
@@ -31,9 +32,15 @@ public class Visit {
     @Column
     private VisitStatus visitStatus;
 
+    @Column
+    private String doctorRecommendations;
+
     @Column(name = "doctorId")
     private Long doctorId;
 
     @Column(name = "patientId")
     private Long patientId;
+
+    @ManyToMany(mappedBy = "visits")
+    private List<MedicalExamination> medicalExaminations;
 }
