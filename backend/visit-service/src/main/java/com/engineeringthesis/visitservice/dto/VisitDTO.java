@@ -4,6 +4,7 @@ import com.engineeringthesis.visitservice.model.VisitStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Data
