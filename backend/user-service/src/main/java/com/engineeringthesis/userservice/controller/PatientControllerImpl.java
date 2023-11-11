@@ -31,7 +31,7 @@ public class PatientControllerImpl implements CrudController<PatientDTO> {
         Long patientId = patientDTO.getPatientId();
         log.info("Starting saving Patient with patientId: " + patientId);
         Patient patient = patientMapper.patientDTOToPatient(patientDTO);
-        patient.setRegistryDate(LocalDate.now());
+//        patient.setRegistryDate(LocalDate.now()); //not needed (we have annotation in patient entity class
         patientService.save(patient);
         return ResponseEntity.ok(new CrudResponse(patient.getPatientId(), "Patient added to database!"));
     }

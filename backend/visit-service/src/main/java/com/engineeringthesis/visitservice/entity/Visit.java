@@ -7,7 +7,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 
@@ -25,17 +27,13 @@ public class Visit {
     @Column
     private LocalDateTime visitDate;
 
+    @Enumerated(EnumType.STRING)
     @Column
     private VisitStatus visitStatus;
 
-    @Column
-    private String doctorRecommendations;
+    @Column(name = "doctorId")
+    private Long doctorId;
 
-    @ManyToOne
-    @JoinColumn(name = "patient_id")
-    private Patient patient;
-
-    @ManyToOne
-    @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
+    @Column(name = "patientId")
+    private Long patientId;
 }

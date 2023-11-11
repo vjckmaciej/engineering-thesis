@@ -43,7 +43,7 @@ public class DoctorServiceImpl implements CrudService<Doctor> {
 
     @Override
     public Doctor getById(Long id) {
-        String message = String.format("Doctor with this doctorId: %d doesn't exists in database!", id);
+        String message = String.format("Doctor with this doctorId: %d doesn't exist in database!", id);
 //        return doctorRepository.findByDoctorId(id).orElseThrow(() -> new ObjectDoesNotExistException(message));
         return doctorRepository.findByDoctorId(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, message));
     }
@@ -104,7 +104,7 @@ public class DoctorServiceImpl implements CrudService<Doctor> {
     public void deleteById(Long id) {
         try {
             if (!doctorRepository.existsByDoctorId(id)) {
-                String message = String.format("Cannot delete Doctor with doctorId: %d! Object doesn't exists in database!", id);
+                String message = String.format("Cannot delete Doctor with doctorId: %d! Object doesn't exist in database!", id);
                 //            throw new DeleteException(message);
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, message);
             }
@@ -120,7 +120,7 @@ public class DoctorServiceImpl implements CrudService<Doctor> {
     public void deleteByPesel(String PESEL) {
         try {
             if (!doctorRepository.existsByPesel(PESEL)) {
-                String message = String.format("Cannot delete Doctor with PESEL: %s! Object doesn't exists in database!", PESEL);
+                String message = String.format("Cannot delete Doctor with PESEL: %s! Object doesn't exist in database!", PESEL);
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, message);
             }
             doctorRepository.deleteByPesel(PESEL);

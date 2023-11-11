@@ -11,11 +11,11 @@ spring:
   h2:
     console:
       enabled: true
-      path: /h2
+      path: /h2-users
       settings:
         web-allow-others: true
   datasource:
-    url: jdbc:h2:file:./database/dbFile;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:file:./database/dbFile_users;DB_CLOSE_ON_EXIT=FALSE
   jpa:
     hibernate:
       ddl-auto: update #this configuration doesnt clean database after every restart
