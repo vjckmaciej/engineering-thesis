@@ -41,6 +41,6 @@ public class Visit {
     @Column(name = "patientId")
     private Long patientId;
 
-    @ManyToMany(mappedBy = "visits")
+    @OneToMany(mappedBy = "visit")
     private List<MedicalExamination> medicalExaminations;
 }

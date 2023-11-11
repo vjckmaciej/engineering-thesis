@@ -31,6 +31,7 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         log.info("Starting saving Visit with visitId: " + visitId);
         Visit visit = visitMapper.visitDTOToVisit(visitDTO);
         visit.setVisitStatus(VisitStatus.SCHEDULED);
+        visit.setDoctorRecommendations("There are no any doctor recommendations yet!");
         visitService.save(visit);
         return ResponseEntity.ok(new CrudResponse(visit.getVisitId(), "Visit added to database!"));
     }

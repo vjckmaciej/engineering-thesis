@@ -21,13 +21,9 @@ public class MedicalExamination {
     @Column
     private String medicalExaminationName;
 
-    @ManyToMany
-    @JoinTable(
-            name = "MEDICAL_EXAMINATIONS_VISITS",
-            joinColumns = @JoinColumn(name = "medicalExaminationId"),
-            inverseJoinColumns = @JoinColumn(name = "visitId")
-    )
-    private List<Visit> visits;
+    @ManyToOne
+    @JoinColumn(name = "visitId")
+    private Visit visit;
 
     @OneToMany(mappedBy = "medicalExamination")
     private List<Result> exactResults;
