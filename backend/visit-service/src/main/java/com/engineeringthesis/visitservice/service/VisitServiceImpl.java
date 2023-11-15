@@ -51,6 +51,8 @@ public class VisitServiceImpl implements CrudService<Visit> {
         return visitRepository.findAll();
     }
 
+    public List<Visit> getAllVisitsByPatientPesel(String patientPesel) { return  visitRepository.findAllByPatientPesel(patientPesel); }
+
     @Override
     public void update(Visit visit) {
         Long visitId = visit.getVisitId();
@@ -63,11 +65,11 @@ public class VisitServiceImpl implements CrudService<Visit> {
 
             visit.setVisitId(oldVisit.getVisitId());
 
-            if (visit.getDoctorId() != null && !Objects.equals(visit.getDoctorId(), oldVisit.getDoctorId())) {
-                oldVisit.setDoctorId(visit.getDoctorId());
+            if (visit.getDoctorPesel() != null && !Objects.equals(visit.getDoctorPesel(), oldVisit.getDoctorPesel())) {
+                oldVisit.setDoctorPesel(visit.getDoctorPesel());
             }
-            if (visit.getPatientId() != null && !Objects.equals(visit.getPatientId(), oldVisit.getPatientId())) {
-                oldVisit.setPatientId(visit.getPatientId());
+            if (visit.getPatientPesel() != null && !Objects.equals(visit.getPatientPesel(), oldVisit.getPatientPesel())) {
+                oldVisit.setPatientPesel(visit.getPatientPesel());
             }
 
             if (visit.getVisitDate() != null && !Objects.equals(visit.getVisitDate(), oldVisit.getVisitDate())) {

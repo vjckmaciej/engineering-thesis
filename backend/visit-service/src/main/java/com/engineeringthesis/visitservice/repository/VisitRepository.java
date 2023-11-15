@@ -17,5 +17,7 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
 
     List<Visit> findAll();
 
+    List<Visit> findAllByPatientPesel(String patientPesel);
+
     List<Visit> deleteByVisitId(Long visitId);
 }

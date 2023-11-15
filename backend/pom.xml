@@ -14,6 +14,7 @@
         <module>user-service</module>
         <module>visit-service</module>
         <module>commons</module>
+        <module>openai-analysis-service</module>
     </modules>
 
     <name>backend</name>

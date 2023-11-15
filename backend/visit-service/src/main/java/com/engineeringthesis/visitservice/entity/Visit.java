@@ -34,11 +34,16 @@ public class Visit {
     @Column
     private String doctorRecommendations;
 
-    @Column(name = "doctorId")
-    private Long doctorId;
+//    @Column(name = "doctorId")
+//    private Long doctorId;
+//
+//    @Column(name = "patientId")
+//    private Long patientId;
+    @Column
+    private String doctorPesel;
 
-    @Column(name = "patientId")
-    private Long patientId;
+    @Column
+    private String patientPesel;
 
     @OneToMany(mappedBy = "visit", cascade = CascadeType.ALL)
     private List<MedicalExamination> medicalExaminations;

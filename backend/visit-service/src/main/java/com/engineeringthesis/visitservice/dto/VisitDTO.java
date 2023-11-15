@@ -12,8 +12,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class VisitDTO {
     private Long visitId;
-    private Long patientId;
-    private Long doctorId;
+//    private Long patientId;
+//    private Long doctorId;
+    private String patientPesel;
+    private String doctorPesel;
     private LocalDateTime visitDate;
     private VisitStatus visitStatus;
     private Integer weekOfPregnancy;

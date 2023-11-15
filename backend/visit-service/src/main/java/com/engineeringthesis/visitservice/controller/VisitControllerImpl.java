@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,9 +62,9 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         return ResponseEntity.ok(allVisitDTOS);
     }
 
-    @RequestMapping(path = "/produceReport/{visitId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/produceReportVisitId/{visitId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<VisitResultsReportDTO> generateReportById(@PathVariable Long visitId) {
-        log.info("Starting finding Visit with visitId: " + visitId);
+        log.info("Starting generating report for Visit with visitId: " + visitId);
         Visit visit = visitService.getById(visitId);
         VisitResultsReportDTO visitResultsReportDTO = new VisitResultsReportDTO();
         visitResultsReportDTO.setWeekOfPregnancy(visit.getWeekOfPregnancy());
@@ -80,6 +81,33 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         }
 
         return ResponseEntity.ok(visitResultsReportDTO);
+    }
+
+    @RequestMapping(path = "/produceReportPatientPesel/{patientPesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<VisitResultsReportDTO>> generateReportByPatientPesel(@PathVariable String patientPesel) {
+        log.info("Starting generating report for Visits with patient pesel: " + patientPesel);
+        List<Visit> allVisitsWithGivenPatientPesel = visitService.getAllVisitsByPatientPesel(patientPesel);
+        List<VisitResultsReportDTO> allVisitResultsReportDTO = new ArrayList<>();
+
+        for (Visit visit : allVisitsWithGivenPatientPesel) {
+            VisitResultsReportDTO visitResultsReportDTO = new VisitResultsReportDTO();
+            visitResultsReportDTO.setWeekOfPregnancy(visit.getWeekOfPregnancy());
+            visitResultsReportDTO.setDoctorRecommendations(visit.getDoctorRecommendations());
+            visitResultsReportDTO.setVisitDate(visit.getVisitDate());
+
+            for (MedicalExamination medicalExamination : visit.getMedicalExaminations()) {
+                String medicalExaminationName = medicalExamination.getMedicalExaminationName();
+                List<Result> medicalExaminationResultsGroup = medicalExamination.getExactResults();
+//            List<ResultDTO> medicalExaminationResultsGroupDTO = medicalExaminationResultsGroup.stream().map((resultMapper::resultToResultDTO)).toList();
+                List<ResultsReportDTO> medicalExaminationResultsGroupDTO = medicalExaminationResultsGroup.stream().map((resultMapper::resultToResultsReportDTO)).toList();
+
+                visitResultsReportDTO.getResults().put(medicalExaminationName, medicalExaminationResultsGroupDTO);
+            }
+
+            allVisitResultsReportDTO.add(visitResultsReportDTO);
+        }
+
+        return ResponseEntity.ok(allVisitResultsReportDTO);
     }
 
     @Override

@@ -22,8 +22,10 @@ public class VisitMapperImpl implements VisitMapper {
         visit.setVisitId(visitDTO.getVisitId());
         visit.setVisitDate(visitDTO.getVisitDate());
         visit.setVisitStatus(visitDTO.getVisitStatus());
-        visit.setDoctorId(visitDTO.getDoctorId());
-        visit.setPatientId(visitDTO.getPatientId());
+//        visit.setDoctorId(visitDTO.getDoctorId());
+//        visit.setPatientId(visitDTO.getPatientId());
+        visit.setDoctorPesel(visitDTO.getDoctorPesel());
+        visit.setPatientPesel(visitDTO.getPatientPesel());
         visit.setWeekOfPregnancy(visitDTO.getWeekOfPregnancy());
         visit.setDoctorRecommendations(visitDTO.getDoctorRecommendations());
 
@@ -40,8 +42,10 @@ public class VisitMapperImpl implements VisitMapper {
 
         visitDTO.setVisitId(visit.getVisitId());
         visitDTO.setVisitDate(visit.getVisitDate());
-        visitDTO.setDoctorId(visit.getDoctorId());
-        visitDTO.setPatientId(visit.getPatientId());
+//        visitDTO.setDoctorId(visit.getDoctorId());
+//        visitDTO.setPatientId(visit.getPatientId());
+        visitDTO.setDoctorPesel(visit.getDoctorPesel());
+        visitDTO.setPatientPesel(visit.getPatientPesel());
         visitDTO.setVisitStatus(visit.getVisitStatus());
         visitDTO.setWeekOfPregnancy(visit.getWeekOfPregnancy());
         visitDTO.setDoctorRecommendations(visit.getDoctorRecommendations());
