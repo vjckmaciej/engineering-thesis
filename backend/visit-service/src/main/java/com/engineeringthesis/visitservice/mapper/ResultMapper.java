@@ -1,6 +1,7 @@
 package com.engineeringthesis.visitservice.mapper;
 
 import com.engineeringthesis.visitservice.dto.ResultDTO;
+import com.engineeringthesis.visitservice.dto.ResultsReportDTO;
 import com.engineeringthesis.visitservice.entity.Result;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,4 +14,6 @@ public interface ResultMapper {
 
     @Mapping(target = "medicalExaminationId", source = "result.medicalExamination.medicalExaminationId")
     ResultDTO resultToResultDTO(Result result);
+
+    ResultsReportDTO resultToResultsReportDTO(Result result);
 }

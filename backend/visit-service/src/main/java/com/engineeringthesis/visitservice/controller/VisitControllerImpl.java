@@ -2,8 +2,14 @@ package com.engineeringthesis.visitservice.controller;
 
 import com.engineeringthesis.commons.model.CrudController;
 import com.engineeringthesis.commons.model.CrudResponse;
+import com.engineeringthesis.visitservice.dto.ResultDTO;
+import com.engineeringthesis.visitservice.dto.ResultsReportDTO;
 import com.engineeringthesis.visitservice.dto.VisitDTO;
+import com.engineeringthesis.visitservice.dto.VisitResultsReportDTO;
+import com.engineeringthesis.visitservice.entity.MedicalExamination;
+import com.engineeringthesis.visitservice.entity.Result;
 import com.engineeringthesis.visitservice.entity.Visit;
+import com.engineeringthesis.visitservice.mapper.ResultMapper;
 import com.engineeringthesis.visitservice.mapper.VisitMapper;
 import com.engineeringthesis.visitservice.model.VisitStatus;
 import com.engineeringthesis.visitservice.service.VisitServiceImpl;
@@ -23,6 +29,7 @@ import java.util.stream.Collectors;
 public class VisitControllerImpl implements CrudController<VisitDTO> {
     private final VisitServiceImpl visitService;
     private final VisitMapper visitMapper;
+    private final ResultMapper resultMapper;
 
     @Override
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -52,6 +59,27 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         List<Visit> allVisits = visitService.getAll();
         List<VisitDTO> allVisitDTOS = allVisits.stream().map((visitMapper::visitToVisitDTO)).collect(Collectors.toList());
         return ResponseEntity.ok(allVisitDTOS);
+    }
+
+    @RequestMapping(path = "/produceReport/{visitId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<VisitResultsReportDTO> generateReportById(@PathVariable Long visitId) {
+        log.info("Starting finding Visit with visitId: " + visitId);
+        Visit visit = visitService.getById(visitId);
+        VisitResultsReportDTO visitResultsReportDTO = new VisitResultsReportDTO();
+        visitResultsReportDTO.setWeekOfPregnancy(visit.getWeekOfPregnancy());
+        visitResultsReportDTO.setDoctorRecommendations(visit.getDoctorRecommendations());
+        visitResultsReportDTO.setVisitDate(visit.getVisitDate());
+
+        for (MedicalExamination medicalExamination : visit.getMedicalExaminations()) {
+            String medicalExaminationName = medicalExamination.getMedicalExaminationName();
+            List<Result> medicalExaminationResultsGroup = medicalExamination.getExactResults();
+//            List<ResultDTO> medicalExaminationResultsGroupDTO = medicalExaminationResultsGroup.stream().map((resultMapper::resultToResultDTO)).toList();
+            List<ResultsReportDTO> medicalExaminationResultsGroupDTO = medicalExaminationResultsGroup.stream().map((resultMapper::resultToResultsReportDTO)).toList();
+
+            visitResultsReportDTO.getResults().put(medicalExaminationName, medicalExaminationResultsGroupDTO);
+        }
+
+        return ResponseEntity.ok(visitResultsReportDTO);
     }
 
     @Override

@@ -21,10 +21,13 @@ public class MedicalExamination {
     @Column
     private String medicalExaminationName;
 
+    @Column
+    private Long visitIdReference;
+
     @ManyToOne
     @JoinColumn(name = "visitId")
     private Visit visit;
 
-    @OneToMany(mappedBy = "medicalExamination")
+    @OneToMany(mappedBy = "medicalExamination", cascade = CascadeType.ALL)
     private List<Result> exactResults;
 }

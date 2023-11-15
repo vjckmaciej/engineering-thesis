@@ -1,21 +1,20 @@
 package com.engineeringthesis.visitservice.dto;
 
-import com.engineeringthesis.visitservice.model.VisitStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class VisitDTO {
-    private Long visitId;
-    private Long patientId;
-    private Long doctorId;
+public class VisitResultsReportDTO {
     private LocalDateTime visitDate;
-    private VisitStatus visitStatus;
     private Integer weekOfPregnancy;
+    private Map<String, List<ResultsReportDTO>> results = new HashMap<>();
     private String doctorRecommendations;
 }

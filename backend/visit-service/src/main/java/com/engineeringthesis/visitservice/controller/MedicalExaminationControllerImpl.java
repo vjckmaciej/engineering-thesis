@@ -51,6 +51,14 @@ public class MedicalExaminationControllerImpl implements CrudController<MedicalE
         return ResponseEntity.ok(allMedicalExaminationDTOS);
     }
 
+    @RequestMapping(path = "/filter/{visitId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<MedicalExaminationDTO>> getAllByVisitId(@PathVariable Long visitId) {
+        log.info("Starting getting list of all MedicalExamination objects with given visitId: " + visitId);
+        List<MedicalExamination> allMedicalExaminations = medicalExaminationService.getAllByVisitId(visitId);
+        List<MedicalExaminationDTO> allMedicalExaminationDTOS = allMedicalExaminations.stream().map((medicalExaminationMapper::medicalExaminationToMedicalExaminationDTO)).collect(Collectors.toList());
+        return ResponseEntity.ok(allMedicalExaminationDTOS);
+    }
+
     @Override
     @RequestMapping(method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CrudResponse> update(@RequestBody MedicalExaminationDTO medicalExaminationDTO) {

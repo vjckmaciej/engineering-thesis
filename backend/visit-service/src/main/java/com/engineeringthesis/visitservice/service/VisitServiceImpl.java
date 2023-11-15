@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -62,7 +63,27 @@ public class VisitServiceImpl implements CrudService<Visit> {
 
             visit.setVisitId(oldVisit.getVisitId());
 
-            visitRepository.save(visit);
+            if (visit.getDoctorId() != null && !Objects.equals(visit.getDoctorId(), oldVisit.getDoctorId())) {
+                oldVisit.setDoctorId(visit.getDoctorId());
+            }
+            if (visit.getPatientId() != null && !Objects.equals(visit.getPatientId(), oldVisit.getPatientId())) {
+                oldVisit.setPatientId(visit.getPatientId());
+            }
+
+            if (visit.getVisitDate() != null && !Objects.equals(visit.getVisitDate(), oldVisit.getVisitDate())) {
+                oldVisit.setVisitDate(visit.getVisitDate());
+            }
+            if (visit.getVisitStatus() != null && !Objects.equals(visit.getVisitStatus(), oldVisit.getVisitStatus())) {
+                oldVisit.setVisitStatus(visit.getVisitStatus());
+            }
+            if (visit.getWeekOfPregnancy() != null && !Objects.equals(visit.getWeekOfPregnancy(), oldVisit.getWeekOfPregnancy())) {
+                oldVisit.setWeekOfPregnancy(visit.getWeekOfPregnancy());
+            }
+            if (visit.getDoctorRecommendations() != null && !Objects.equals(visit.getDoctorRecommendations(), oldVisit.getDoctorRecommendations())) {
+                oldVisit.setDoctorRecommendations(visit.getDoctorRecommendations());
+            }
+
+            visitRepository.save(oldVisit);
         } catch (DataAccessException e) {
             log.error(e.getLocalizedMessage());
             String message = String.format("Cannot save Visit with this visitId: %d", visitId);

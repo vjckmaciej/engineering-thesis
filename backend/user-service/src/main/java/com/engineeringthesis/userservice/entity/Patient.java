@@ -21,9 +21,6 @@ public class Patient {
     private Long patientId;
 
     @Column
-    private Integer weekOfPregnancy;
-
-    @Column
     private String firstName;
 
     @Column

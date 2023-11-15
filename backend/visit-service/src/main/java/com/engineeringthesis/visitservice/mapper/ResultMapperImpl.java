@@ -1,6 +1,7 @@
 package com.engineeringthesis.visitservice.mapper;
 
 import com.engineeringthesis.visitservice.dto.ResultDTO;
+import com.engineeringthesis.visitservice.dto.ResultsReportDTO;
 import com.engineeringthesis.visitservice.entity.MedicalExamination;
 import com.engineeringthesis.visitservice.entity.Result;
 import com.engineeringthesis.visitservice.repository.MedicalExaminationRepository;
@@ -66,5 +67,20 @@ public class ResultMapperImpl implements ResultMapper {
         }
 
         return resultDTO;
+    }
+
+    public ResultsReportDTO resultToResultsReportDTO(Result result) {
+        if (result == null) {
+            return null;
+        }
+
+        ResultsReportDTO resultsReportDTO = new ResultsReportDTO();
+
+        resultsReportDTO.setResultName(result.getResultName());
+        resultsReportDTO.setResultDescription(result.getResultDescription());
+        resultsReportDTO.setResultValue(result.getResultValue());
+        resultsReportDTO.setDoctorNote(result.getDoctorNote());
+
+        return resultsReportDTO;
     }
 }

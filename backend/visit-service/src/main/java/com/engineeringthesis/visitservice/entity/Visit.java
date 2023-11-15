@@ -29,6 +29,9 @@ public class Visit {
     private VisitStatus visitStatus;
 
     @Column
+    private Integer weekOfPregnancy;
+
+    @Column
     private String doctorRecommendations;
 
     @Column(name = "doctorId")
@@ -37,6 +40,6 @@ public class Visit {
     @Column(name = "patientId")
     private Long patientId;
 
-    @OneToMany(mappedBy = "visit")
+    @OneToMany(mappedBy = "visit", cascade = CascadeType.ALL)
     private List<MedicalExamination> medicalExaminations;
 }

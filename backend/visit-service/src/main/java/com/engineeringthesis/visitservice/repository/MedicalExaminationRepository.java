@@ -17,5 +17,7 @@ public interface MedicalExaminationRepository extends JpaRepository<MedicalExami
 
     List<MedicalExamination> findAll();
 
+    Optional<List<MedicalExamination>> findAllByVisitIdReference(Long visitId);
+
     List<MedicalExamination> deleteByMedicalExaminationId(Long medicalExaminationId);
 }

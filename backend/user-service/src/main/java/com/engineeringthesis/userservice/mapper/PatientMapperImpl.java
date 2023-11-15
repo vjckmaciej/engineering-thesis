@@ -27,7 +27,6 @@ public class PatientMapperImpl implements PatientMapper {
         Patient patient = new Patient();
 
         patient.setPatientId(patientDTO.getPatientId());
-        patient.setWeekOfPregnancy(patientDTO.getWeekOfPregnancy());
         patient.setFirstName(patientDTO.getFirstName());
         patient.setLastName(patientDTO.getLastName());
         patient.setBirthDate(patientDTO.getBirthDate());
@@ -59,7 +58,6 @@ public class PatientMapperImpl implements PatientMapper {
         PatientDTO patientDTO = new PatientDTO();
 
         patientDTO.setPatientId(patient.getPatientId());
-        patientDTO.setWeekOfPregnancy(patient.getWeekOfPregnancy());
         patientDTO.setFirstName(patient.getFirstName());
         patientDTO.setLastName(patient.getLastName());
         patientDTO.setBirthDate(patient.getBirthDate());

@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class PatientDTO {
     private Long patientId;
-    private Integer weekOfPregnancy;
     private String firstName;
     private String lastName;
     private LocalDate birthDate;

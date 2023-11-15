@@ -34,6 +34,7 @@ public class MedicalExaminationMapperImpl implements MedicalExaminationMapper {
             if (optionalVisit.isPresent()) {
                 Visit visit = optionalVisit.get();
                 medicalExamination.setVisit(visit);
+                medicalExamination.setVisitIdReference(medicalExaminationDTO.getVisitId());
             } else {
                 String message = String.format("Visit with given visitId: %d doesn't exist in database!", medicalExaminationDTO.getVisitId());
                 log.error(message);
