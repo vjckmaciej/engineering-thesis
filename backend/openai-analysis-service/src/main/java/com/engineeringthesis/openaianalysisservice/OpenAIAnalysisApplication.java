@@ -9,4 +9,5 @@ public class OpenAIAnalysisApplication {
         SpringApplication.run(OpenAIAnalysisApplication.class, args);
     }
 
+
 }
