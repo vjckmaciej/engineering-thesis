@@ -1,7 +1,5 @@
 server:
   port: 8083
-  servlet:
-    context-path: /openai
 
 springdoc:
   swagger-ui:
@@ -33,3 +31,6 @@ logging:
   file:
     path: /
     name: openai_analysis_logs.txt
+
+OPEN_AI_URL: "https://api.openai.com/v1/completions"
+OPEN_AI_KEY: "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"
