@@ -3,7 +3,7 @@ package com.engineeringthesis.userservice.controller;
 import com.engineeringthesis.commons.model.CrudController;
 import com.engineeringthesis.commons.model.CrudPESELResponse;
 import com.engineeringthesis.commons.model.CrudResponse;
-import com.engineeringthesis.userservice.dto.PatientDTO;
+import com.engineeringthesis.commons.dto.user.PatientDTO;
 import com.engineeringthesis.userservice.entity.Patient;
 import com.engineeringthesis.userservice.mapper.PatientMapper;
 import com.engineeringthesis.userservice.service.PatientServiceImpl;

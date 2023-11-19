@@ -5,6 +5,7 @@ import com.engineeringthesis.commons.exception.DeleteException;
 import com.engineeringthesis.commons.model.CrudService;
 import com.engineeringthesis.visitservice.entity.Result;
 import com.engineeringthesis.visitservice.repository.ResultRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -69,6 +70,7 @@ public class ResultServiceImpl implements CrudService<Result> {
         }
     }
 
+    @Transactional
     @Override
     public void deleteById(Long id) {
         try {

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping(path = "/result")
-public class ResultController implements CrudController<ResultDTO> {
+public class ResultControllerImpl implements CrudController<ResultDTO> {
     private final ResultServiceImpl resultService;
     private final ResultMapper resultMapper;
 

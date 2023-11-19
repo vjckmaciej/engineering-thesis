@@ -2,7 +2,6 @@ package com.engineeringthesis.visitservice.controller;
 
 import com.engineeringthesis.commons.model.CrudController;
 import com.engineeringthesis.commons.model.CrudResponse;
-import com.engineeringthesis.visitservice.dto.ResultDTO;
 import com.engineeringthesis.visitservice.dto.ResultsReportDTO;
 import com.engineeringthesis.visitservice.dto.VisitDTO;
 import com.engineeringthesis.visitservice.dto.VisitResultsReportDTO;
@@ -83,7 +82,7 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         return ResponseEntity.ok(visitResultsReportDTO);
     }
 
-    @RequestMapping(path = "/produceReportPatientPesel/{patientPesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/generateReportPatientPesel/{patientPesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<VisitResultsReportDTO>> generateReportByPatientPesel(@PathVariable String patientPesel) {
         log.info("Starting generating report for Visits with patient pesel: " + patientPesel);
         List<Visit> allVisitsWithGivenPatientPesel = visitService.getAllVisitsByPatientPesel(patientPesel);

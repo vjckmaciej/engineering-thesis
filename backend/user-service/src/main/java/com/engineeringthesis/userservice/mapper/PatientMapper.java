@@ -1,6 +1,6 @@
 package com.engineeringthesis.userservice.mapper;
 
-import com.engineeringthesis.userservice.dto.PatientDTO;
+import com.engineeringthesis.commons.dto.user.PatientDTO;
 import com.engineeringthesis.userservice.entity.Patient;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

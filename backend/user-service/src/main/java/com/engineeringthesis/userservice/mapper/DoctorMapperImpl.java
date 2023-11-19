@@ -1,7 +1,7 @@
 package com.engineeringthesis.userservice.mapper;
 
 
-import com.engineeringthesis.userservice.dto.DoctorDTO;
+import com.engineeringthesis.commons.dto.user.DoctorDTO;
 import com.engineeringthesis.userservice.entity.Doctor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

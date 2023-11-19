@@ -1,4 +1,4 @@
-package com.engineeringthesis.userservice.dto;
+package com.engineeringthesis.commons.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,12 +9,11 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PatientDTO {
-    private Long patientId;
+public class DoctorDTO {
+    private Long doctorId;
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
     private String pesel;
     private String phoneNumber;
-    private Long doctorId;
 }
