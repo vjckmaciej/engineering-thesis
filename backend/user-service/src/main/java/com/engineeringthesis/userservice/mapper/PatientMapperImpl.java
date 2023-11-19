@@ -30,6 +30,7 @@ public class PatientMapperImpl implements PatientMapper {
         patient.setFirstName(patientDTO.getFirstName());
         patient.setLastName(patientDTO.getLastName());
         patient.setBirthDate(patientDTO.getBirthDate());
+        patient.setPregnancyStartDate(patientDTO.getPregnancyStartDate());
         patient.setPesel(patientDTO.getPesel());
         patient.setPhoneNumber(patientDTO.getPhoneNumber());
 
@@ -61,6 +62,7 @@ public class PatientMapperImpl implements PatientMapper {
         patientDTO.setFirstName(patient.getFirstName());
         patientDTO.setLastName(patient.getLastName());
         patientDTO.setBirthDate(patient.getBirthDate());
+        patientDTO.setPregnancyStartDate(patient.getPregnancyStartDate());
         patientDTO.setPesel(patient.getPesel());
         patientDTO.setPhoneNumber(patient.getPhoneNumber());
 

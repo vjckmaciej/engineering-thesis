@@ -30,6 +30,9 @@ public class Patient {
     private LocalDate birthDate;
 
     @Column
+    private LocalDate pregnancyStartDate;
+
+    @Column
     private String pesel;
 
     @Column

@@ -61,7 +61,23 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         return ResponseEntity.ok(allVisitDTOS);
     }
 
-    @RequestMapping(path = "/produceReportVisitId/{visitId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/plannedVisits/{patientPesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<VisitDTO>> getAllPlannedVisits(@PathVariable String patientPesel) {
+        log.info("Starting getting list of all Visit objects");
+        List<Visit> allVisits = visitService.getAllVisitsByPatientPesel(patientPesel);
+        List<Visit> allPlannedVisits = new ArrayList<>();
+
+        for (Visit visit : allVisits) {
+            if (visit.getVisitStatus().equals(VisitStatus.SCHEDULED)) {
+                allPlannedVisits.add(visit);
+            }
+        }
+
+        List<VisitDTO> allPlannedVisitDTOS = allPlannedVisits.stream().map((visitMapper::visitToVisitDTO)).collect(Collectors.toList());
+        return ResponseEntity.ok(allPlannedVisitDTOS);
+    }
+
+    @RequestMapping(path = "/generateReportVisitId/{visitId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<VisitResultsReportDTO> generateReportById(@PathVariable Long visitId) {
         log.info("Starting generating report for Visit with visitId: " + visitId);
         Visit visit = visitService.getById(visitId);
@@ -73,7 +89,6 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         for (MedicalExamination medicalExamination : visit.getMedicalExaminations()) {
             String medicalExaminationName = medicalExamination.getMedicalExaminationName();
             List<Result> medicalExaminationResultsGroup = medicalExamination.getExactResults();
-//            List<ResultDTO> medicalExaminationResultsGroupDTO = medicalExaminationResultsGroup.stream().map((resultMapper::resultToResultDTO)).toList();
             List<ResultsReportDTO> medicalExaminationResultsGroupDTO = medicalExaminationResultsGroup.stream().map((resultMapper::resultToResultsReportDTO)).toList();
 
             visitResultsReportDTO.getResults().put(medicalExaminationName, medicalExaminationResultsGroupDTO);

@@ -13,7 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +60,13 @@ public class PatientServiceImpl implements CrudService<Patient> {
     @Override
     public List<Patient> getAll() {
         return patientRepository.findAll();
+    }
+
+    public Integer getPregnancyWeekByPesel(String pesel) {
+        String message = String.format("Patient with this PESEL: %s doesn't exist in database!", pesel);
+        Patient optionalPatient = patientRepository.findByPesel(pesel).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, message));
+        log.info("zaraz to oblicze");
+        return Math.toIntExact(ChronoUnit.WEEKS.between(optionalPatient.getPregnancyStartDate(), LocalDate.now()));
     }
 
     @Override
