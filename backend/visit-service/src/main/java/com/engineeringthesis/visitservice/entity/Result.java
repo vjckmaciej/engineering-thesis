@@ -23,7 +23,13 @@ public class Result {
     private String resultDescription;
 
     @Column
-    private Integer resultValue;
+    private Integer numericalResult;
+
+    @Column
+    private String unit;
+
+    @Column
+    private String descriptiveResult;
 
     @Column
     private String doctorNote;

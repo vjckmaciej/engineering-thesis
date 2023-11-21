@@ -2,18 +2,20 @@ package com.engineeringthesis.visitservice.controller;
 
 import com.engineeringthesis.commons.model.CrudController;
 import com.engineeringthesis.commons.model.CrudResponse;
-import com.engineeringthesis.visitservice.dto.ResultsReportDTO;
-import com.engineeringthesis.visitservice.dto.VisitDTO;
-import com.engineeringthesis.visitservice.dto.VisitResultsReportDTO;
+import com.engineeringthesis.commons.dto.visit.ResultsReportDTO;
+import com.engineeringthesis.commons.dto.visit.VisitDTO;
+import com.engineeringthesis.commons.dto.visit.VisitResultsReportDTO;
+import com.engineeringthesis.visitservice.client.OpenAIClient;
 import com.engineeringthesis.visitservice.entity.MedicalExamination;
 import com.engineeringthesis.visitservice.entity.Result;
 import com.engineeringthesis.visitservice.entity.Visit;
 import com.engineeringthesis.visitservice.mapper.ResultMapper;
 import com.engineeringthesis.visitservice.mapper.VisitMapper;
-import com.engineeringthesis.visitservice.model.VisitStatus;
+import com.engineeringthesis.commons.model.visit.VisitStatus;
 import com.engineeringthesis.visitservice.service.VisitServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +32,9 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
     private final VisitServiceImpl visitService;
     private final VisitMapper visitMapper;
     private final ResultMapper resultMapper;
+
+    @Autowired
+    private OpenAIClient openAIClient;
 
     @Override
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -106,6 +111,7 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         for (Visit visit : allVisitsWithGivenPatientPesel) {
             VisitResultsReportDTO visitResultsReportDTO = new VisitResultsReportDTO();
             visitResultsReportDTO.setWeekOfPregnancy(visit.getWeekOfPregnancy());
+            visitResultsReportDTO.setWomanAge(visit.getWomanAge());
             visitResultsReportDTO.setDoctorRecommendations(visit.getDoctorRecommendations());
             visitResultsReportDTO.setVisitDate(visit.getVisitDate());
 
@@ -122,6 +128,25 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         }
 
         return ResponseEntity.ok(allVisitResultsReportDTO);
+    }
+
+    @RequestMapping(path = "/analyzeReportsByPesel/{pesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String analyzeReportByOpenAI(@PathVariable String pesel) {
+        log.info("Starting analyzing report with OpenAI for PESEL: " + pesel);
+        List<VisitResultsReportDTO> visitResultsReportDTOS = generateReportByPatientPesel(pesel).getBody();
+        StringBuilder resultStringBuilder = new StringBuilder();
+
+        for (VisitResultsReportDTO reportDTO : visitResultsReportDTOS) {
+            resultStringBuilder.append(reportDTO.toString()).append("\n");
+        }
+
+
+        String visitResultReportString = resultStringBuilder.toString();
+        log.info("visitResultReportString: " + visitResultReportString);
+        String response = openAIClient.analyzeReport(visitResultReportString);
+        log.info("Response: " + response);
+
+        return response;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.engineeringthesis.visitservice.entity;
 
-import com.engineeringthesis.visitservice.model.VisitStatus;
+import com.engineeringthesis.commons.model.visit.VisitStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,6 +30,9 @@ public class Visit {
 
     @Column
     private Integer weekOfPregnancy;
+
+    @Column
+    private Integer womanAge;
 
     @Column
     private String doctorRecommendations;

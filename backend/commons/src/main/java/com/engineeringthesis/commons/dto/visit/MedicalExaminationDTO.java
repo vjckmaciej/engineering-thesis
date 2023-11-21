@@ -1,4 +1,4 @@
-package com.engineeringthesis.visitservice.dto;
+package com.engineeringthesis.commons.dto.visit;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.engineeringthesis.visitservice.dto;
+package com.engineeringthesis.commons.dto.visit;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +11,9 @@ public class ResultDTO {
     private Long resultId;
     private String resultName;
     private String resultDescription;
-    private Integer resultValue;
+    private Integer numericalResult;
+    private String unit;
+    private String descriptiveResult;
     private String doctorNote;
     private Long medicalExaminationId;
 }

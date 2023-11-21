@@ -1,7 +1,7 @@
 package com.engineeringthesis.visitservice.mapper;
 
-import com.engineeringthesis.visitservice.dto.ResultDTO;
-import com.engineeringthesis.visitservice.dto.ResultsReportDTO;
+import com.engineeringthesis.commons.dto.visit.ResultDTO;
+import com.engineeringthesis.commons.dto.visit.ResultsReportDTO;
 import com.engineeringthesis.visitservice.entity.Result;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

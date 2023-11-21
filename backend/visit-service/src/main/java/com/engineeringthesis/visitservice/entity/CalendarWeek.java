@@ -1,4 +1,4 @@
-package com.engineeringthesis.calendardietplanservice.entity;
+package com.engineeringthesis.visitservice.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

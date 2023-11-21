@@ -1,6 +1,6 @@
-package com.engineeringthesis.visitservice.dto;
+package com.engineeringthesis.commons.dto.visit;
 
-import com.engineeringthesis.visitservice.model.VisitStatus;
+import com.engineeringthesis.commons.model.visit.VisitStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,5 +19,6 @@ public class VisitDTO {
     private LocalDateTime visitDate;
     private VisitStatus visitStatus;
     private Integer weekOfPregnancy;
+    private Integer womanAge;
     private String doctorRecommendations;
 }

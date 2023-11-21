@@ -1,4 +1,4 @@
-package com.engineeringthesis.visitservice.model;
+package com.engineeringthesis.commons.model.visit;
 
 public enum VisitStatus {
     SCHEDULED, //The visit has been scheduled but has not yet started.

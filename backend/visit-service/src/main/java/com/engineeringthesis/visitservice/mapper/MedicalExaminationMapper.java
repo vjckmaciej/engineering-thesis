@@ -1,6 +1,6 @@
 package com.engineeringthesis.visitservice.mapper;
 
-import com.engineeringthesis.visitservice.dto.MedicalExaminationDTO;
+import com.engineeringthesis.commons.dto.visit.MedicalExaminationDTO;
 import com.engineeringthesis.visitservice.entity.MedicalExamination;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

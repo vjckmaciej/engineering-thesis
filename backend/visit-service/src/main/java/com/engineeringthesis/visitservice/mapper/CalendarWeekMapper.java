@@ -1,6 +1,6 @@
-package com.engineeringthesis.calendardietplanservice.mapper;
+package com.engineeringthesis.visitservice.mapper;
 
-import com.engineeringthesis.calendardietplanservice.entity.CalendarWeek;
+import com.engineeringthesis.visitservice.entity.CalendarWeek;
 import com.engineeringthesis.commons.dto.calendardietplan.CalendarWeekDTO;
 import org.mapstruct.Mapper;
 

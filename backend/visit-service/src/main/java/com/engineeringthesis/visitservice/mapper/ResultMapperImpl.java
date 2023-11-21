@@ -1,7 +1,7 @@
 package com.engineeringthesis.visitservice.mapper;
 
-import com.engineeringthesis.visitservice.dto.ResultDTO;
-import com.engineeringthesis.visitservice.dto.ResultsReportDTO;
+import com.engineeringthesis.commons.dto.visit.ResultDTO;
+import com.engineeringthesis.commons.dto.visit.ResultsReportDTO;
 import com.engineeringthesis.visitservice.entity.MedicalExamination;
 import com.engineeringthesis.visitservice.entity.Result;
 import com.engineeringthesis.visitservice.repository.MedicalExaminationRepository;
@@ -30,7 +30,9 @@ public class ResultMapperImpl implements ResultMapper {
         result.setResultId(resultDTO.getResultId());
         result.setResultName(resultDTO.getResultName());
         result.setResultDescription(resultDTO.getResultDescription());
-        result.setResultValue(resultDTO.getResultValue());
+        result.setNumericalResult(resultDTO.getNumericalResult());
+        result.setUnit(resultDTO.getUnit());
+        result.setDescriptiveResult(resultDTO.getDescriptiveResult());
         result.setDoctorNote(resultDTO.getDoctorNote());
 
         if (resultDTO.getMedicalExaminationId() != null) {
@@ -59,7 +61,9 @@ public class ResultMapperImpl implements ResultMapper {
         resultDTO.setResultId(result.getResultId());
         resultDTO.setResultName(result.getResultName());
         resultDTO.setResultDescription(result.getResultDescription());
-        resultDTO.setResultValue(result.getResultValue());
+        resultDTO.setNumericalResult(result.getNumericalResult());
+        resultDTO.setUnit(result.getUnit());
+        resultDTO.setDescriptiveResult(result.getDescriptiveResult());
         resultDTO.setDoctorNote(result.getDoctorNote());
 
         if (result.getMedicalExamination() != null) {
@@ -78,7 +82,9 @@ public class ResultMapperImpl implements ResultMapper {
 
         resultsReportDTO.setResultName(result.getResultName());
         resultsReportDTO.setResultDescription(result.getResultDescription());
-        resultsReportDTO.setResultValue(result.getResultValue());
+        resultsReportDTO.setNumericalResult(result.getNumericalResult());
+        resultsReportDTO.setUnit(result.getUnit());
+        resultsReportDTO.setDescriptiveResult(result.getDescriptiveResult());
         resultsReportDTO.setDoctorNote(result.getDoctorNote());
 
         return resultsReportDTO;

@@ -15,7 +15,6 @@
         <module>commons</module>
         <module>openai-analysis-service</module>
         <module>forum-service</module>
-        <module>calendar-diet-plan-service</module>
     </modules>
 
     <name>backend</name>

@@ -20,7 +20,7 @@ public class OpenAIAnalysisControllerImpl {
     public String analyzeReport(@RequestBody String query) {
         QueryRequest queryRequest = new QueryRequest();
         queryRequest.setQuery(
-                "Proszę przeanalizować raporty z wizyt kobiety u ginekologa i ocenić ryzyko ciąży na podstawie podanych raportów z wizyt:"
+                "Prosze przeanalizowac raporty z wizyt kobiety u ginekologa i ocenic ryzyko zagrozenia ciazy na podstawie podanych raportow z wizyt:"
                 + query);
 
         log.info("Starting query: " + queryRequest.getQuery());

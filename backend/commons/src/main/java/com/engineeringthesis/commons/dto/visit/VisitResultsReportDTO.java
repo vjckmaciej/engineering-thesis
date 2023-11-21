@@ -1,4 +1,4 @@
-package com.engineeringthesis.visitservice.dto;
+package com.engineeringthesis.commons.dto.visit;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +15,7 @@ import java.util.Map;
 public class VisitResultsReportDTO {
     private LocalDateTime visitDate;
     private Integer weekOfPregnancy;
+    private Integer womanAge;
     private Map<String, List<ResultsReportDTO>> results = new HashMap<>();
     private String doctorRecommendations;
 }

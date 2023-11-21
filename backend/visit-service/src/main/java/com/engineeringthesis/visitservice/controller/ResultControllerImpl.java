@@ -2,7 +2,7 @@ package com.engineeringthesis.visitservice.controller;
 
 import com.engineeringthesis.commons.model.CrudController;
 import com.engineeringthesis.commons.model.CrudResponse;
-import com.engineeringthesis.visitservice.dto.ResultDTO;
+import com.engineeringthesis.commons.dto.visit.ResultDTO;
 import com.engineeringthesis.visitservice.entity.Result;
 import com.engineeringthesis.visitservice.mapper.ResultMapper;
 import com.engineeringthesis.visitservice.service.ResultServiceImpl;

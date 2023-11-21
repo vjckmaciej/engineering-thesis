@@ -1,9 +1,9 @@
-package com.engineeringthesis.calendardietplanservice.controller;
+package com.engineeringthesis.visitservice.controller;
 
-import com.engineeringthesis.calendardietplanservice.client.UserServiceClient;
-import com.engineeringthesis.calendardietplanservice.entity.CalendarWeek;
-import com.engineeringthesis.calendardietplanservice.mapper.CalendarWeekMapper;
-import com.engineeringthesis.calendardietplanservice.service.CalendarWeekServiceImpl;
+import com.engineeringthesis.visitservice.client.UserServiceClient;
+import com.engineeringthesis.visitservice.entity.CalendarWeek;
+import com.engineeringthesis.visitservice.mapper.CalendarWeekMapper;
+import com.engineeringthesis.visitservice.service.CalendarWeekServiceImpl;
 import com.engineeringthesis.commons.dto.calendardietplan.CalendarWeekDTO;
 import com.engineeringthesis.commons.model.CrudController;
 import com.engineeringthesis.commons.model.CrudResponse;
@@ -52,9 +52,12 @@ public class CalendarWeekControllerImpl implements CrudController<CalendarWeekDT
     }
 
     @RequestMapping(path = "/pesel/{pesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Integer getCalendarWeekByPesel(@PathVariable String pesel) {
+    public ResponseEntity<CalendarWeekDTO> getCalendarWeekByPesel(@PathVariable String pesel) {
         log.info("Starting getting pregnancy week for Patient with PESEL: " + pesel);
-        return userServiceClient.getPregnancyWeekByPesel(pesel);
+        Integer pregnancyWeek = userServiceClient.getPregnancyWeekByPesel(pesel);
+        CalendarWeek calendarWeek = calendarWeekService.findCalendarWeekByPregnancyWeek(pregnancyWeek);
+        CalendarWeekDTO calendarWeekDTO = calendarWeekMapper.calendarWeekToCalendarWeekDTO(calendarWeek);
+        return ResponseEntity.ok(calendarWeekDTO);
     }
 
     @Override

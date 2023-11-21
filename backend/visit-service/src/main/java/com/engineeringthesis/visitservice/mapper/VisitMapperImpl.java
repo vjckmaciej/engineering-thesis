@@ -1,6 +1,6 @@
 package com.engineeringthesis.visitservice.mapper;
 
-import com.engineeringthesis.visitservice.dto.VisitDTO;
+import com.engineeringthesis.commons.dto.visit.VisitDTO;
 import com.engineeringthesis.visitservice.entity.Visit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
