@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -80,7 +81,35 @@ public class PatientServiceImpl implements CrudService<Patient> {
 
             patient.setPatientId(oldPatient.getPatientId());
 
-            patientRepository.save(patient);
+            if (patient.getFirstName() != null && !Objects.equals(patient.getFirstName(), oldPatient.getFirstName())) {
+                oldPatient.setFirstName(patient.getFirstName());
+            }
+
+            if (patient.getLastName() != null && !Objects.equals(patient.getLastName(), oldPatient.getLastName())) {
+                oldPatient.setLastName(patient.getLastName());
+            }
+
+            if (patient.getBirthDate() != null && !Objects.equals(patient.getBirthDate(), oldPatient.getBirthDate())) {
+                oldPatient.setBirthDate(patient.getBirthDate());
+            }
+
+            if (patient.getPregnancyStartDate() != null && !Objects.equals(patient.getPregnancyStartDate(), oldPatient.getPregnancyStartDate())) {
+                oldPatient.setPregnancyStartDate(patient.getPregnancyStartDate());
+            }
+
+            if (patient.getPesel() != null && !Objects.equals(patient.getPesel(), oldPatient.getPesel())) {
+                oldPatient.setPesel(patient.getPesel());
+            }
+
+            if (patient.getPhoneNumber() != null && !Objects.equals(patient.getPhoneNumber(), oldPatient.getPhoneNumber())) {
+                oldPatient.setPhoneNumber(patient.getPhoneNumber());
+            }
+
+            if (patient.getPregnancyDoctor() != null && !Objects.equals(patient.getPregnancyDoctor(), oldPatient.getPregnancyDoctor())) {
+                oldPatient.setPregnancyDoctor(patient.getPregnancyDoctor());
+            }
+
+            patientRepository.save(oldPatient);
         } catch (DataAccessException e) {
             log.error(e.getLocalizedMessage());
             String message = String.format("Cannot save Patient with this patientId: %d", patientId);
@@ -99,7 +128,35 @@ public class PatientServiceImpl implements CrudService<Patient> {
 
             patient.setPatientId(oldPatient.getPatientId());
 
-            patientRepository.save(patient);
+            if (patient.getFirstName() != null && !Objects.equals(patient.getFirstName(), oldPatient.getFirstName())) {
+                oldPatient.setFirstName(patient.getFirstName());
+            }
+
+            if (patient.getLastName() != null && !Objects.equals(patient.getLastName(), oldPatient.getLastName())) {
+                oldPatient.setLastName(patient.getLastName());
+            }
+
+            if (patient.getBirthDate() != null && !Objects.equals(patient.getBirthDate(), oldPatient.getBirthDate())) {
+                oldPatient.setBirthDate(patient.getBirthDate());
+            }
+
+            if (patient.getPregnancyStartDate() != null && !Objects.equals(patient.getPregnancyStartDate(), oldPatient.getPregnancyStartDate())) {
+                oldPatient.setPregnancyStartDate(patient.getPregnancyStartDate());
+            }
+
+            if (patient.getPesel() != null && !Objects.equals(patient.getPesel(), oldPatient.getPesel())) {
+                oldPatient.setPesel(patient.getPesel());
+            }
+
+            if (patient.getPhoneNumber() != null && !Objects.equals(patient.getPhoneNumber(), oldPatient.getPhoneNumber())) {
+                oldPatient.setPhoneNumber(patient.getPhoneNumber());
+            }
+
+            if (patient.getPregnancyDoctor() != null && !Objects.equals(patient.getPregnancyDoctor(), oldPatient.getPregnancyDoctor())) {
+                oldPatient.setPregnancyDoctor(patient.getPregnancyDoctor());
+            }
+
+            patientRepository.save(oldPatient);
         } catch (DataAccessException e) {
             log.error(e.getLocalizedMessage());
             String message = String.format("Cannot save Patient with this PESEL: %s", pesel);

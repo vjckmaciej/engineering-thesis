@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -72,7 +73,28 @@ public class DoctorServiceImpl implements CrudService<Doctor> {
 
             doctor.setDoctorId(oldDoctor.getDoctorId());
 
-            doctorRepository.save(doctor);
+            if (doctor.getFirstName() != null && !Objects.equals(doctor.getFirstName(), oldDoctor.getFirstName())) {
+                oldDoctor.setFirstName(doctor.getFirstName());
+            }
+
+            if (doctor.getLastName() != null && !Objects.equals(doctor.getLastName(), oldDoctor.getLastName())) {
+                oldDoctor.setLastName(doctor.getLastName());
+            }
+
+            if (doctor.getBirthDate() != null && !Objects.equals(doctor.getBirthDate(), oldDoctor.getBirthDate())) {
+                oldDoctor.setBirthDate(doctor.getBirthDate());
+            }
+
+            if (doctor.getPesel() != null && !Objects.equals(doctor.getPesel(), oldDoctor.getPesel())) {
+                oldDoctor.setPesel(doctor.getPesel());
+            }
+
+            if (doctor.getPhoneNumber() != null && !Objects.equals(doctor.getPhoneNumber(), oldDoctor.getPhoneNumber())) {
+                oldDoctor.setPhoneNumber(doctor.getPhoneNumber());
+            }
+
+
+            doctorRepository.save(oldDoctor);
         } catch (DataAccessException e) {
             log.error(e.getLocalizedMessage());
             String message = String.format("Cannot save Doctor with this doctorId: %d", doctorId);
@@ -91,7 +113,27 @@ public class DoctorServiceImpl implements CrudService<Doctor> {
 
             doctor.setDoctorId(oldDoctor.getDoctorId());
 
-            doctorRepository.save(doctor);
+            if (doctor.getFirstName() != null && !Objects.equals(doctor.getFirstName(), oldDoctor.getFirstName())) {
+                oldDoctor.setFirstName(doctor.getFirstName());
+            }
+
+            if (doctor.getLastName() != null && !Objects.equals(doctor.getLastName(), oldDoctor.getLastName())) {
+                oldDoctor.setLastName(doctor.getLastName());
+            }
+
+            if (doctor.getBirthDate() != null && !Objects.equals(doctor.getBirthDate(), oldDoctor.getBirthDate())) {
+                oldDoctor.setBirthDate(doctor.getBirthDate());
+            }
+
+            if (doctor.getPesel() != null && !Objects.equals(doctor.getPesel(), oldDoctor.getPesel())) {
+                oldDoctor.setPesel(doctor.getPesel());
+            }
+
+            if (doctor.getPhoneNumber() != null && !Objects.equals(doctor.getPhoneNumber(), oldDoctor.getPhoneNumber())) {
+                oldDoctor.setPhoneNumber(doctor.getPhoneNumber());
+            }
+
+            doctorRepository.save(oldDoctor);
         } catch (DataAccessException e) {
             log.error(e.getLocalizedMessage());
             String message = String.format("Cannot save Doctor with this PESEL: %s", pesel);
