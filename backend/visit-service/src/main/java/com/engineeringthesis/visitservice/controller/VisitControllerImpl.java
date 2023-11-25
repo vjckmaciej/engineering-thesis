@@ -1,11 +1,13 @@
 package com.engineeringthesis.visitservice.controller;
 
+import com.engineeringthesis.commons.dto.user.PatientDTO;
 import com.engineeringthesis.commons.model.CrudController;
 import com.engineeringthesis.commons.model.CrudResponse;
 import com.engineeringthesis.commons.dto.visit.ResultsReportDTO;
 import com.engineeringthesis.commons.dto.visit.VisitDTO;
 import com.engineeringthesis.commons.dto.visit.VisitResultsReportDTO;
 import com.engineeringthesis.visitservice.client.OpenAIClient;
+import com.engineeringthesis.visitservice.client.UserServiceClient;
 import com.engineeringthesis.visitservice.entity.MedicalExamination;
 import com.engineeringthesis.visitservice.entity.Result;
 import com.engineeringthesis.visitservice.entity.Visit;
@@ -20,6 +22,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,12 +40,26 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
     @Autowired
     private OpenAIClient openAIClient;
 
+    @Autowired
+    private UserServiceClient userServiceClient;
+
     @Override
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CrudResponse> add(@RequestBody VisitDTO visitDTO) {
         Long visitId = visitDTO.getVisitId();
         log.info("Starting saving Visit with visitId: " + visitId);
+
         Visit visit = visitMapper.visitDTOToVisit(visitDTO);
+
+        String patientPesel = visitDTO.getPatientPesel();
+        PatientDTO patientDTO = userServiceClient.getByPesel(patientPesel).getBody();
+        assert patientDTO != null;
+
+        LocalDate womanBirthDate = patientDTO.getBirthDate();
+        Period womanAge =  Period.between(womanBirthDate, LocalDate.now());
+
+        visit.setWomanAge(womanAge.getYears());
+
         visit.setVisitStatus(VisitStatus.SCHEDULED);
         visit.setDoctorRecommendations("There are no any doctor recommendations yet!");
         visitService.save(visit);
@@ -88,6 +106,7 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         Visit visit = visitService.getById(visitId);
         VisitResultsReportDTO visitResultsReportDTO = new VisitResultsReportDTO();
         visitResultsReportDTO.setWeekOfPregnancy(visit.getWeekOfPregnancy());
+        visitResultsReportDTO.setWomanAge(visit.getWomanAge());
         visitResultsReportDTO.setDoctorRecommendations(visit.getDoctorRecommendations());
         visitResultsReportDTO.setVisitDate(visit.getVisitDate());
 
@@ -111,6 +130,7 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         for (Visit visit : allVisitsWithGivenPatientPesel) {
             VisitResultsReportDTO visitResultsReportDTO = new VisitResultsReportDTO();
             visitResultsReportDTO.setWeekOfPregnancy(visit.getWeekOfPregnancy());
+
             visitResultsReportDTO.setWomanAge(visit.getWomanAge());
             visitResultsReportDTO.setDoctorRecommendations(visit.getDoctorRecommendations());
             visitResultsReportDTO.setVisitDate(visit.getVisitDate());

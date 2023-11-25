@@ -53,8 +53,16 @@ public class CalendarWeekControllerImpl implements CrudController<CalendarWeekDT
 
     @RequestMapping(path = "/pesel/{pesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CalendarWeekDTO> getCalendarWeekByPesel(@PathVariable String pesel) {
-        log.info("Starting getting pregnancy week for Patient with PESEL: " + pesel);
+        log.info("Starting getting Calendar week for Patient with PESEL: " + pesel);
         Integer pregnancyWeek = userServiceClient.getPregnancyWeekByPesel(pesel);
+        CalendarWeek calendarWeek = calendarWeekService.findCalendarWeekByPregnancyWeek(pregnancyWeek);
+        CalendarWeekDTO calendarWeekDTO = calendarWeekMapper.calendarWeekToCalendarWeekDTO(calendarWeek);
+        return ResponseEntity.ok(calendarWeekDTO);
+    }
+
+    @RequestMapping(path = "/getCalendarWeek/{pregnancyWeek}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CalendarWeekDTO> getCalendarWeekByPregnancyWeek(@PathVariable Integer pregnancyWeek) {
+        log.info("Starting getting Calendar week for pregnany week: " + pregnancyWeek);
         CalendarWeek calendarWeek = calendarWeekService.findCalendarWeekByPregnancyWeek(pregnancyWeek);
         CalendarWeekDTO calendarWeekDTO = calendarWeekMapper.calendarWeekToCalendarWeekDTO(calendarWeek);
         return ResponseEntity.ok(calendarWeekDTO);
