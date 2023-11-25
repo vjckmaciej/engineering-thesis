@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,6 +36,7 @@ public class ForumUserServiceImpl implements CrudService<ForumUser> {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
             }
 
+            forumUser.setRegistrationDate(LocalDate.now());
             forumUserRepository.save(forumUser);
         } catch (DataAccessException e) {
             log.error(e.getLocalizedMessage());

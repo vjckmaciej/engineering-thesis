@@ -28,6 +28,5 @@ public class ForumUserDTO {
     @Pattern(regexp = "\\d{11}", message = "PESEL must contain 11 digits!")
     private String pesel;
 
-    @NotNull(message = "Registration date must not be null!")
     private LocalDate registrationDate;
 }
