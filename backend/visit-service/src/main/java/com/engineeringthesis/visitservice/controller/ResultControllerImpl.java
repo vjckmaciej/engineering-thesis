@@ -6,6 +6,7 @@ import com.engineeringthesis.commons.dto.visit.ResultDTO;
 import com.engineeringthesis.visitservice.entity.Result;
 import com.engineeringthesis.visitservice.mapper.ResultMapper;
 import com.engineeringthesis.visitservice.service.ResultServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -25,7 +26,7 @@ public class ResultControllerImpl implements CrudController<ResultDTO> {
 
     @Override
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CrudResponse> add(@RequestBody ResultDTO resultDTO) {
+    public ResponseEntity<CrudResponse> add(@Valid @RequestBody ResultDTO resultDTO) {
         Long resultId = resultDTO.getResultId();
         log.info("Starting saving Result with resultId: " + resultId);
         Result result = resultMapper.resultDTOToResult(resultDTO);

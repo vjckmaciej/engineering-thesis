@@ -8,6 +8,7 @@ import com.engineeringthesis.forumservice.client.UserServiceClient;
 import com.engineeringthesis.forumservice.mapper.ForumUserMapper;
 import com.engineeringthesis.forumservice.entity.ForumUser;
 import com.engineeringthesis.forumservice.service.ForumUserServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class ForumUserControllerImpl implements CrudController<ForumUserDTO> {
 
     @Override
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CrudResponse> add(@RequestBody ForumUserDTO forumUserDTO) {
+    public ResponseEntity<CrudResponse> add(@Valid @RequestBody ForumUserDTO forumUserDTO) {
         Long forumUserId = forumUserDTO.getForumUserId();
         log.info("Starting saving ForumUser with forumUserId: " + forumUserId);
 

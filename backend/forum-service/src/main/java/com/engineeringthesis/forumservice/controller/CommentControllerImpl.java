@@ -6,6 +6,7 @@ import com.engineeringthesis.commons.model.CrudResponse;
 import com.engineeringthesis.forumservice.entity.Comment;
 import com.engineeringthesis.forumservice.mapper.CommentMapper;
 import com.engineeringthesis.forumservice.service.CommentServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -26,7 +27,7 @@ public class CommentControllerImpl implements CrudController<CommentDTO> {
 
     @Override
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CrudResponse> add(@RequestBody CommentDTO commentDTO) {
+    public ResponseEntity<CrudResponse> add(@Valid @RequestBody CommentDTO commentDTO) {
         Long commentId = commentDTO.getCommentId();
         log.info("Starting saving Comment with commentId: " + commentId);
         Comment commentToSave = commentMapper.commentDTOToComment(commentDTO);

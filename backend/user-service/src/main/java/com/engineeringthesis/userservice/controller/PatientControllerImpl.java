@@ -7,6 +7,7 @@ import com.engineeringthesis.commons.dto.user.PatientDTO;
 import com.engineeringthesis.userservice.entity.Patient;
 import com.engineeringthesis.userservice.mapper.PatientMapper;
 import com.engineeringthesis.userservice.service.PatientServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -26,7 +27,7 @@ public class PatientControllerImpl implements CrudController<PatientDTO> {
 
     @Override
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CrudResponse> add(@RequestBody PatientDTO patientDTO) {
+    public ResponseEntity<CrudResponse> add(@Valid @RequestBody PatientDTO patientDTO) {
         Long patientId = patientDTO.getPatientId();
         log.info("Starting saving Patient with patientId: " + patientId);
         Patient patient = patientMapper.patientDTOToPatient(patientDTO);

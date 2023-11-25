@@ -15,6 +15,7 @@ import com.engineeringthesis.visitservice.mapper.ResultMapper;
 import com.engineeringthesis.visitservice.mapper.VisitMapper;
 import com.engineeringthesis.commons.model.visit.VisitStatus;
 import com.engineeringthesis.visitservice.service.VisitServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
 
     @Override
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CrudResponse> add(@RequestBody VisitDTO visitDTO) {
+    public ResponseEntity<CrudResponse> add(@Valid @RequestBody VisitDTO visitDTO) {
         Long visitId = visitDTO.getVisitId();
         log.info("Starting saving Visit with visitId: " + visitId);
 

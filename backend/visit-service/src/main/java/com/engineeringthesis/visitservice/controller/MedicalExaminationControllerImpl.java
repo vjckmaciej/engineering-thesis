@@ -6,6 +6,7 @@ import com.engineeringthesis.commons.dto.visit.MedicalExaminationDTO;
 import com.engineeringthesis.visitservice.entity.MedicalExamination;
 import com.engineeringthesis.visitservice.mapper.MedicalExaminationMapper;
 import com.engineeringthesis.visitservice.service.MedicalExaminationServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -25,7 +26,7 @@ public class MedicalExaminationControllerImpl implements CrudController<MedicalE
 
     @Override
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CrudResponse> add(@RequestBody MedicalExaminationDTO medicalExaminationDTO) {
+    public ResponseEntity<CrudResponse> add(@Valid @RequestBody MedicalExaminationDTO medicalExaminationDTO) {
         Long medicalExaminationId = medicalExaminationDTO.getMedicalExaminationId();
         log.info("Starting saving MedicalExamination with medicalExaminationId: " + medicalExaminationId);
         MedicalExamination medicalExamination = medicalExaminationMapper.medicalExaminationDTOToMedicalExamination(medicalExaminationDTO);

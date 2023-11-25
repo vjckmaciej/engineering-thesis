@@ -7,15 +7,13 @@ import com.engineeringthesis.visitservice.service.CalendarWeekServiceImpl;
 import com.engineeringthesis.commons.dto.calendardietplan.CalendarWeekDTO;
 import com.engineeringthesis.commons.model.CrudController;
 import com.engineeringthesis.commons.model.CrudResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,8 +31,14 @@ public class CalendarWeekControllerImpl implements CrudController<CalendarWeekDT
 
 
     @Override
-    public ResponseEntity<CrudResponse> add(CalendarWeekDTO calendarWeekDTO) {
-        return null;
+    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CrudResponse> add(@Valid @RequestBody CalendarWeekDTO calendarWeekDTO) {
+        Long calendarWeekId = calendarWeekDTO.getCalendarWeekId();
+        log.info("Starting saving CalendarWeek with calendarWeekId: " + calendarWeekId);
+        CalendarWeek calendarWeekToSave = calendarWeekMapper.calendarWeekDTOToCalendarWeek(calendarWeekDTO);
+        calendarWeekService.save(calendarWeekToSave);
+        return ResponseEntity.ok(new CrudResponse(calendarWeekToSave.getCalendarWeekId(), "CalendarWeek added to database!"));
+
     }
 
     @Override
@@ -74,7 +78,11 @@ public class CalendarWeekControllerImpl implements CrudController<CalendarWeekDT
     }
 
     @Override
-    public ResponseEntity<CrudResponse> deleteById(Long id) {
-        return null;
+    @RequestMapping(path = "/{calendarWeekId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CrudResponse> deleteById(@PathVariable Long calendarWeekId) {
+        log.info(String.format("Starting deleting CalendarWeek by calendarWeekId: %d", calendarWeekId));
+        calendarWeekService.deleteById(calendarWeekId);
+        String message = String.format("CalendarWeek with calendarWeekId: %d deleted!", calendarWeekId);
+        return ResponseEntity.ok(new CrudResponse(calendarWeekId, message));
     }
 }

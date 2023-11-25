@@ -6,6 +6,7 @@ import com.engineeringthesis.commons.dto.forum.ThreadDTO;
 import com.engineeringthesis.forumservice.mapper.ThreadMapper;
 import com.engineeringthesis.forumservice.entity.Thread;
 import com.engineeringthesis.forumservice.service.ThreadServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -25,7 +26,7 @@ public class ThreadControllerImpl implements CrudController<ThreadDTO>{
 
     @Override
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CrudResponse> add(@RequestBody ThreadDTO threadDTO) {
+    public ResponseEntity<CrudResponse> add(@Valid @RequestBody ThreadDTO threadDTO) {
         Long threadId = threadDTO.getThreadId();
         log.info("Starting saving Thread with threadId: " + threadId);
         Thread threadToSave = threadMapper.threadDTOToThread(threadDTO);
