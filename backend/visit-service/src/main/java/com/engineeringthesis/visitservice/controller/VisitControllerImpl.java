@@ -169,6 +169,25 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         return response;
     }
 
+    @RequestMapping(path = "/generateDietPlan/{pesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String generateDietPlanByOpenAI(@PathVariable String pesel) {
+        log.info("Starting generating diet plan with OpenAI for PESEL: " + pesel);
+        List<VisitResultsReportDTO> visitResultsReportDTOS = generateReportByPatientPesel(pesel).getBody();
+        StringBuilder resultStringBuilder = new StringBuilder();
+
+        for (VisitResultsReportDTO reportDTO : visitResultsReportDTOS) {
+            resultStringBuilder.append(reportDTO.toString()).append("\n");
+        }
+
+
+        String visitResultReportString = resultStringBuilder.toString();
+        log.info("visitResultReportString: " + visitResultReportString);
+        String response = openAIClient.generateDietPlan(visitResultReportString);
+        log.info("Response: " + response);
+
+        return response;
+    }
+
     @Override
     @RequestMapping(method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CrudResponse> update(@RequestBody VisitDTO visitDTO) {

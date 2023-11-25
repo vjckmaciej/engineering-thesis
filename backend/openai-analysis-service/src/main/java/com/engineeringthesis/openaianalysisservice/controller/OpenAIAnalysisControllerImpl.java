@@ -27,4 +27,18 @@ public class OpenAIAnalysisControllerImpl {
 
         return openAIAnalysisService.analyzeReport(queryRequest.getQuery());
     }
+
+    @PostMapping("/generateDietPlan")
+    public String generateDietPlan(@RequestBody String query) {
+        QueryRequest queryRequest = new QueryRequest();
+        queryRequest.setQuery(
+                "Wygeneruj plan dietetyczny dla kobiety w ciazy z podanymi ponizej wynikami badan." +
+                        "Podaj to w formacie: [Dzien tygodnia]: [Nazwa dania na sniadanie], [Nazwa dania na obiad], [Nazwa dania na kolacje]." +
+                        "Uwzglednij wyniki badan, wiek kobiety i zalecenia lekarza "
+                        + query);
+
+        log.info("Starting query: " + queryRequest.getQuery());
+
+        return openAIAnalysisService.analyzeReport(queryRequest.getQuery());
+    }
 }

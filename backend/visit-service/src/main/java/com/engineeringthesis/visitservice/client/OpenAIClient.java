@@ -8,4 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface OpenAIClient {
     @PostMapping("/api/v1/analyzeReport")
     String analyzeReport(@RequestBody String query);
+
+    @PostMapping("/api/v1/generateDietPlan")
+    String generateDietPlan(@RequestBody String query);
 }
