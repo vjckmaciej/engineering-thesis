@@ -196,4 +196,8 @@ public class PatientServiceImpl implements CrudService<Patient> {
             throw new DeleteException(message);
         }
     }
+
+    public boolean existsByPesel(String pesel) {
+        return patientRepository.existsByPesel(pesel);
+    }
 }

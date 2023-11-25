@@ -98,4 +98,10 @@ public class DoctorControllerImpl implements CrudController<DoctorDTO> {
         String message = String.format("Doctor with PESEL: %s deleted!", pesel);
         return ResponseEntity.ok(new CrudPESELResponse(pesel, message));
     }
+
+    @RequestMapping(path = "/existsByPesel/{pesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public boolean existsByPeselDoctor(@PathVariable String pesel) {
+        log.info("Checking if doctor exists by given PESEL: " + pesel);
+        return doctorService.existsByPesel(pesel);
+    }
 }

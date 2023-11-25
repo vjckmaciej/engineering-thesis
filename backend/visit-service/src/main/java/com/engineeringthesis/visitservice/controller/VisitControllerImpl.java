@@ -19,9 +19,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -49,6 +51,16 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
     public ResponseEntity<CrudResponse> add(@Valid @RequestBody VisitDTO visitDTO) {
         Long visitId = visitDTO.getVisitId();
         log.info("Starting saving Visit with visitId: " + visitId);
+
+        if (!userServiceClient.existsByPeselDoctor(visitDTO.getDoctorPesel()) ) {
+            String message = String.format("Doctor with given PESEL doesn't exist in database!");
+            return ResponseEntity.badRequest().body(new CrudResponse(Long.parseLong(visitDTO.getDoctorPesel()), message));
+        }
+
+        if (!userServiceClient.existsByPeselPatient(visitDTO.getPatientPesel())) {
+            String message = String.format("Patient with given PESEL doesn't exist in database!");
+            return ResponseEntity.badRequest().body(new CrudResponse(Long.parseLong(visitDTO.getPatientPesel()), message));
+        }
 
         Visit visit = visitMapper.visitDTOToVisit(visitDTO);
 

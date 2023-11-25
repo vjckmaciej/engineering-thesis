@@ -103,4 +103,10 @@ public class PatientControllerImpl implements CrudController<PatientDTO> {
         String message = String.format("Patient with PESEL: %s deleted!", pesel);
         return ResponseEntity.ok(new CrudPESELResponse(pesel, message));
     }
+
+    @RequestMapping(path = "/existsByPesel/{pesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public boolean existsByPeselPatient(@PathVariable String pesel) {
+        log.info("Checking if patient exists by given PESEL: " + pesel);
+        return patientService.existsByPesel(pesel);
+    }
 }

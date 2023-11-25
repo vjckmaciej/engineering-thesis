@@ -13,5 +13,11 @@ public interface UserServiceClient {
 
     @GetMapping("/patient/pesel/{pesel}")
     ResponseEntity<PatientDTO> getByPesel(@PathVariable(name = "pesel") String pesel);
+
+    @GetMapping("/patient/existsByPesel/{pesel}")
+    boolean existsByPeselPatient(@PathVariable(name = "pesel") String pesel);
+
+    @GetMapping("/doctor/existsByPesel/{pesel}")
+    boolean existsByPeselDoctor(@PathVariable(name = "pesel") String pesel);
 }
 

@@ -35,8 +35,8 @@ public class VisitDTO {
     @Max(value = 42, message = "Pregnancy week must be maximum 42!")
     private Integer weekOfPregnancy;
 
-    @NotNull(message = "Woman age must not be null!")
-    @Min(value = 18, message = "Woman age must be at least 18!")
+//    @NotNull(message = "Woman age must not be null!")
+//    @Min(value = 18, message = "Woman age must be at least 18!")
     private Integer womanAge;
 
     private String doctorRecommendations;
