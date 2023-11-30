@@ -5,9 +5,27 @@ import { NavLink } from "react-router-dom"
 
 export default function Sidebar() {
   return (
-    <List color="white" fontSize="1.2em" spacing={4}>
+    <List color="white" fontSize="1.2em" spacing={6}>
       <ListItem>
-        <NavLink to="/">
+        <NavLink to="calendar">
+          <ListIcon as={CalendarIcon} color="white" />
+          Calendar
+        </NavLink>
+      </ListItem>  
+      <ListItem>
+        <NavLink to="visits">
+          <ListIcon as={AtSignIcon} color="white" />
+          Visits
+        </NavLink>
+      </ListItem>
+      <ListItem>
+        <NavLink to="profile">
+          <ListIcon as={AtSignIcon} color="white" />
+          Profile
+        </NavLink>
+      </ListItem>
+      <ListItem> 
+        <NavLink to="dashboard">
           <ListIcon as={CalendarIcon} color="white" />
           Dashboard
         </NavLink>
@@ -18,12 +36,8 @@ export default function Sidebar() {
           New Task
         </NavLink>
       </ListItem>
-      <ListItem>
-        <NavLink to="profile">
-          <ListIcon as={AtSignIcon} color="white" />
-          Profile
-        </NavLink>
-      </ListItem>
+      
+      
     </List>
   )
 }

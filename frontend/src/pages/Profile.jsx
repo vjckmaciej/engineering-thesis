@@ -23,7 +23,7 @@ export default function Profile() {
         <Tab _selected={{ color: 'white', bg: 'purple.400' }}>Account Info</Tab>
         <Tab _selected={{ color: 'white', bg: 'purple.400' }}>Task History</Tab>
       </TabList>
-
+      
       <TabPanels py="10px">
         <TabPanel>
           <List spacing={4}>
