@@ -2,6 +2,8 @@ package com.engineeringthesis.visitservice.repository;
 
 import com.engineeringthesis.visitservice.entity.Visit;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,4 +22,14 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
     List<Visit> findAllByPatientPesel(String patientPesel);
 
     List<Visit> deleteByVisitId(Long visitId);
+
+
+    @Query("SELECT v FROM Visit v " +
+            "WHERE v.patientPesel = :patientPesel " +
+            "AND v.visitStatus = 'SCHEDULED' " +
+            "AND v.visitDate > CURRENT_TIMESTAMP " +
+            "ORDER BY v.visitDate ASC " +
+            "LIMIT 1")
+    Optional<Visit> findNextScheduledVisitByPatientPesel(@Param("patientPesel") String patientPesel);
+
 }

@@ -4,6 +4,7 @@ import com.engineeringthesis.forumservice.entity.Thread;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -25,4 +26,6 @@ public interface ThreadRepository extends JpaRepository<Thread, Long> {
     Thread save(Thread thread);
 
     Optional<Thread> findByThreadId(Long threadId);
+
+    List<Thread> findAllByCategory(String category);
 }

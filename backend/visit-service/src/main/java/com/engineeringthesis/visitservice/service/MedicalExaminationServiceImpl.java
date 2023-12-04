@@ -52,7 +52,7 @@ public class MedicalExaminationServiceImpl implements CrudService<MedicalExamina
     }
 
     public List<MedicalExamination> getAllByVisitId(Long visitId) {
-        String message = String.format("MedicalExaminations with this medicalExaminationId: %d don't exist in database!", visitId);
+        String message = String.format("MedicalExaminations with this visitId: %d don't exist in database!", visitId);
         return medicalExaminationRepository.findAllByVisitIdReference(visitId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, message));
     }
 

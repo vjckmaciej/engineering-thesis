@@ -26,7 +26,7 @@ public class ThreadMapperImpl implements ThreadMapper {
 
         Thread thread = new Thread();
 
-        thread.setThreadId(threadDTO.getThreadId());
+//        thread.setThreadId(threadDTO.getThreadId());
         thread.setCategory(threadDTO.getCategory());
         thread.setTitle(threadDTO.getTitle());
         thread.setContent(threadDTO.getContent());
@@ -58,6 +58,7 @@ public class ThreadMapperImpl implements ThreadMapper {
         threadDTO.setCategory(thread.getCategory());
         threadDTO.setTitle(thread.getTitle());
         threadDTO.setContent(thread.getContent());
+        threadDTO.setCreationDate(thread.getCreationDate());
 
         if (thread.getAuthor() != null) {
             threadDTO.setAuthorId(thread.getAuthor().getForumUserId());

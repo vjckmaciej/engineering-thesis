@@ -38,6 +38,7 @@ public class CommentMapperImpl implements CommentMapper {
             if (optionalThread.isPresent()) {
                 Thread thread = optionalThread.get();
                 comment.setThread(thread);
+                comment.setThreadIdReference(commentDTO.getThreadId());
             } else {
                 String message = String.format("Thread with given threadId: %d doesn't exist in database!", commentDTO.getThreadId());
                 log.error(message);
@@ -70,6 +71,7 @@ public class CommentMapperImpl implements CommentMapper {
 
         commentDTO.setCommentId(comment.getCommentId());
         commentDTO.setContent(comment.getContent());
+        commentDTO.setCreationDate(comment.getCreationDate());
 
         if (comment.getThread() != null) {
             commentDTO.setThreadId(comment.getThread().getThreadId());

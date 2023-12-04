@@ -50,6 +50,11 @@ public class ResultServiceImpl implements CrudService<Result> {
         return resultRepository.findAll();
     }
 
+    public List<Result> getAllByMedicalExaminationId(Long medicalExaminationId) {
+        String message = String.format("Results with this medicalExaminationId: %d don't exist in database!", medicalExaminationId);
+        return resultRepository.findAllByMedicalExaminationIdReference(medicalExaminationId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, message));
+    }
+
     @Override
     public void update(Result result) {
         Long resultId = result.getResultId();

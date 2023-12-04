@@ -52,6 +52,11 @@ public class CommentServiceImpl implements CrudService<Comment> {
         return commentRepository.findAll();
     }
 
+    public List<Comment> getAllCommentsByThreadId(Long threadId) {
+        String message = String.format("Comments with this threadId: %d don't exist in database!", threadId);
+        return commentRepository.findAllByThreadIdReferenceOrderByCreationDateAsc(threadId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, message));
+    }
+
     @Override
     public void update(Comment comment) {
         Long commentId = comment.getCommentId();

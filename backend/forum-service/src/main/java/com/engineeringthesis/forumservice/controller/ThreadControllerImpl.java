@@ -27,8 +27,8 @@ public class ThreadControllerImpl implements CrudController<ThreadDTO>{
     @Override
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CrudResponse> add(@Valid @RequestBody ThreadDTO threadDTO) {
-        Long threadId = threadDTO.getThreadId();
-        log.info("Starting saving Thread with threadId: " + threadId);
+//        Long threadId = threadDTO.getThreadId();
+        log.info("Starting saving Thread with thread title: " + threadDTO.getTitle());
         Thread threadToSave = threadMapper.threadDTOToThread(threadDTO);
         threadService.save(threadToSave);
         return ResponseEntity.ok(new CrudResponse(threadToSave.getThreadId(), "Thread added to database!"));
@@ -49,6 +49,14 @@ public class ThreadControllerImpl implements CrudController<ThreadDTO>{
     public ResponseEntity<List<ThreadDTO>> getAll() {
         log.info("Starting getting list of all Thread objects");
         List<Thread> allThreads = threadService.getAll();
+        List<ThreadDTO> allThreadDTOS = allThreads.stream().map((threadMapper::threadToThreadDTO)).collect(Collectors.toList());
+        return ResponseEntity.ok(allThreadDTOS);
+    }
+
+    @RequestMapping(path="/category/{category}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ThreadDTO>> getAllThreadsByCategory(@PathVariable String category) {
+        log.info("Starting getting list of all Thread objects with category: " + category);
+        List<Thread> allThreads = threadService.getAllThreadsByCategory(category);
         List<ThreadDTO> allThreadDTOS = allThreads.stream().map((threadMapper::threadToThreadDTO)).collect(Collectors.toList());
         return ResponseEntity.ok(allThreadDTOS);
     }

@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +53,10 @@ public class VisitServiceImpl implements CrudService<Visit> {
     }
 
     public List<Visit> getAllVisitsByPatientPesel(String patientPesel) { return  visitRepository.findAllByPatientPesel(patientPesel); }
+
+    public Optional<Visit> findNearestPlannedVisit(String patientPesel) {
+        return visitRepository.findNextScheduledVisitByPatientPesel(patientPesel);
+    }
 
     @Override
     public void update(Visit visit) {

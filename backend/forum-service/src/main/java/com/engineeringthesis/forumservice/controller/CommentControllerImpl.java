@@ -36,7 +36,7 @@ public class CommentControllerImpl implements CrudController<CommentDTO> {
     }
 
     @Override
-    @RequestMapping(path = "/{commentId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/comment/{commentId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CommentDTO> getById(@PathVariable Long commentId) {
         log.info("Starting finding Comment with commentId: " + commentId);
         Comment comment = commentService.getById(commentId);
@@ -49,6 +49,14 @@ public class CommentControllerImpl implements CrudController<CommentDTO> {
     public ResponseEntity<List<CommentDTO>> getAll() {
         log.info("Starting getting list of all Comment objects");
         List<Comment> allComments = commentService.getAll();
+        List<CommentDTO> allCommentDTOS = allComments.stream().map((commentMapper::commentToCommentDTO)).collect(Collectors.toList());
+        return ResponseEntity.ok(allCommentDTOS);
+    }
+
+    @RequestMapping(path = "/{threadId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<CommentDTO>> getAllCommentsByThreadId(@PathVariable Long threadId) {
+        log.info("Starting getting list of all Comment objects for thread with threadId:" + threadId);
+        List<Comment> allComments = commentService.getAllCommentsByThreadId(threadId);
         List<CommentDTO> allCommentDTOS = allComments.stream().map((commentMapper::commentToCommentDTO)).collect(Collectors.toList());
         return ResponseEntity.ok(allCommentDTOS);
     }

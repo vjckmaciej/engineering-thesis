@@ -33,8 +33,8 @@ public class OpenAIAnalysisControllerImpl {
         QueryRequest queryRequest = new QueryRequest();
         queryRequest.setQuery(
                 "Wygeneruj plan dietetyczny dla kobiety w ciazy z podanymi ponizej wynikami badan." +
-                        "Podaj to w formacie: [Dzien tygodnia]: [Nazwa dania na sniadanie], [Nazwa dania na obiad], [Nazwa dania na kolacje]." +
-                        "Uwzglednij wyniki badan, wiek kobiety i zalecenia lekarza "
+                        " Uwzglednij wyniki badan, wiek kobiety, zalecenia lekarza, liczbe podanych dni dla diety, " +
+                        " liczbe dan w ciagu dnia, przedzial kaloryczny oraz podane alergeny. Oto lista rzeczy ktore ta kobieta wymaga od diety: "
                         + query);
 
         log.info("Starting query: " + queryRequest.getQuery());

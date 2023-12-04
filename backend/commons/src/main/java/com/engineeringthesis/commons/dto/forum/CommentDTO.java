@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,4 +27,6 @@ public class CommentDTO {
     @NotNull(message = "AuthorID must not be null!")
     @Positive(message = "AuthorID must be positive!")
     private Long authorId;
+
+    private LocalDateTime creationDate;
 }

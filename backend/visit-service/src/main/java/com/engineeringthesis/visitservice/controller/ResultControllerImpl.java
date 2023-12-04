@@ -1,8 +1,10 @@
 package com.engineeringthesis.visitservice.controller;
 
+import com.engineeringthesis.commons.dto.visit.MedicalExaminationDTO;
 import com.engineeringthesis.commons.model.CrudController;
 import com.engineeringthesis.commons.model.CrudResponse;
 import com.engineeringthesis.commons.dto.visit.ResultDTO;
+import com.engineeringthesis.visitservice.entity.MedicalExamination;
 import com.engineeringthesis.visitservice.entity.Result;
 import com.engineeringthesis.visitservice.mapper.ResultMapper;
 import com.engineeringthesis.visitservice.service.ResultServiceImpl;
@@ -50,6 +52,14 @@ public class ResultControllerImpl implements CrudController<ResultDTO> {
         List<Result> allResults = resultService.getAll();
         List<ResultDTO> allResultDTOS = allResults.stream().map((resultMapper::resultToResultDTO)).collect(Collectors.toList());
         return ResponseEntity.ok(allResultDTOS);
+    }
+
+    @RequestMapping(path = "/filter/{medicalExaminationId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ResultDTO>> getAllByMedicalExaminationId(@PathVariable Long medicalExaminationId) {
+        log.info("Starting getting list of all Result objects with given medicalExaminationId: " + medicalExaminationId);
+        List<Result> allResults = resultService.getAllByMedicalExaminationId(medicalExaminationId);
+        List<ResultDTO> allResultDTOs = allResults.stream().map((resultMapper::resultToResultDTO)).collect(Collectors.toList());
+        return ResponseEntity.ok(allResultDTOs);
     }
 
     @Override

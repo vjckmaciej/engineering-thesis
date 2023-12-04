@@ -17,5 +17,7 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
 
     List<Result> findAll();
 
+    Optional<List<Result>> findAllByMedicalExaminationIdReference(Long visitId);
+
     List<Result> deleteByResultId(Long resultId);
 }

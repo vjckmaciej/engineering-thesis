@@ -40,6 +40,7 @@ public class ResultMapperImpl implements ResultMapper {
             if (optionalMedicalExamination.isPresent()) {
                 MedicalExamination medicalExamination = optionalMedicalExamination.get();
                 result.setMedicalExamination(medicalExamination);
+                result.setMedicalExaminationIdReference(resultDTO.getMedicalExaminationId());
             } else {
                 String message = String.format("Medical examination with given medicalExaminationId: %d doesn't exist in database!", resultDTO.getMedicalExaminationId());
                 log.error(message);

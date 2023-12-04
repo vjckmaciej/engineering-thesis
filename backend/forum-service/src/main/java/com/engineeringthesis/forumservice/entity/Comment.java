@@ -27,6 +27,9 @@ public class Comment {
     @CreationTimestamp
     private LocalDateTime creationDate;
 
+    @Column
+    private Long threadIdReference;
+
     @ManyToOne
     @JoinColumn(name = "threadId")
     private Thread thread;

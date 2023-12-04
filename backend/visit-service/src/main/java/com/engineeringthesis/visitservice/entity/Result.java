@@ -34,6 +34,9 @@ public class Result {
     @Column
     private String doctorNote;
 
+    @Column
+    private Long medicalExaminationIdReference;
+
     @ManyToOne
     @JoinColumn(name = "medicalExaminationId")
     private MedicalExamination medicalExamination;

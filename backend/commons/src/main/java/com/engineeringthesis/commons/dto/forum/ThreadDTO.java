@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,14 +21,16 @@ public class ThreadDTO {
     private String category;
 
     @NotBlank(message = "Title must not be blank!")
-    @Size(max = 100, message = "Title must contain maximum of 100 characters!")
+    @Size(min=3, max = 100, message = "Title must contain maximum of 100 characters!")
     private String title;
 
     @NotBlank(message = "Content must not be blank!")
-    @Size(max = 1000, message = "Content must contain maximum of 1000 characters!")
+    @Size(min=3, max = 1000, message = "Content must contain maximum of 1000 characters!")
     private String content;
 
     @NotNull(message = "AuthorID must not be null!")
     @Positive(message = "AuthorID must be positive!")
     private Long authorId;
+
+    private LocalDateTime creationDate;
 }

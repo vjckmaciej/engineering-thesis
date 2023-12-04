@@ -35,7 +35,7 @@ public class CalendarWeekServiceImpl implements CrudService<CalendarWeek> {
 
     @Override
     public List<CalendarWeek> getAll() {
-        return calendarWeekRepository.findAll();
+        return calendarWeekRepository.findAllOrderByPregnancyWeekAsc();
     }
 
     public CalendarWeek findCalendarWeekByPregnancyWeek(Integer pregnancyWeek) {

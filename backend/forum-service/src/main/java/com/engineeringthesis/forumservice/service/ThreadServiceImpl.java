@@ -51,6 +51,10 @@ public class ThreadServiceImpl  implements CrudService<Thread> {
         return threadRepository.findAll();
     }
 
+    public List<Thread> getAllThreadsByCategory(String category) {
+        return threadRepository.findAllByCategory(category);
+    }
+
     @Override
     public void update(Thread thread) {
         Long threadId = thread.getThreadId();
