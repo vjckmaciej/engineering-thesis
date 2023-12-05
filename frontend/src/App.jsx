@@ -16,7 +16,8 @@ import HeroLayout from "./layouts/HeroLayout";
 import Calendar from "./pages/Calendar";
 import Forum, { threadsLoader } from "./pages/Forum";
 import ThreadDetails from "./components/ThreadDetails";
-import CreateThread, { createAction } from "./pages/thread/CreateThread";
+import CreateThread from "./pages/thread/CreateThread";
+import CreateVisit from "./pages/visit/CreateVisit";
 import VisitDetails from "./components/VisitDetails";
 import DietPlan from "./pages/DietPlan";
 
@@ -30,16 +31,13 @@ const router = createBrowserRouter(
         <Route path="calendar" element={<Calendar />} loader={tasksLoader} />
         <Route path="forum" element={<Forum />} loader={threadsLoader} />
         <Route path="forum/:threadId" element={<ThreadDetails />} />
-        <Route
-          path="forum/create"
-          element={<CreateThread />}
-          action={createAction}
-        />
+        <Route path="forum/create" element={<CreateThread />} />
         <Route path="dashboard" element={<Dashboard />} loader={tasksLoader} />
         {/* <Route path="create" element={<Create />} action={createAction} /> */}
         <Route path="dietplan" element={<DietPlan />} />
         <Route path="profile" element={<Profile />} />
         <Route path="visits" element={<Visits />} />
+        <Route path="visits/create" element={<CreateVisit />} />
         <Route path="visits/:visitId" element={<VisitDetails />} />
       </Route>
       {/* <Route path="start" element={<Hero />} /> */}

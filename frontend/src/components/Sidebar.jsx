@@ -1,10 +1,11 @@
-import { List, ListItem, ListIcon } from "@chakra-ui/react";
+import { List, ListItem, ListIcon, Spacer } from "@chakra-ui/react";
 import {
   CalendarIcon,
   EditIcon,
   AtSignIcon,
   ChatIcon,
   CopyIcon,
+  AddIcon,
 } from "@chakra-ui/icons";
 import { NavLink } from "react-router-dom";
 
@@ -30,15 +31,21 @@ export default function Sidebar() {
         </NavLink>
       </ListItem>
       <ListItem>
+        <NavLink to="forum">
+          <ListIcon as={ChatIcon} color="white" />
+          Forum
+        </NavLink>
+      </ListItem>
+      <ListItem>
         <NavLink to="dietplan">
           <ListIcon as={EditIcon} color="white" />
           Diet plan
         </NavLink>
       </ListItem>
       <ListItem>
-        <NavLink to="forum">
-          <ListIcon as={ChatIcon} color="white" />
-          Forum
+        <NavLink to="visits/create">
+          <ListIcon as={AddIcon} color="white" />
+          Add new visit
         </NavLink>
       </ListItem>
 

@@ -84,15 +84,3 @@ export default function CreateThread() {
     </Box>
   );
 }
-
-export const createAction = async ({ request }) => {
-  const data = await request.formData();
-
-  const thread = {
-    category: data.get("category"),
-    title: data.get("title"),
-    content: data.get("content"),
-  };
-
-  console.log(task);
-};

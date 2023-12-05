@@ -69,11 +69,33 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
 
         LocalDate womanBirthDate = patientDTO.getBirthDate();
         Period womanAge =  Period.between(womanBirthDate, LocalDate.now());
-
         visit.setWomanAge(womanAge.getYears());
 
-        visit.setVisitStatus(VisitStatus.SCHEDULED);
-        visit.setDoctorRecommendations("There are no any doctor recommendations yet!");
+        LocalDate patientPregnancyStart = patientDTO.getPregnancyStartDate();
+        LocalDate visitDate = LocalDate.from(visitDTO.getVisitDate());
+        Period periodFromStartOfPregnancy = Period.between(patientPregnancyStart, visitDate);
+
+        long totalDays = periodFromStartOfPregnancy.getDays();
+        long totalWeeks = (periodFromStartOfPregnancy.toTotalMonths() * 4) + (totalDays / 7);
+        Integer totalWeeksInteger = Math.toIntExact(totalWeeks);
+
+        int maxPregnancyWeek = 44;
+        if (totalWeeksInteger > maxPregnancyWeek) {
+            String message = String.format("Limit of maximum pregnancy week is %s, but you passed: %d", "44", totalWeeksInteger);
+            log.info(message);
+            return ResponseEntity.badRequest().body(new CrudResponse(null, message));
+        } else {
+            visit.setWeekOfPregnancy(totalWeeksInteger);
+        }
+
+        if (visit.getVisitStatus() == null) {
+            visit.setVisitStatus(VisitStatus.SCHEDULED);
+        }
+
+        if (visit.getDoctorRecommendations() == null) {
+            visit.setDoctorRecommendations("There are no any doctor recommendations yet!");
+        }
+
         visitService.save(visit);
         return ResponseEntity.ok(new CrudResponse(visit.getVisitId(), "Visit added to database!"));
     }

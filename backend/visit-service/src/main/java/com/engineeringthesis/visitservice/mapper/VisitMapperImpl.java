@@ -19,15 +19,25 @@ public class VisitMapperImpl implements VisitMapper {
 
         Visit visit = new Visit();
 
-        visit.setVisitId(visitDTO.getVisitId());
+        if (visitDTO.getVisitId() != null) {
+            visit.setVisitId(visitDTO.getVisitId());
+        }
+
         visit.setVisitDate(visitDTO.getVisitDate());
-        visit.setVisitStatus(visitDTO.getVisitStatus());
+
+        if (visitDTO.getVisitStatus() != null) {
+            visit.setVisitStatus(visitDTO.getVisitStatus());
+        }
+
 //        visit.setDoctorId(visitDTO.getDoctorId());
 //        visit.setPatientId(visitDTO.getPatientId());
         visit.setDoctorPesel(visitDTO.getDoctorPesel());
         visit.setPatientPesel(visitDTO.getPatientPesel());
-        visit.setWeekOfPregnancy(visitDTO.getWeekOfPregnancy());
-        visit.setDoctorRecommendations(visitDTO.getDoctorRecommendations());
+//        visit.setWeekOfPregnancy(visitDTO.getWeekOfPregnancy());
+
+        if (visitDTO.getDoctorRecommendations() != null) {
+            visit.setDoctorRecommendations(visitDTO.getDoctorRecommendations());
+        }
 
         return visit;
     }

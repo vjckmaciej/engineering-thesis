@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,7 +28,20 @@ public class VisitServiceImpl implements CrudService<Visit> {
     @Override
     public void save(Visit visit) {
         Long visitId = visit.getVisitId();
+//        List<Visit> allDoctorVisits = visitRepository.findAllByDoctorPesel(visit.getDoctorPesel());
+        LocalDateTime visitDate = visit.getVisitDate();
+        List<Visit> visitListWithExactDate = visitRepository.findAllByVisitDate(visitDate);
+        String doctorPesel = visit.getDoctorPesel();
+
         try {
+            for (Visit visit1 : visitListWithExactDate) {
+                if (visit1.getDoctorPesel().equals(doctorPesel)) {
+                    String message = "There is already booked visit for this date for this doctor!";
+                    log.error(message);
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
+                }
+            }
+            
             if (visitRepository.existsByVisitId(visitId)) {
                 String message = String.format("Visit with this visitId: %d already exists in database!", visitId);
                 log.error(message);
