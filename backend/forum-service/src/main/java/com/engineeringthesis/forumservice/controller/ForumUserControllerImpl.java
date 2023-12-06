@@ -83,6 +83,12 @@ public class ForumUserControllerImpl implements CrudController<ForumUserDTO> {
         return forumUserService.getForumUserIdByPesel(pesel);
     }
 
+    @RequestMapping(path="/getForumUserUsernameByAuthorId/{authorId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getForumUserUsernameByAuthorId(@PathVariable Long authorId) {
+        log.info("Starting getting forum user username by authorId: " + authorId);
+        return forumUserService.getForumUserUsernameByAuthorId(authorId);
+    }
+
     @Override
     @RequestMapping(method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CrudResponse> update(@RequestBody ForumUserDTO forumUserDTO) {

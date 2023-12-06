@@ -35,10 +35,6 @@ export default function Forum() {
         const data = await res.json();
         setAuthorId(data);
         sessionStorage.setItem("authorId", data.toString());
-        console.log("AuthorId: " + data);
-        console.log(
-          "session storage new authorId: " + sessionStorage.getItem("authorId")
-        );
       } catch (error) {
         console.error("Błąd pobierania danych:", error);
       }
@@ -48,18 +44,50 @@ export default function Forum() {
   }, [pesel]);
 
   useEffect(() => {
+    const fetchAllThreads = async () => {
+      try {
+        const url = selectedCategory
+          ? `http://localhost:8084/forum/thread/category/${selectedCategory}`
+          : "http://localhost:8084/forum/thread";
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        // Fetch and set author usernames for all threads
+        const threadsWithAuthors = await Promise.all(
+          data.map(async (thread) => {
+            const authorUsername = await fetchAuthorUsername(thread.authorId);
+            return { ...thread, authorUsername };
+          })
+        );
+
+        setAllThreads(threadsWithAuthors);
+      } catch (error) {
+        console.error("Błąd podczas pobierania wątków:", error);
+      }
+    };
+
+    fetchAllThreads();
+  }, [selectedCategory, authorId]);
+
+  const fetchAuthorUsername = async (authorId) => {
+    try {
+      const res = await fetch(
+        `http://localhost:8084/forum/forumUser/getForumUserUsernameByAuthorId/${authorId}`
+      );
+      const data = await res.text();
+      return data;
+    } catch (error) {
+      console.error("Błąd pobierania nazwy użytkownika:", error);
+      return "Unknown";
+    }
+  };
+
+  useEffect(() => {
     if (authorId !== null) {
       fetchMyThreads();
     }
   }, [authorId]);
-
-  useEffect(() => {
-    if (!selectedCategory) {
-      fetchAndRefreshThreads();
-    } else {
-      fetchAndRefreshThreads(selectedCategory);
-    }
-  }, [selectedCategory]);
 
   const fetchMyThreads = async () => {
     try {
@@ -71,21 +99,6 @@ export default function Forum() {
       setMyThreads(data);
     } catch (error) {
       console.error("Błąd podczas pobierania wątków użytkownika:", error);
-    }
-  };
-
-  const fetchAndRefreshThreads = async (category) => {
-    try {
-      const url = category
-        ? `http://localhost:8084/forum/thread/category/${category}`
-        : "http://localhost:8084/forum/thread";
-
-      const response = await fetch(url);
-      const data = await response.json();
-
-      setAllThreads(data);
-    } catch (error) {
-      console.error("Błąd podczas pobierania wątków:", error);
     }
   };
 
@@ -149,7 +162,7 @@ export default function Forum() {
               >
                 <Stack>
                   <CardBody>
-                    <Heading size="md">AuthorId: {thread.authorId}</Heading>
+                    <Heading size="md">Author: {thread.authorUsername}</Heading>
                     <Heading size="md">Title: {thread.title}</Heading>
                     <Text py="2">Category: {thread.category}</Text>
                     <Text py="2">Content: {thread.content}</Text>
@@ -182,7 +195,6 @@ export default function Forum() {
               >
                 <Stack>
                   <CardBody>
-                    <Heading size="md">AuthorId: {myThread.authorId}</Heading>
                     <Heading size="md">Title: {myThread.title}</Heading>
                     <Text py="2">Category: {myThread.category}</Text>
                     <Text py="2">Content: {myThread.content}</Text>
