@@ -36,6 +36,7 @@ public class ThreadMapperImpl implements ThreadMapper {
             if (optionalForumUser.isPresent()) {
                 ForumUser forumUser = optionalForumUser.get();
                 thread.setAuthor(forumUser);
+                thread.setAuthorIdReference(threadDTO.getAuthorId());
             } else {
                 String message = String.format("Forum User with given forumUserId: %d doesn't exist in database!", threadDTO.getAuthorId());
                 log.error(message);

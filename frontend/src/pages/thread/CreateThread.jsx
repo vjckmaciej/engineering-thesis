@@ -9,10 +9,14 @@ import {
   Checkbox,
   Select,
   Heading,
+  useToast,
 } from "@chakra-ui/react";
 import { Form } from "react-router-dom";
 
 export default function CreateThread() {
+  const authorId = sessionStorage.getItem("authorId");
+  const threadAddedToast = useToast();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -21,7 +25,7 @@ export default function CreateThread() {
       category: formData.get("category"),
       title: formData.get("title"),
       content: formData.get("content"),
-      authorId: 1,
+      authorId,
     };
 
     console.log(threadData);
@@ -40,6 +44,16 @@ export default function CreateThread() {
         // Handle success, e.g., redirect to a different page
         console.log("Thread created successfully");
         // Add your redirect logic here
+        threadAddedToast({
+          title: "Thread successfully added!",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       } else {
         // Handle error, e.g., display an error message
         console.error("Failed to create thread");

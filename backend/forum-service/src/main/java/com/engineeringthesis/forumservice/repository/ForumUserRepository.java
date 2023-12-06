@@ -2,6 +2,8 @@ package com.engineeringthesis.forumservice.repository;
 
 import com.engineeringthesis.forumservice.entity.ForumUser;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,6 +22,9 @@ public interface ForumUserRepository extends JpaRepository<ForumUser, Long> {
     boolean existsByPesel(String PESEL);
 //
     List<ForumUser> findAll();
+
+    @Query("SELECT fu.forumUserId FROM ForumUser fu WHERE fu.pesel = :pesel")
+    Long findForumUserIdByPesel(@Param("pesel") String pesel);
 //
     List<ForumUser> deleteByForumUserId(Long forumId);
 //

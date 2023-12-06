@@ -28,4 +28,6 @@ public interface ThreadRepository extends JpaRepository<Thread, Long> {
     Optional<Thread> findByThreadId(Long threadId);
 
     List<Thread> findAllByCategory(String category);
+
+    Optional<List<Thread>> findAllByAuthorIdReferenceOrderByCreationDateAsc(Long authorId);
 }

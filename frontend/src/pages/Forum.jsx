@@ -19,18 +19,60 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Forum() {
+  const pesel = sessionStorage.getItem("pesel");
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("");
   const [allThreads, setAllThreads] = useState([]);
+  const [myThreads, setMyThreads] = useState([]);
+  const [authorId, setAuthorId] = useState(null);
 
   useEffect(() => {
-    if (selectedCategory) {
-      fetchAndRefreshThreads(selectedCategory);
-    } else {
-      // Jeśli kategoria nie jest wybrana, załaduj wszystkie wątki
+    const fetchAuthorId = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:8084/forum/forumUser/getForumUserIdByPesel/${pesel}`
+        );
+        const data = await res.json();
+        setAuthorId(data);
+        sessionStorage.setItem("authorId", data.toString());
+        console.log("AuthorId: " + data);
+        console.log(
+          "session storage new authorId: " + sessionStorage.getItem("authorId")
+        );
+      } catch (error) {
+        console.error("Błąd pobierania danych:", error);
+      }
+    };
+
+    fetchAuthorId();
+  }, [pesel]);
+
+  useEffect(() => {
+    if (authorId !== null) {
+      fetchMyThreads();
+    }
+  }, [authorId]);
+
+  useEffect(() => {
+    if (!selectedCategory) {
       fetchAndRefreshThreads();
+    } else {
+      fetchAndRefreshThreads(selectedCategory);
     }
   }, [selectedCategory]);
+
+  const fetchMyThreads = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8084/forum/thread/getAllThreadsByAuthorId/${authorId}`
+      );
+
+      const data = await response.json();
+      setMyThreads(data);
+    } catch (error) {
+      console.error("Błąd podczas pobierania wątków użytkownika:", error);
+    }
+  };
 
   const fetchAndRefreshThreads = async (category) => {
     try {
@@ -127,7 +169,39 @@ export default function Forum() {
             ))}
           </Box>
         </TabPanel>
-        <TabPanel></TabPanel>
+        <TabPanel>
+          <Box>
+            <Heading mb="40px">My threads</Heading>
+            {myThreads.map((myThread) => (
+              <Card
+                key={myThread.threadId}
+                direction={{ base: "column", sm: "row" }}
+                overflow="hidden"
+                variant="outline"
+                mb="10px"
+              >
+                <Stack>
+                  <CardBody>
+                    <Heading size="md">AuthorId: {myThread.authorId}</Heading>
+                    <Heading size="md">Title: {myThread.title}</Heading>
+                    <Text py="2">Category: {myThread.category}</Text>
+                    <Text py="2">Content: {myThread.content}</Text>
+                  </CardBody>
+
+                  <CardFooter>
+                    <Button
+                      variant="solid"
+                      colorScheme="blue"
+                      onClick={() => handleShowMore(myThread.threadId)}
+                    >
+                      Show more
+                    </Button>
+                  </CardFooter>
+                </Stack>
+              </Card>
+            ))}
+          </Box>
+        </TabPanel>
       </TabPanels>
     </Tabs>
   );

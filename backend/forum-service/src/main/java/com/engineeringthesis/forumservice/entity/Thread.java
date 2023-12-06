@@ -33,6 +33,9 @@ public class Thread {
     @CreationTimestamp
     private LocalDateTime creationDate;
 
+    @Column
+    private Long authorIdReference;
+
     @ManyToOne
     @JoinColumn(name = "authorId")
     private ForumUser author;

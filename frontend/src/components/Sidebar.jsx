@@ -38,12 +38,14 @@ export default function Sidebar() {
           Forum
         </NavLink>
       </ListItem>
-      <ListItem>
-        <NavLink to="dietplan">
-          <ListIcon as={EditIcon} color="white" />
-          Diet plan
-        </NavLink>
-      </ListItem>
+      {isDoctor === "false" && (
+        <ListItem>
+          <NavLink to="dietplan">
+            <ListIcon as={EditIcon} color="white" />
+            Diet plan
+          </NavLink>
+        </ListItem>
+      )}
       {isDoctor === "true" && (
         <ListItem>
           <NavLink to="visits/create">

@@ -61,6 +61,14 @@ public class ThreadControllerImpl implements CrudController<ThreadDTO>{
         return ResponseEntity.ok(allThreadDTOS);
     }
 
+    @RequestMapping(path="/getAllThreadsByAuthorId/{authorId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ThreadDTO>> getAllThreadsByAuthorId(@PathVariable Long authorId) {
+        log.info("Starting getting list of all Thread objects by authorID: " + authorId);
+        List<Thread> allThreads = threadService.getAllThreadsByAuthorId(authorId);
+        List<ThreadDTO> allThreadDTOS = allThreads.stream().map((threadMapper::threadToThreadDTO)).collect(Collectors.toList());
+        return ResponseEntity.ok(allThreadDTOS);
+    }
+
     @Override
     @RequestMapping(method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CrudResponse> update(@RequestBody ThreadDTO threadDTO) {

@@ -55,6 +55,11 @@ public class ThreadServiceImpl  implements CrudService<Thread> {
         return threadRepository.findAllByCategory(category);
     }
 
+    public List<Thread> getAllThreadsByAuthorId(Long authorId) {
+        String message = String.format("Threads with this authorID: %d don't exist in database!", authorId);
+        return threadRepository.findAllByAuthorIdReferenceOrderByCreationDateAsc(authorId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, message));
+    }
+
     @Override
     public void update(Thread thread) {
         Long threadId = thread.getThreadId();

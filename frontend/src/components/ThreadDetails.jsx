@@ -22,6 +22,7 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Form } from "react-router-dom";
 
 export default function ThreadDetails() {
+  const authorId = sessionStorage.getItem("authorId");
   const { threadId } = useParams();
   const [threadDetails, setThreadDetails] = useState(null);
   const [allComments, setAllComments] = useState(null);
@@ -64,7 +65,7 @@ export default function ThreadDetails() {
     const commentData = {
       content: formData.get("content"),
       threadId: parseInt(threadId, 10),
-      authorId: 1,
+      authorId,
     };
 
     try {
