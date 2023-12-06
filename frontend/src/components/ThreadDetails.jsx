@@ -228,14 +228,14 @@ export default function ThreadDetails() {
         <FormControl mb="10px">
           <FormLabel mt="40px">New comment:</FormLabel>
           <Textarea
-            placeholder="Write here your comment here... It must contain at least 3 characters and at most 1000 characters! Remember to be kind to others! :)"
+            placeholder="Write your comment here... It must contain at least 3 characters and at most 1000 characters! Remember to be kind to others! :)"
             name="content"
             onChange={(e) => setCharCounter(e.target.value.length)}
           />
         </FormControl>
 
         <Flex p="10px" mb="10px" alignItems="center">
-          {charCounter <= 1000 ? (
+          {charCounter <= 1000 && charCounter >= 3 ? (
             <>
               <Button
                 type="submit"
@@ -250,7 +250,15 @@ export default function ThreadDetails() {
             </>
           ) : (
             <>
-              <Heading size="md">Your comment has too many characters!</Heading>
+              <Button
+                type="submit"
+                variant="solid"
+                colorScheme="blue"
+                isDisabled="true"
+                leftIcon={<AddIcon />}
+              >
+                Add comment
+              </Button>
               <Spacer />
               <p>Characters counter: {charCounter}</p>
             </>

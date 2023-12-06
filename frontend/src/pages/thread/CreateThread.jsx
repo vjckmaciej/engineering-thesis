@@ -12,10 +12,12 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Form } from "react-router-dom";
+import { useState } from "react";
 
 export default function CreateThread() {
   const authorId = sessionStorage.getItem("authorId");
   const threadAddedToast = useToast();
+  const [charCounter, setCharCounter] = useState(0);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -79,21 +81,41 @@ export default function CreateThread() {
         <FormControl isRequired mb="40px">
           <FormLabel>Thread title:</FormLabel>
           <Input type="text" name="title" />
-          <FormHelperText>Enter a descriptive thread title.</FormHelperText>
+          <FormHelperText>
+            Enter a descriptive thread title. It must contain at least 3
+            characters and at most 100 characters.
+          </FormHelperText>
         </FormControl>
 
         <FormControl mb="40px">
           <FormLabel>Thread content:</FormLabel>
           <Textarea
-            placeholder="Describe your problem or something you want to write about! :)"
+            placeholder="Describe your problem or something you want to write about! Remember it must contain at least 3 characters and at most 1000 characters! :)"
             name="content"
+            onChange={(e) => setCharCounter(e.target.value.length)}
           />
         </FormControl>
 
         {/* <Button type="submit">submit</Button> */}
-        <Button type="submit" variant="solid" colorScheme="green" mb="30px">
-          Create
-        </Button>
+        {charCounter <= 1000 && charCounter >= 3 ? (
+          <>
+            <Button type="submit" variant="solid" colorScheme="green" mb="30px">
+              Create thread
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              isDisabled="true"
+              type="submit"
+              variant="solid"
+              colorScheme="green"
+              mb="30px"
+            >
+              Create thread
+            </Button>
+          </>
+        )}
       </Form>
     </Box>
   );
