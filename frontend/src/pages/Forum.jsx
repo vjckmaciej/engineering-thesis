@@ -14,6 +14,8 @@ import {
   Tab,
   TabPanels,
   TabPanel,
+  HStack,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +27,7 @@ export default function Forum() {
   const [allThreads, setAllThreads] = useState([]);
   const [myThreads, setMyThreads] = useState([]);
   const [authorId, setAuthorId] = useState(null);
+  const threadDeletedToast = useToast();
 
   useEffect(() => {
     const fetchAuthorId = async () => {
@@ -106,6 +109,42 @@ export default function Forum() {
     navigate(`/app/forum/${threadId}`);
   };
 
+  const handleDelete = async (threadId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8084/forum/thread/${threadId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        console.log(`Thread with threadId ${threadId} deleted successfully`);
+
+        threadDeletedToast({
+          title: "Thread successfully deleted!",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+
+        // Aktualizuj listę wątków użytkownika po usunięciu wątku
+        fetchMyThreads();
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        console.error(`Failed to delete thread with threadId ${threadId}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   const handleChangeCategory = (event) => {
     const newCategory = event.target.value;
     setSelectedCategory(newCategory);
@@ -167,15 +206,25 @@ export default function Forum() {
                     <Text py="2">Category: {thread.category}</Text>
                     <Text py="2">Content: {thread.content}</Text>
                   </CardBody>
-
                   <CardFooter>
-                    <Button
-                      variant="solid"
-                      colorScheme="blue"
-                      onClick={() => handleShowMore(thread.threadId)}
-                    >
-                      Show more
-                    </Button>
+                    <HStack spacing="20px">
+                      <Button
+                        variant="solid"
+                        colorScheme="blue"
+                        onClick={() => handleShowMore(thread.threadId)}
+                      >
+                        Show more
+                      </Button>
+                      {thread.authorId === authorId && (
+                        <Button
+                          variant="solid"
+                          colorScheme="red"
+                          onClick={() => handleDelete(thread.threadId)}
+                        >
+                          Delete
+                        </Button>
+                      )}
+                    </HStack>
                   </CardFooter>
                 </Stack>
               </Card>
@@ -201,13 +250,22 @@ export default function Forum() {
                   </CardBody>
 
                   <CardFooter>
-                    <Button
-                      variant="solid"
-                      colorScheme="blue"
-                      onClick={() => handleShowMore(myThread.threadId)}
-                    >
-                      Show more
-                    </Button>
+                    <HStack spacing="20px">
+                      <Button
+                        variant="solid"
+                        colorScheme="blue"
+                        onClick={() => handleShowMore(myThread.threadId)}
+                      >
+                        Show more
+                      </Button>
+                      <Button
+                        variant="solid"
+                        colorScheme="red"
+                        onClick={() => handleDelete(myThread.threadId)}
+                      >
+                        Delete
+                      </Button>
+                    </HStack>
                   </CardFooter>
                 </Stack>
               </Card>

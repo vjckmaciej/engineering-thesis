@@ -9,12 +9,12 @@ import {
   CardBody,
   FormControl,
   FormLabel,
-  Input,
   Textarea,
   useToast,
   HStack,
   Flex,
   Spacer,
+  CardFooter,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { format } from "date-fns";
@@ -22,12 +22,33 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Form } from "react-router-dom";
 
 export default function ThreadDetails() {
-  const authorId = sessionStorage.getItem("authorId");
+  const authorId = parseInt(sessionStorage.getItem("authorId"), 10);
   const { threadId } = useParams();
   const [threadDetails, setThreadDetails] = useState(null);
   const [allComments, setAllComments] = useState(null);
   const commentAddedToast = useToast();
+  const commentDeletedToast = useToast();
   const [charCounter, setCharCounter] = useState(0);
+
+  const fetchComments = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8084/forum/comment/${threadId}`
+      );
+      const data = await res.json();
+
+      const commentsWithAuthors = await Promise.all(
+        data.map(async (comment) => {
+          const authorUsername = await fetchAuthorUsername(comment.authorId);
+          return { ...comment, authorUsername };
+        })
+      );
+
+      setAllComments(commentsWithAuthors);
+    } catch (error) {
+      console.error("Błąd pobierania danych:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchThreadDetails = async () => {
@@ -42,21 +63,21 @@ export default function ThreadDetails() {
       }
     };
 
-    const fetchComments = async () => {
-      try {
-        const res = await fetch(
-          `http://localhost:8084/forum/comment/${threadId}`
-        );
-        const data = await res.json();
-        setAllComments(data);
-      } catch (error) {
-        console.error("Błąd pobierania danych:", error);
-      }
-    };
-
     fetchThreadDetails();
     fetchComments();
   }, [threadId]);
+
+  const fetchAuthorUsername = async (authorId) => {
+    try {
+      const res = await fetch(
+        `http://localhost:8084/forum/forumUser/getForumUserUsernameByAuthorId/${authorId}`
+      );
+      const data = await res.text();
+      return data;
+    } catch (error) {
+      console.error("Błąd pobierania nazwy użytkownika:", error);
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -92,6 +113,43 @@ export default function ThreadDetails() {
         }, 2000);
       } else {
         console.error("Failed to add comment");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleDelete = async (commentId) => {
+    try {
+      console.log("Deleting comment with commentId:", commentId);
+      console.log("authorId:", authorId);
+
+      const response = await fetch(
+        `http://localhost:8084/forum/comment/${commentId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        console.log(`Comment with commentId ${commentId} deleted successfully`);
+
+        commentDeletedToast({
+          title: "Comment successfully deleted!",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+        fetchComments();
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        console.error(`Failed to delete comment with commentId ${commentId}`);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -143,7 +201,7 @@ export default function ThreadDetails() {
             <Stack>
               <CardBody>
                 <Heading size="sm" mb="5px">
-                  Author: {comment.authorId}
+                  Author: {comment.authorUsername}
                 </Heading>
                 <Text py="3">{comment.content}</Text>
                 <Text py="3">
@@ -151,6 +209,17 @@ export default function ThreadDetails() {
                   {format(new Date(comment.creationDate), "yyyy-MM-dd HH:mm")}
                 </Text>
               </CardBody>
+              <CardFooter>
+                {comment.authorId === authorId && (
+                  <Button
+                    variant="solid"
+                    colorScheme="red"
+                    onClick={() => handleDelete(comment.commentId)}
+                  >
+                    Delete your comment
+                  </Button>
+                )}
+              </CardFooter>
             </Stack>
           </Card>
         ))}
@@ -159,7 +228,7 @@ export default function ThreadDetails() {
         <FormControl mb="10px">
           <FormLabel mt="40px">New comment:</FormLabel>
           <Textarea
-            placeholder="Write here your comment here... It must contain at least 3 characters and at most 1000 chcaracters! Remember to be kind to others! :)"
+            placeholder="Write here your comment here... It must contain at least 3 characters and at most 1000 characters! Remember to be kind to others! :)"
             name="content"
             onChange={(e) => setCharCounter(e.target.value.length)}
           />
