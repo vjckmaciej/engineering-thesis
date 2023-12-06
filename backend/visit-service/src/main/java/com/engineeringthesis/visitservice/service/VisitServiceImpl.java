@@ -67,12 +67,16 @@ public class VisitServiceImpl implements CrudService<Visit> {
         return visitRepository.findAll();
     }
 
-    public List<Visit> getAllVisitsByPesel(String patientPesel, Boolean isDoctor) {
+    public List<Visit> getAllVisitsByPesel(String pesel, Boolean isDoctor) {
         if (isDoctor) {
-            return visitRepository.findAllByDoctorPeselOrderByVisitDateAsc(patientPesel);
+            return visitRepository.findAllByDoctorPeselOrderByVisitDateAsc(pesel);
         } else {
-            return visitRepository.findAllByPatientPeselOrderByVisitDateAsc(patientPesel);
+            return visitRepository.findAllByPatientPeselOrderByVisitDateAsc(pesel);
         }
+    }
+
+    public List<Visit> getAllVisitsByPeselWithGivenPatientPesel(String pesel, String patientPesel) {
+        return visitRepository.findAllByDoctorPeselAndPatientPeselOrderByVisitDateAsc(pesel, patientPesel);
     }
 
 

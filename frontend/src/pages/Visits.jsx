@@ -17,6 +17,10 @@ import {
   Spinner,
   Container,
   Spacer,
+  FormControl,
+  FormLabel,
+  Input,
+  FormHelperText,
 } from "@chakra-ui/react";
 import { ViewIcon } from "@chakra-ui/icons";
 
@@ -25,6 +29,7 @@ export default function Visits() {
   const pesel = sessionStorage.getItem("pesel");
   const isDoctor = sessionStorage.getItem("isDoctor");
   const [loading, setLoading] = useState(false);
+  const [selectedPatientPesel, setSelectedPatientPesel] = useState("");
   const [myVisits, setMyVisits] = useState([]);
   const [analysisResult, setAnalysisResult] = useState("");
   const [nearestPlannedVisit, setNearestPlannedVisit] = useState(null);
@@ -37,6 +42,7 @@ export default function Visits() {
         const res = await fetch(
           `http://localhost:8082/visit/visit/myvisits/${pesel}?isDoctor=${isDoctor}`
         );
+
         const data = await res.json();
         setMyVisits(data);
       } catch (error) {
@@ -81,6 +87,32 @@ export default function Visits() {
       setAnalysisResult(data);
     } catch (error) {
       console.error("Błąd pobierania danych:", error);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setSelectedPatientPesel(e.target.value);
+  };
+
+  const findDoctorVisitWithGivenPatientPesel = async () => {
+    try {
+      let res;
+      if (selectedPatientPesel !== "") {
+        res = await fetch(
+          `http://localhost:8082/visit/visit/myvisitsWithGivenPatientPesel/${pesel}?patientPesel=${selectedPatientPesel}`
+        );
+      } else {
+        res = await fetch(
+          `http://localhost:8082/visit/visit/myvisits/${pesel}?isDoctor=${isDoctor}`
+        );
+      }
+
+      const data = await res.json();
+      setMyVisits(data);
+    } catch (error) {
+      console.error("Błąd pobierania danych:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -140,6 +172,39 @@ export default function Visits() {
       <Heading mb="40px" mt="100px" textAlign="center">
         All visits
       </Heading>
+      <FormControl mb="40px">
+        <FormLabel>Enter patient PESEL to filter visits:</FormLabel>
+        <Input
+          type="text"
+          name="selectedPatientPesel"
+          value={selectedPatientPesel}
+          onChange={handleInputChange}
+        />
+        <Button
+          bg={"pink.500"}
+          rounded={"full"}
+          color={"white"}
+          _hover={{ bg: "purple.300" }}
+          mt="5px"
+          onClick={findDoctorVisitWithGivenPatientPesel}
+        >
+          Find patient visits
+        </Button>
+        <Button
+          ml="10px"
+          bg={"blue.500"}
+          rounded={"full"}
+          color={"white"}
+          _hover={{ bg: "green.300" }}
+          mt="5px"
+          onClick={() => {
+            setSelectedPatientPesel("");
+            findDoctorVisitWithGivenPatientPesel;
+          }}
+        >
+          Clear
+        </Button>
+      </FormControl>
       {isDoctor === "false" && (
         <>
           <Button bg="cyan" onClick={() => analyzeVisitsByOpenAI()}>

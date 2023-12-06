@@ -24,6 +24,8 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
 
     List<Visit> findAllByDoctorPeselOrderByVisitDateAsc(String doctorPesel);
 
+    List<Visit> findAllByDoctorPeselAndPatientPeselOrderByVisitDateAsc(String doctorPesel, String patientPesel);
+
     List<Visit> findAllByVisitDate(LocalDateTime visitDate);
 
 

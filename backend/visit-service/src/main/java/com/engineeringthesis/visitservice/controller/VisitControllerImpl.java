@@ -134,10 +134,33 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         return ResponseEntity.ok(allPlannedVisitDTOS);
     }
 
-    @RequestMapping(path = "/myvisits/{patientPesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<VisitDTO>> getAllMyVisits(@PathVariable String patientPesel, @RequestParam Boolean isDoctor) {
-        log.info("Starting getting list of all my Visit objects");
-        List<Visit> allVisits = visitService.getAllVisitsByPesel(patientPesel, isDoctor);
+    @RequestMapping(path = "/myvisits/{pesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<VisitDTO>> getAllMyVisits(@PathVariable String pesel, @RequestParam Boolean isDoctor) {
+        log.info("Starting getting list of all my Visit objects with PESEL: " + pesel);
+
+//        List<Visit> allVisits;
+//        if (patientPesel != null) {
+//            allVisits = visitService.getAllVisitsByPesel(pesel, isDoctor);
+//        } else {
+//            allVisits = visitService.getAllVisitsByPeselWithGivenPatientPesel(pesel, patientPesel);
+//        }
+        List<Visit> allVisits = visitService.getAllVisitsByPesel(pesel, isDoctor);
+
+        List<VisitDTO> allPlannedVisitDTOS = allVisits.stream().map((visitMapper::visitToVisitDTO)).collect(Collectors.toList());
+        return ResponseEntity.ok(allPlannedVisitDTOS);
+    }
+
+    @RequestMapping(path = "/myvisitsWithGivenPatientPesel/{pesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<VisitDTO>> getAllMyVisitsWithMyPatientPesel(@PathVariable String pesel, @RequestParam String patientPesel) {
+        log.info("Starting getting list of all my Visit objects with PESEL: " + pesel);
+
+//        List<Visit> allVisits;
+//        if (patientPesel != null) {
+//            allVisits = visitService.getAllVisitsByPesel(pesel, isDoctor);
+//        } else {
+//            allVisits = visitService.getAllVisitsByPeselWithGivenPatientPesel(pesel, patientPesel);
+//        }
+        List<Visit> allVisits = visitService.getAllVisitsByPeselWithGivenPatientPesel(pesel, patientPesel);
 
         List<VisitDTO> allPlannedVisitDTOS = allVisits.stream().map((visitMapper::visitToVisitDTO)).collect(Collectors.toList());
         return ResponseEntity.ok(allPlannedVisitDTOS);
