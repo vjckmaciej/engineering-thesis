@@ -119,9 +119,9 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
     }
 
     @RequestMapping(path = "/plannedVisits/{patientPesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<VisitDTO>> getAllPlannedVisits(@PathVariable String patientPesel) {
-        log.info("Starting getting list of all Visit objects");
-        List<Visit> allVisits = visitService.getAllVisitsByPatientPesel(patientPesel);
+    public ResponseEntity<List<VisitDTO>> getAllPlannedVisits(@PathVariable String patientPesel, @RequestParam Boolean isDoctor) {
+        log.info("Starting getting list of all planned Visit objects");
+        List<Visit> allVisits = visitService.getAllVisitsByPesel(patientPesel, isDoctor);
         List<Visit> allPlannedVisits = new ArrayList<>();
 
         for (Visit visit : allVisits) {
@@ -135,9 +135,9 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
     }
 
     @RequestMapping(path = "/myvisits/{patientPesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<VisitDTO>> getAllMyVisits(@PathVariable String patientPesel) {
+    public ResponseEntity<List<VisitDTO>> getAllMyVisits(@PathVariable String patientPesel, @RequestParam Boolean isDoctor) {
         log.info("Starting getting list of all my Visit objects");
-        List<Visit> allVisits = visitService.getAllVisitsByPatientPesel(patientPesel);
+        List<Visit> allVisits = visitService.getAllVisitsByPesel(patientPesel, isDoctor);
 
         List<VisitDTO> allPlannedVisitDTOS = allVisits.stream().map((visitMapper::visitToVisitDTO)).collect(Collectors.toList());
         return ResponseEntity.ok(allPlannedVisitDTOS);
@@ -167,7 +167,7 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
     @RequestMapping(path = "/generateReportPatientPesel/{patientPesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<VisitResultsReportDTO>> generateReportByPatientPesel(@PathVariable String patientPesel) {
         log.info("Starting generating report for Visits with patient pesel: " + patientPesel);
-        List<Visit> allVisitsWithGivenPatientPesel = visitService.getAllVisitsByPatientPesel(patientPesel);
+        List<Visit> allVisitsWithGivenPatientPesel = visitService.getAllVisitsByPesel(patientPesel, false);
         List<VisitResultsReportDTO> allVisitResultsReportDTO = new ArrayList<>();
 
         for (Visit visit : allVisitsWithGivenPatientPesel) {
@@ -251,10 +251,10 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         return new ResponseEntity<>(dietPlanDayResponseDTOList, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/nearestPlannedVisit/{patientPesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<VisitDTO> getById(@PathVariable String patientPesel) {
-        log.info("Starting finding nearest Visit for patient with pesel: " + patientPesel);
-        Optional<Visit> visit = visitService.findNearestPlannedVisit(patientPesel);
+    @RequestMapping(path = "/nearestPlannedVisit/{pesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<VisitDTO> getNearestPlannedVisit(@PathVariable String pesel, @RequestParam Boolean isDoctor) {
+        log.info("Starting finding nearest Visit for user with PESEL: " + pesel);
+        Optional<Visit> visit = visitService.findNearestPlannedVisit(pesel, isDoctor);
 
         VisitDTO visitDTO = new VisitDTO();
         if (visit.isPresent()) {
@@ -262,6 +262,8 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         }
         return ResponseEntity.ok(visitDTO);
     }
+
+
 
     @Override
     @RequestMapping(method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)

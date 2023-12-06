@@ -41,7 +41,7 @@ public class VisitServiceImpl implements CrudService<Visit> {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
                 }
             }
-            
+
             if (visitRepository.existsByVisitId(visitId)) {
                 String message = String.format("Visit with this visitId: %d already exists in database!", visitId);
                 log.error(message);
@@ -67,10 +67,23 @@ public class VisitServiceImpl implements CrudService<Visit> {
         return visitRepository.findAll();
     }
 
-    public List<Visit> getAllVisitsByPatientPesel(String patientPesel) { return  visitRepository.findAllByPatientPesel(patientPesel); }
+    public List<Visit> getAllVisitsByPesel(String patientPesel, Boolean isDoctor) {
+        if (isDoctor) {
+            return visitRepository.findAllByDoctorPeselOrderByVisitDateAsc(patientPesel);
+        } else {
+            return visitRepository.findAllByPatientPeselOrderByVisitDateAsc(patientPesel);
+        }
+    }
 
-    public Optional<Visit> findNearestPlannedVisit(String patientPesel) {
-        return visitRepository.findNextScheduledVisitByPatientPesel(patientPesel);
+
+
+    public Optional<Visit> findNearestPlannedVisit(String pesel, Boolean isDoctor) {
+        if (isDoctor) {
+            return visitRepository.findNextScheduledVisitByDoctorPesel(pesel);
+        } else {
+            return visitRepository.findNextScheduledVisitByPatientPesel(pesel);
+        }
+
     }
 
     @Override

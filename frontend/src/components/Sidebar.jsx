@@ -10,6 +10,8 @@ import {
 import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
+  const isDoctor = sessionStorage.getItem("isDoctor");
+
   return (
     <List color="white" fontSize="1.2em" spacing={6}>
       <ListItem>
@@ -42,12 +44,14 @@ export default function Sidebar() {
           Diet plan
         </NavLink>
       </ListItem>
-      <ListItem>
-        <NavLink to="visits/create">
-          <ListIcon as={AddIcon} color="white" />
-          Add new visit
-        </NavLink>
-      </ListItem>
+      {isDoctor === "true" && (
+        <ListItem>
+          <NavLink to="visits/create">
+            <ListIcon as={AddIcon} color="white" />
+            Add new visit
+          </NavLink>
+        </ListItem>
+      )}
 
       <ListItem>
         <NavLink to="dashboard">

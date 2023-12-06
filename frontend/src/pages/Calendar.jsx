@@ -1,24 +1,25 @@
-import { EditIcon, ViewIcon } from "@chakra-ui/icons";
+import React, { useEffect, useState } from "react";
 import {
   Box,
-  SimpleGrid,
-  Text,
-  Flex,
   Heading,
+  SimpleGrid,
+  Spinner,
   Card,
   CardHeader,
+  Flex,
+  Button,
+  Text,
+  Divider,
   CardBody,
   CardFooter,
   HStack,
-  Divider,
-  Button,
-  Spinner,
 } from "@chakra-ui/react";
 import { useLoaderData } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import { ViewIcon } from "@chakra-ui/icons";
 
 export default function Calendar() {
   const pesel = sessionStorage.getItem("pesel");
+  const isDoctor = sessionStorage.getItem("isDoctor");
   const [loading, setLoading] = useState(false);
   const calendarWeeks = useLoaderData();
   const [patientCalendarWeek, setPatientCalendarWeek] = useState(null);
@@ -40,14 +41,16 @@ export default function Calendar() {
       }
     };
 
-    fetchData();
-  }, [pesel]);
+    if (isDoctor === "false") {
+      fetchData();
+    }
+  }, [pesel, isDoctor]);
 
   return (
     <Box>
-      <Heading mb="40px">Your calendar week</Heading>
-      {patientCalendarWeek && (
+      {isDoctor === "false" && patientCalendarWeek && (
         <Box>
+          <Heading mb="40px">Your calendar week</Heading>
           <Card
             key={patientCalendarWeek.calendarWeekId}
             borderTop="8px"
@@ -77,7 +80,7 @@ export default function Calendar() {
         </Box>
       )}
 
-      <Heading mb="40px" mt="100px">
+      <Heading mb="40px" mt="30px">
         All calendar weeks
       </Heading>
       {loading ? (

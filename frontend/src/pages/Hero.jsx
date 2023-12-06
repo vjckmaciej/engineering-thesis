@@ -5,30 +5,73 @@ import {
   Text,
   VStack,
   useBreakpointValue,
-  Textarea,
   FormControl,
   FormLabel,
-  Input,
   FormHelperText,
+  Input,
+  RadioGroup,
+  Radio,
+  useToast,
 } from "@chakra-ui/react";
-import { NavLink, useNavigate, Outlet } from "react-router-dom";
-import { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 
 export default function Hero() {
   const navigate = useNavigate();
   const [pesel, setPesel] = useState("");
+  const [isDoctor, setIsDoctor] = useState("");
+  const loginFailedToast = useToast();
 
   const handleInputChange = (e) => {
     setPesel(e.target.value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Save pesel in sessionStorage
     sessionStorage.setItem("pesel", pesel);
+    sessionStorage.setItem("isDoctor", isDoctor.toString());
 
-    console.log(pesel);
-    // Navigate to the '/create' route
-    navigate("app/dashboard");
+    if (pesel.length !== 11) {
+      loginFailedToast({
+        title: "Invalid PESEL! PESEL must have 11 digits.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      console.log("isDoctor: " + isDoctor);
+      let res;
+      if (isDoctor) {
+        console.log("I'ma a Doctor");
+        res = await fetch(
+          `http://localhost:8081/user/doctor/existsByPesel/${pesel}`
+        );
+      } else {
+        console.log("I'm a patient");
+
+        res = await fetch(
+          `http://localhost:8081/user/patient/existsByPesel/${pesel}`
+        );
+      }
+
+      const data = await res.json();
+
+      if (typeof data === "boolean" && data === true) {
+        navigate("/app/calendar");
+      } else {
+        loginFailedToast({
+          title: "Login failed! You entered wrong credentials.",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("Błąd pobierania danych:", error);
+    }
   };
 
   return (
@@ -45,7 +88,7 @@ export default function Hero() {
         px={useBreakpointValue({ base: 4, md: 8 })}
         bgGradient={"linear(to-r, cyan.600, transparent)"}
       >
-        <Stack maxW={"2xl"} align={"flex-center"} spacing={6}>
+        <Stack maxW={"2xl"} align={"center"} spacing={6}>
           <Text
             color={"white"}
             fontWeight={700}
@@ -63,8 +106,7 @@ export default function Hero() {
           >
             Razem przez ciążę
           </Text>
-          d
-          <Stack direction={"column"}>
+          <Stack direction={"column"} spacing={4} align="center">
             <Button
               bg={"pink.400"}
               rounded={"full"}
@@ -73,7 +115,6 @@ export default function Hero() {
             >
               Zaloguj się
             </Button>
-            /*dodac rejestracje */
             <Button
               bg={"pink.200"}
               rounded={"full"}
@@ -83,7 +124,7 @@ export default function Hero() {
               Zarejestruj się
             </Button>
             <Button>
-              <NavLink to="create">Przejdz do aplikacji</NavLink>
+              <NavLink to="/app/dashboard">Przejdź do aplikacji</NavLink>
             </Button>
             <FormControl isRequired mb="40px">
               <FormLabel>Podaj pesel:</FormLabel>
@@ -93,7 +134,19 @@ export default function Hero() {
                 value={pesel}
                 onChange={handleInputChange}
               />
-              <FormHelperText>Enter PESEL</FormHelperText>
+              <FormHelperText>Wprowadź PESEL</FormHelperText>
+            </FormControl>
+            <FormControl isRequired mt="20px">
+              <FormLabel>Wybierz typ użytkownika</FormLabel>
+              <RadioGroup
+                onChange={(value) => setIsDoctor(value === "true")}
+                value={isDoctor.toString()}
+              >
+                <Stack direction="row">
+                  <Radio value="false">Patient</Radio>
+                  <Radio value="true">Doctor</Radio>
+                </Stack>
+              </RadioGroup>
             </FormControl>
             <Button
               bg={"pink.400"}
@@ -102,7 +155,7 @@ export default function Hero() {
               _hover={{ bg: "purpleAlpha.500" }}
               onClick={handleSubmit}
             >
-              Submit
+              Zatwierdź
             </Button>
           </Stack>
         </Stack>

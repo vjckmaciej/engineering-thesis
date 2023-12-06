@@ -20,11 +20,13 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
 
     List<Visit> findAll();
 
-    List<Visit> findAllByPatientPesel(String patientPesel);
+    List<Visit> findAllByPatientPeselOrderByVisitDateAsc(String patientPesel);
 
-    List<Visit> findAllByDoctorPesel(String doctorPesel);
+    List<Visit> findAllByDoctorPeselOrderByVisitDateAsc(String doctorPesel);
 
     List<Visit> findAllByVisitDate(LocalDateTime visitDate);
+
+
     List<Visit> deleteByVisitId(Long visitId);
 
 
@@ -35,5 +37,13 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
             "ORDER BY v.visitDate ASC " +
             "LIMIT 1")
     Optional<Visit> findNextScheduledVisitByPatientPesel(@Param("patientPesel") String patientPesel);
+
+    @Query("SELECT v FROM Visit v " +
+            "WHERE v.doctorPesel = :doctorPesel " +
+            "AND v.visitStatus = 'SCHEDULED' " +
+            "AND v.visitDate > CURRENT_TIMESTAMP " +
+            "ORDER BY v.visitDate ASC " +
+            "LIMIT 1")
+    Optional<Visit> findNextScheduledVisitByDoctorPesel(@Param("doctorPesel") String doctorPesel);
 
 }

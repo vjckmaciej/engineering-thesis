@@ -12,6 +12,9 @@ import {
   Input,
   Textarea,
   useToast,
+  HStack,
+  Flex,
+  Spacer,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { format } from "date-fns";
@@ -23,6 +26,7 @@ export default function ThreadDetails() {
   const [threadDetails, setThreadDetails] = useState(null);
   const [allComments, setAllComments] = useState(null);
   const commentAddedToast = useToast();
+  const [charCounter, setCharCounter] = useState(0);
 
   useEffect(() => {
     const fetchThreadDetails = async () => {
@@ -151,22 +155,37 @@ export default function ThreadDetails() {
         ))}
 
       <Form method="post" onSubmit={handleSubmit}>
-        <FormControl mb="40px">
+        <FormControl mb="10px">
           <FormLabel mt="40px">New comment:</FormLabel>
           <Textarea
-            placeholder="Write here your comment here..."
+            placeholder="Write here your comment here... It must contain at least 3 characters and at most 1000 chcaracters! Remember to be kind to others! :)"
             name="content"
+            onChange={(e) => setCharCounter(e.target.value.length)}
           />
         </FormControl>
 
-        <Button
-          type="submit"
-          variant="solid"
-          colorScheme="blue"
-          leftIcon={<AddIcon />}
-        >
-          Add comment
-        </Button>
+        <Flex p="10px" mb="10px" alignItems="center">
+          {charCounter <= 1000 ? (
+            <>
+              <Button
+                type="submit"
+                variant="solid"
+                colorScheme="blue"
+                leftIcon={<AddIcon />}
+              >
+                Add comment
+              </Button>
+              <Spacer />
+              <p>Characters counter: {charCounter}</p>
+            </>
+          ) : (
+            <>
+              <Heading size="md">Your comment has too many characters!</Heading>
+              <Spacer />
+              <p>Characters counter: {charCounter}</p>
+            </>
+          )}
+        </Flex>
       </Form>
     </Box>
   );

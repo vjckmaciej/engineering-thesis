@@ -22,6 +22,7 @@ import { ViewIcon } from "@chakra-ui/icons";
 export default function Visits() {
   const navigate = useNavigate();
   const pesel = sessionStorage.getItem("pesel");
+  const isDoctor = sessionStorage.getItem("isDoctor");
   const [loading, setLoading] = useState(false);
   const [myVisits, setMyVisits] = useState([]);
   const [analysisResult, setAnalysisResult] = useState("");
@@ -33,7 +34,7 @@ export default function Visits() {
 
       try {
         const res = await fetch(
-          `http://localhost:8082/visit/visit/myvisits/${pesel}`
+          `http://localhost:8082/visit/visit/myvisits/${pesel}?isDoctor=${isDoctor}`
         );
         const data = await res.json();
         setMyVisits(data);
@@ -51,7 +52,7 @@ export default function Visits() {
     const fetchNearestPlannedVisit = async () => {
       try {
         const res = await fetch(
-          `http://localhost:8082/visit/visit/nearestPlannedVisit/${pesel}`
+          `http://localhost:8082/visit/visit/nearestPlannedVisit/${pesel}?isDoctor=${isDoctor}`
         );
         const data = await res.json();
         setNearestPlannedVisit(data);

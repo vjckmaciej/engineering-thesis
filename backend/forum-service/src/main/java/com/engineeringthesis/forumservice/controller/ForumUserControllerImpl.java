@@ -42,7 +42,7 @@ public class ForumUserControllerImpl implements CrudController<ForumUserDTO> {
         String forumUserPesel = forumUserDTO.getPesel();
 
         try {
-            ResponseEntity<PatientDTO> optionalPatientDTO = userServiceClient.getByPesel(forumUserPesel);
+            ResponseEntity<PatientDTO> optionalPatientDTO = userServiceClient.getPatientByPesel(forumUserPesel);
             if (optionalPatientDTO.getStatusCode().equals(HttpStatus.OK)) {
                 ForumUser forumUser = forumUserMapper.forumUserDTOToForumUser(forumUserDTO);
                 forumUserService.save(forumUser);
