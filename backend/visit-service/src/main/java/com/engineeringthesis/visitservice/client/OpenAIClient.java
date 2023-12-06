@@ -9,6 +9,9 @@ public interface OpenAIClient {
     @PostMapping("/api/v1/analyzeReport")
     String analyzeReport(@RequestBody String query);
 
+    @PostMapping("/api/v1/analyzeVisit")
+    String analyzeVisit(@RequestBody String query);
+
     @PostMapping("/api/v1/generateDietPlan")
     String generateDietPlan(@RequestBody String query);
 }

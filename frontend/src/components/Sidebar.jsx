@@ -54,19 +54,6 @@ export default function Sidebar() {
           </NavLink>
         </ListItem>
       )}
-
-      <ListItem>
-        <NavLink to="dashboard">
-          <ListIcon as={CalendarIcon} color="white" />
-          Dashboard
-        </NavLink>
-      </ListItem>
-      <ListItem>
-        <NavLink to="create">
-          <ListIcon as={EditIcon} color="white" />
-          New Task
-        </NavLink>
-      </ListItem>
     </List>
   );
 }

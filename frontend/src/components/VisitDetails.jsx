@@ -12,10 +12,12 @@ import {
 import { useParams } from "react-router-dom";
 
 export default function VisitDetails() {
+  const isDoctor = sessionStorage.getItem("isDoctor");
   const { visitId } = useParams();
   const [visitDetails, setVisitDetails] = useState(null);
   const [medicalExaminations, setMedicalExaminations] = useState(null);
   const [resultsMap, setResultsMap] = useState({});
+  const [analysisResult, setAnalysisResult] = useState("");
 
   useEffect(() => {
     const fetchVisitDetails = async () => {
@@ -65,6 +67,18 @@ export default function VisitDetails() {
     }));
   };
 
+  const analyzeVisitByOpenAI = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8082/visit/visit/analyzeVisitByOpenAI/${visitId}`
+      );
+      const data = await res.text();
+      setAnalysisResult(data);
+    } catch (error) {
+      console.error("Błąd pobierania danych:", error);
+    }
+  };
+
   return (
     <Box>
       {visitDetails ? (
@@ -95,6 +109,11 @@ export default function VisitDetails() {
       ) : (
         <Text>Loading...</Text>
       )}
+
+      <Button bg="cyan" onClick={() => analyzeVisitByOpenAI()}>
+        Click to analyze this Visit by OpenAI
+      </Button>
+      <Text>Analysis result: {analysisResult}</Text>
 
       <Heading mb="4" mt="40px">
         All medical examinations

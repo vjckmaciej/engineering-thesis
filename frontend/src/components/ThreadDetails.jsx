@@ -173,7 +173,7 @@ export default function ThreadDetails() {
                 <Text py="2">Category: {threadDetails.category}</Text>
                 <Text py="2">Content: {threadDetails.content}</Text>
                 <Text py="3">
-                  Added:{" "}
+                  Created:{" "}
                   {format(
                     new Date(threadDetails.creationDate),
                     "yyyy-MM-dd HH:mm:ss"

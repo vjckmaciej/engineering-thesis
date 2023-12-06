@@ -19,6 +19,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
 
 export default function Forum() {
   const pesel = sessionStorage.getItem("pesel");
@@ -205,6 +206,11 @@ export default function Forum() {
                     <Heading size="md">Title: {thread.title}</Heading>
                     <Text py="2">Category: {thread.category}</Text>
                     <Text py="2">Content: {thread.content}</Text>
+                    Created:{" "}
+                    {format(
+                      new Date(thread.creationDate),
+                      "yyyy-MM-dd HH:mm:ss"
+                    )}
                   </CardBody>
                   <CardFooter>
                     <HStack spacing="20px">
@@ -246,6 +252,7 @@ export default function Forum() {
                   <CardBody>
                     <Heading size="md">Title: {myThread.title}</Heading>
                     <Text py="2">Category: {myThread.category}</Text>
+                    <Text py="2">Content: {myThread.content}</Text>
                     <Text py="2">Content: {myThread.content}</Text>
                   </CardBody>
 

@@ -28,6 +28,18 @@ public class OpenAIAnalysisControllerImpl {
         return openAIAnalysisService.analyzeReport(queryRequest.getQuery());
     }
 
+    @PostMapping("/analyzeVisit")
+    public String analyzeVisit(@RequestBody String query) {
+        QueryRequest queryRequest = new QueryRequest();
+        queryRequest.setQuery(
+                "Prosze przeanalizowac raport z podanej wizyty kobiety u ginekologa i ocenic ryzyko zagrozenia ciazy na podstawie podanych danych:"
+                        + query);
+
+        log.info("Starting query: " + queryRequest.getQuery());
+
+        return openAIAnalysisService.analyzeReport(queryRequest.getQuery());
+    }
+
     @PostMapping("/generateDietPlan")
     public String generateDietPlan(@RequestBody String query) {
         QueryRequest queryRequest = new QueryRequest();

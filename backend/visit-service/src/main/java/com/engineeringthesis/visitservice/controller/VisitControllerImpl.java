@@ -206,7 +206,22 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
 
         String visitResultReportString = resultStringBuilder.toString();
         log.info("visitResultReportString: " + visitResultReportString);
-        String response = openAIClient.analyzeReport(visitResultReportString);
+        String response = openAIClient.analyzeVisit(visitResultReportString);
+        log.info("Response: " + response);
+
+        return response;
+    }
+
+    @RequestMapping(path = "/analyzeVisitByOpenAI/{visitId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String analyzeVisitByOpenAI(@PathVariable Long visitId) {
+        log.info("Starting analyzing visit with OpenAI for VisitID: " + visitId);
+        VisitResultsReportDTO visitResultsReportDTO = generateReportById(visitId).getBody();
+
+
+        assert visitResultsReportDTO != null;
+        String visitReportString = visitResultsReportDTO.toString();
+        log.info("visitResultReportString: " + visitReportString);
+        String response = openAIClient.analyzeVisit(visitReportString);
         log.info("Response: " + response);
 
         return response;

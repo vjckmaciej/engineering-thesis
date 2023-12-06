@@ -16,6 +16,7 @@ import {
   Button,
   Spinner,
   Container,
+  Spacer,
 } from "@chakra-ui/react";
 import { ViewIcon } from "@chakra-ui/icons";
 
@@ -139,10 +140,14 @@ export default function Visits() {
       <Heading mb="40px" mt="100px" textAlign="center">
         All visits
       </Heading>
-      <Button bg="cyan" onClick={() => analyzeVisitsByOpenAI()}>
-        Click to analyze by OpenAI
-      </Button>
-      <Text>Analysis result: {analysisResult}</Text>
+      {isDoctor === "false" && (
+        <>
+          <Button bg="cyan" onClick={() => analyzeVisitsByOpenAI()}>
+            Click to analyze by OpenAI
+          </Button>
+          <Text>Analysis result: {analysisResult}</Text>
+        </>
+      )}
 
       {loading ? (
         <Spinner />
@@ -169,6 +174,7 @@ export default function Visits() {
                           "yyyy-MM-dd HH:mm"
                         )}
                       </Heading>
+                      <Spacer />
                     </Box>
                   </Flex>
                 </CardHeader>
