@@ -18,7 +18,7 @@ const BloodTestForm = ({ onSubmit }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onSubmit(formData); // Przekazanie danych z formularza
+    onSubmit(formData); // Przekazanie danych do funkcji onSubmit
   };
 
   return (

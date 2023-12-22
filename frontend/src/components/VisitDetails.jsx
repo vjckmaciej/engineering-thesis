@@ -25,6 +25,15 @@ export default function VisitDetails() {
   const [analysisResult, setAnalysisResult] = useState("");
   const [areResultsLoaded, setAreResultsLoaded] = useState(false);
   const [selectedExaminationType, setSelectedExaminationType] = useState("");
+  const resultNameMapping = {
+    hemoglobin: "Hemoglobina",
+    whiteBloodCellCount: "Liczba białych krwinek",
+    plateletCount: "Liczba płytek krwi",
+    fastingGlucose: "Poziom glukozy na czczo",
+    ironLevel: "Poziom żelaza",
+    infectionTest: "Test na obecność infekcji",
+    bloodGroup: "Grupa krwi",
+  };
 
   useEffect(() => {
     const fetchVisitDetails = async () => {
@@ -96,17 +105,14 @@ export default function VisitDetails() {
   const handleSubmitMedicalExamination = async (formData) => {
     event.preventDefault();
 
-    // Upewnij się, że wszystkie wymagane pola są uwzględnione
     const medicalExaminationData = {
-      medicalExaminationName: selectedExaminationType, // Nazwa badania
-      visitId: visitIdForm, // ID wizyty
-      // Dodaj inne wymagane pola z examinationData
+      medicalExaminationName: selectedExaminationType,
+      visitId: visitIdForm,
     };
 
-    console.log("Dane wysyłane do serwera:", medicalExaminationData);
-
     try {
-      const response = await fetch(
+      // Dodanie MedicalExamination
+      let response = await fetch(
         "http://localhost:8082/visit/medicalExamination",
         {
           method: "POST",
@@ -117,13 +123,37 @@ export default function VisitDetails() {
         }
       );
 
-      if (response.ok) {
-        console.log("Badanie medyczne dodane pomyślnie.");
-        // Dodaj odpowiednią logikę po sukcesie
-      } else {
-        console.error("Nie udało się dodać badania medycznego.");
-        // Dodaj odpowiednią logikę błędu
+      if (!response.ok) {
+        throw new Error("Nie udało się dodać badania medycznego.");
       }
+
+      // Pobranie ID nowo dodanego MedicalExamination
+      const examinationResponse = await response.json();
+      const medicalExaminationId = examinationResponse.id;
+
+      // Wysłanie wyników badań
+      for (const [key, value] of Object.entries(formData)) {
+        const resultData = {
+          resultName: key,
+          numericalResult: value,
+          medicalExaminationId: medicalExaminationId,
+          // Dodać inne wymagane pola do resultData
+        };
+
+        response = await fetch("http://localhost:8082/visit/result", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(resultData),
+        });
+
+        if (!response.ok) {
+          console.error(`Błąd podczas dodawania wyniku: ${key}`);
+        }
+      }
+
+      console.log("Wszystkie wyniki badań dodane pomyślnie.");
     } catch (error) {
       console.error("Wystąpił błąd:", error);
     }
@@ -260,20 +290,17 @@ export default function VisitDetails() {
                 {resultsMap[medicalExamination.medicalExaminationId] &&
                   resultsMap[medicalExamination.medicalExaminationId].map(
                     (result) => (
-                      <Container mb="10px" key={result.resultId}>
+                      <Container mb="15px" key={result.resultId}>
                         <Text fontWeight="bold">
-                          Result Id: {result.resultId}
+                          Nazwa badania:{" "}
+                          {resultNameMapping[result.resultName] ||
+                            result.resultName}
                         </Text>
-                        <Text>Result Name: {result.resultName}</Text>
-                        <Text>
-                          Result Description: {result.resultDescription}
-                        </Text>
-                        <Text>Numerical Result: {result.numericalResult}</Text>
-                        <Text>Unit: {result.unit}</Text>
-                        <Text>
-                          Descriptive Result: {result.descriptiveResult}
-                        </Text>
-                        <Text>Doctor Note: {result.doctorNote}</Text>
+                        <Text>Opis badania: {result.resultDescription}</Text>
+                        <Text>Wynik liczbowy: {result.numericalResult}</Text>
+                        <Text>Jednostka: {result.unit}</Text>
+                        <Text>Wynik opisowy: {result.descriptiveResult}</Text>
+                        <Text>Notatka lekarza: {result.doctorNote}</Text>
                       </Container>
                     )
                   )}
