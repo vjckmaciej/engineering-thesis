@@ -6,8 +6,6 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 
 export default function RootLayout() {
-  console.log("RootLayout rendered");
-
   return (
     <Grid templateColumns="repeat(6 , 1fr)" bg="gray.50">
       {/* sidebar */}

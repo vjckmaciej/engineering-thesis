@@ -25,15 +25,6 @@ export default function VisitDetails() {
   const [analysisResult, setAnalysisResult] = useState("");
   const [areResultsLoaded, setAreResultsLoaded] = useState(false);
   const [selectedExaminationType, setSelectedExaminationType] = useState("");
-  const resultNameMapping = {
-    hemoglobin: "Hemoglobina",
-    whiteBloodCellCount: "Liczba białych krwinek",
-    plateletCount: "Liczba płytek krwi",
-    fastingGlucose: "Poziom glukozy na czczo",
-    ironLevel: "Poziom żelaza",
-    infectionTest: "Test na obecność infekcji",
-    bloodGroup: "Grupa krwi",
-  };
 
   useEffect(() => {
     const fetchVisitDetails = async () => {
@@ -111,7 +102,6 @@ export default function VisitDetails() {
     };
 
     try {
-      // Dodanie MedicalExamination
       let response = await fetch(
         "http://localhost:8082/visit/medicalExamination",
         {
@@ -127,33 +117,50 @@ export default function VisitDetails() {
         throw new Error("Nie udało się dodać badania medycznego.");
       }
 
-      // Pobranie ID nowo dodanego MedicalExamination
       const examinationResponse = await response.json();
       const medicalExaminationId = examinationResponse.id;
 
-      // Wysłanie wyników badań
-      for (const [key, value] of Object.entries(formData)) {
-        const resultData = {
-          resultName: key,
-          numericalResult: value,
-          medicalExaminationId: medicalExaminationId,
-          // Dodać inne wymagane pola do resultData
-        };
+      const tests = [
+        "hemoglobin",
+        "whiteBloodCellCount",
+        "plateletCount",
+        "fastingGlucose",
+        "ironLevel",
+        "infectionTest",
+        "bloodGroup",
+      ];
 
-        response = await fetch("http://localhost:8082/visit/result", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(resultData),
-        });
+      for (const test of tests) {
+        const numericalResult = formData[`${test}NumericalResult`];
+        const descriptiveResult = formData[`${test}DescriptiveResult`];
 
-        if (!response.ok) {
-          console.error(`Błąd podczas dodawania wyniku: ${key}`);
+        // Sprawdź, czy wynik liczbowy został wypełniony
+        if (numericalResult || descriptiveResult) {
+          const resultData = {
+            resultName: test,
+            numericalResult: numericalResult,
+            unit: formData[`${test}Unit`],
+            resultDescription: formData[`${test}Description`],
+            descriptiveResult: descriptiveResult,
+            doctorNote: formData[`${test}DoctorNote`],
+            medicalExaminationId: medicalExaminationId,
+          };
+
+          response = await fetch("http://localhost:8082/visit/result", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(resultData),
+          });
+
+          if (!response.ok) {
+            console.error(`Błąd podczas dodawania wyniku dla badania: ${test}`);
+          }
         }
       }
 
-      console.log("Wszystkie wyniki badań dodane pomyślnie.");
+      console.log("Wszystkie wypełnione wyniki badań dodane pomyślnie.");
     } catch (error) {
       console.error("Wystąpił błąd:", error);
     }
@@ -197,16 +204,16 @@ export default function VisitDetails() {
           mt="30px"
           onClick={() => analyzeVisitByOpenAI()}
         >
-          Click to analyze this Visit by OpenAI
+          Kliknij tutaj, aby OpenAI przeanalizowało wizytę
         </Button>
       )}
-      <Text>Analysis result: {analysisResult}</Text>
+      <Text>Wynik analizy: {analysisResult}</Text>
 
       <Heading mb="4" mt="40px">
-        All medical examinations
+        Wszystkie badania
       </Heading>
-      <Box maxW="480px">
-        <FormControl mb="40px">
+      <Box maxW="480px" mb="30px">
+        <FormControl>
           <FormLabel>Wybierz zestaw badań do dodania:</FormLabel>
           <Select
             name="medicalExaminationName"
@@ -242,18 +249,6 @@ export default function VisitDetails() {
       {selectedExaminationType === "Badanie krwi" && (
         <BloodTestForm onSubmit={handleSubmitMedicalExamination} />
       )}
-      {/* {!areResultsLoaded && ( */}
-      <Button
-        bg="purple.500"
-        color="white"
-        mt="30px"
-        onClick={() => handleAddResults()}
-        maxW="480px"
-        disabled={!selectedExaminationType}
-      >
-        Dodaj wyniki badań
-      </Button>
-      {/* )} */}
 
       {medicalExaminations &&
         medicalExaminations.map((medicalExamination) => (
@@ -311,3 +306,13 @@ export default function VisitDetails() {
     </Box>
   );
 }
+
+const resultNameMapping = {
+  hemoglobin: "Hemoglobina",
+  whiteBloodCellCount: "Liczba białych krwinek",
+  plateletCount: "Liczba płytek krwi",
+  fastingGlucose: "Poziom glukozy na czczo",
+  ironLevel: "Poziom żelaza",
+  infectionTest: "Test na obecność infekcji",
+  bloodGroup: "Grupa krwi",
+};

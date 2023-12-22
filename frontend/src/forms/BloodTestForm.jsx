@@ -1,15 +1,54 @@
 import React, { useState } from "react";
-import { FormControl, FormLabel, Input, Button, Stack } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  Stack,
+  Box,
+  Heading,
+} from "@chakra-ui/react";
 
 const BloodTestForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
-    hemoglobin: "",
-    whiteBloodCellCount: "",
-    plateletCount: "",
-    fastingGlucose: "",
-    ironLevel: "",
-    infectionTest: "",
-    bloodGroup: "",
+    // Hemoglobina
+    hemoglobinDescription: "",
+    hemoglobinNumericalResult: "",
+    hemoglobinUnit: "g/dl",
+    hemoglobinDescriptiveResult: "",
+    hemoglobinDoctorNote: "",
+    // Liczba białych krwinek
+    whiteBloodCellCountDescription: "",
+    whiteBloodCellCountNumericalResult: "",
+    whiteBloodCellCountUnit: "x10^9/L",
+    whiteBloodCellCountDescriptiveResult: "",
+    whiteBloodCellCountDoctorNote: "",
+    // Liczba płytek krwi
+    plateletCountDescription: "",
+    plateletCountNumericalResult: "",
+    plateletCountUnit: "x10^9/L",
+    plateletCountDescriptiveResult: "",
+    plateletCountDoctorNote: "",
+    // Poziom glukozy na czczo
+    fastingGlucoseDescription: "",
+    fastingGlucoseNumericalResult: "",
+    fastingGlucoseUnit: "mg/dl",
+    fastingGlucoseDescriptiveResult: "",
+    fastingGlucoseDoctorNote: "",
+    // Poziom żelaza
+    ironLevelDescription: "",
+    ironLevelNumericalResult: "",
+    ironLevelUnit: "μg/dl",
+    ironLevelDescriptiveResult: "",
+    ironLevelDoctorNote: "",
+    // Test na obecność infekcji
+    infectionTestDescription: "",
+    infectionTestDescriptiveResult: "",
+    infectionTestDoctorNote: "",
+    // Grupa krwi
+    bloodGroupDescription: "",
+    bloodGroupDescriptiveResult: "",
+    bloodGroupDoctorNote: "",
   });
 
   const handleChange = (event) => {
@@ -18,80 +57,256 @@ const BloodTestForm = ({ onSubmit }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onSubmit(formData); // Przekazanie danych do funkcji onSubmit
+    onSubmit(formData);
   };
 
+  // Renderowanie formularza z odpowiednimi polami dla każdego badania
   return (
-    <form onSubmit={handleSubmit}>
-      <Stack spacing={4}>
-        <FormControl isRequired>
-          <FormLabel>Hemoglobina</FormLabel>
-          <Input
-            name="hemoglobin"
-            value={formData.hemoglobin}
-            onChange={handleChange}
-          />
-        </FormControl>
+    <Box maxW="480px">
+      <form onSubmit={handleSubmit}>
+        <Stack spacing={4}>
+          <Heading size="md" mt="15px">
+            Hemoglobina
+          </Heading>
+          <FormControl>
+            <FormLabel>Opis badania</FormLabel>
+            <Input
+              name="hemoglobinDescription"
+              value={formData.hemoglobinDescription}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Wynik liczbowy (g/dl)</FormLabel>
+            <Input
+              name="hemoglobinNumericalResult"
+              value={formData.hemoglobinNumericalResult}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Wynik opisowy</FormLabel>
+            <Input
+              name="hemoglobinDescriptiveResult"
+              value={formData.hemoglobinDescriptiveResult}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Notatka lekarza</FormLabel>
+            <Input
+              name="hemoglobinDoctorNote"
+              value={formData.hemoglobinDoctorNote}
+              onChange={handleChange}
+            />
+          </FormControl>
 
-        <FormControl isRequired>
-          <FormLabel>Liczba białych krwinek</FormLabel>
-          <Input
-            name="whiteBloodCellCount"
-            value={formData.whiteBloodCellCount}
-            onChange={handleChange}
-          />
-        </FormControl>
+          <Heading size="md" mt="15px">
+            Liczba białych krwinek
+          </Heading>
+          <FormControl>
+            <FormLabel>Opis badania</FormLabel>
+            <Input
+              name="whiteBloodCellCountDescription"
+              value={formData.whiteBloodCellCountDescription}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Wynik liczbowy (x10^9/L)</FormLabel>
+            <Input
+              name="whiteBloodCellCountNumericalResult"
+              value={formData.whiteBloodCellCountNumericalResult}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Wynik opisowy</FormLabel>
+            <Input
+              name="whiteBloodCellCountDescriptiveResult"
+              value={formData.whiteBloodCellCountDescriptiveResult}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Notatka lekarza</FormLabel>
+            <Input
+              name="whiteBloodCellCountDoctorNote"
+              value={formData.whiteBloodCellCountDoctorNote}
+              onChange={handleChange}
+            />
+          </FormControl>
 
-        <FormControl isRequired>
-          <FormLabel>Liczba płytek krwi</FormLabel>
-          <Input
-            name="plateletCount"
-            value={formData.plateletCount}
-            onChange={handleChange}
-          />
-        </FormControl>
+          <Heading size="md" mt="15px">
+            Liczba płytek krwi
+          </Heading>
+          <FormControl>
+            <FormLabel>Opis badania</FormLabel>
+            <Input
+              name="plateletCountDescription"
+              value={formData.plateletCountDescription}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Wynik liczbowy (x10^9/L)</FormLabel>
+            <Input
+              name="plateletCountNumericalResult"
+              value={formData.plateletCountNumericalResult}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Wynik opisowy</FormLabel>
+            <Input
+              name="plateletCountDescriptiveResult"
+              value={formData.plateletCountDescriptiveResult}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Notatka lekarza</FormLabel>
+            <Input
+              name="plateletCountDoctorNote"
+              value={formData.plateletCountDoctorNote}
+              onChange={handleChange}
+            />
+          </FormControl>
 
-        <FormControl isRequired>
-          <FormLabel>Poziom glukozy na czczo</FormLabel>
-          <Input
-            name="fastingGlucose"
-            value={formData.fastingGlucose}
-            onChange={handleChange}
-          />
-        </FormControl>
+          <Heading size="md" mt="15px">
+            Poziom glukozy na czczo
+          </Heading>
+          <FormControl>
+            <FormLabel>Opis badania</FormLabel>
+            <Input
+              name="fastingGlucoseDescription"
+              value={formData.fastingGlucoseDescription}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Wynik liczbowy (mg/dl)</FormLabel>
+            <Input
+              name="fastingGlucoseNumericalResult"
+              value={formData.fastingGlucoseNumericalResult}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Wynik opisowy</FormLabel>
+            <Input
+              name="fastingGlucoseDescriptiveResult"
+              value={formData.fastingGlucoseDescriptiveResult}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Notatka lekarza</FormLabel>
+            <Input
+              name="fastingGlucoseDoctorNote"
+              value={formData.fastingGlucoseDoctorNote}
+              onChange={handleChange}
+            />
+          </FormControl>
 
-        <FormControl isRequired>
-          <FormLabel>Poziom żelaza</FormLabel>
-          <Input
-            name="ironLevel"
-            value={formData.ironLevel}
-            onChange={handleChange}
-          />
-        </FormControl>
+          <Heading size="md" mt="15px">
+            Poziom żelaza
+          </Heading>
+          <FormControl>
+            <FormLabel>Opis badania</FormLabel>
+            <Input
+              name="ironLevelDescription"
+              value={formData.ironLevelDescription}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Wynik liczbowy (μg/dl)</FormLabel>
+            <Input
+              name="ironLevelNumericalResult"
+              value={formData.ironLevelNumericalResult}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Wynik opisowy</FormLabel>
+            <Input
+              name="ironLevelDescriptiveResult"
+              value={formData.ironLevelDescriptiveResult}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Notatka lekarza</FormLabel>
+            <Input
+              name="ironLevelDoctorNote"
+              value={formData.ironLevelDoctorNote}
+              onChange={handleChange}
+            />
+          </FormControl>
 
-        <FormControl>
-          <FormLabel>Test na obecność infekcji</FormLabel>
-          <Input
-            name="infectionTest"
-            value={formData.infectionTest}
-            onChange={handleChange}
-          />
-        </FormControl>
+          <Heading size="md" mt="15px">
+            Test na obecność infekcji
+          </Heading>
+          <FormControl>
+            <FormLabel>Opis badania</FormLabel>
+            <Input
+              name="infectionTestDescription"
+              value={formData.infectionTestDescription}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Wynik opisowy</FormLabel>
+            <Input
+              name="infectionTestDescriptiveResult"
+              value={formData.infectionTestDescriptiveResult}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Notatka lekarza</FormLabel>
+            <Input
+              name="infectionTestDoctorNote"
+              value={formData.infectionTestDoctorNote}
+              onChange={handleChange}
+            />
+          </FormControl>
 
-        <FormControl>
-          <FormLabel>Grupa krwi</FormLabel>
-          <Input
-            name="bloodGroup"
-            value={formData.bloodGroup}
-            onChange={handleChange}
-          />
-        </FormControl>
+          <Heading size="md" mt="15px">
+            Grupa krwi
+          </Heading>
+          <FormControl>
+            <FormLabel>Opis badania</FormLabel>
+            <Input
+              name="bloodGroupDescription"
+              value={formData.bloodGroupDescription}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Wynik opisowy</FormLabel>
+            <Input
+              name="bloodGroupDescriptiveResult"
+              value={formData.bloodGroupDescriptiveResult}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Notatka lekarza</FormLabel>
+            <Input
+              name="bloodGroupDoctorNote"
+              value={formData.bloodGroupDoctorNote}
+              onChange={handleChange}
+            />
+          </FormControl>
 
-        <Button type="submit" colorScheme="blue">
-          Zapisz wyniki badania krwi
-        </Button>
-      </Stack>
-    </form>
+          <Button type="submit" colorScheme="pink">
+            Zapisz wyniki badania krwi
+          </Button>
+        </Stack>
+      </form>
+    </Box>
   );
 };
 
