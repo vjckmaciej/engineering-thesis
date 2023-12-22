@@ -24,9 +24,9 @@ export default function Navbar() {
           M
         </Box>
         {isDoctor === "true" ? (
-          <Text fontWeight="bold">User type: Doctor</Text>
+          <Text fontWeight="bold">Typ użytkownika: Doktor</Text>
         ) : (
-          <Text fontWeight="bold">User type: Patient</Text>
+          <Text fontWeight="bold">Typ użytkownika: Pacjent</Text>
         )}
         <Heading size="xs">Pesel: {pesel}</Heading>
         <Button colorScheme="purple">Logout</Button>

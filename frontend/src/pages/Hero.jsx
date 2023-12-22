@@ -107,14 +107,14 @@ export default function Hero() {
             Razem przez ciążę
           </Text>
           <Stack direction={"column"} spacing={4} align="center">
-            <Button
+            {/* <Button
               bg={"pink.400"}
               rounded={"full"}
               color={"white"}
               _hover={{ bg: "blue.500" }}
             >
               Zaloguj się
-            </Button>
+            </Button> */}
             <Button
               bg={"pink.200"}
               rounded={"full"}
@@ -123,9 +123,9 @@ export default function Hero() {
             >
               Zarejestruj się
             </Button>
-            <Button>
+            {/* <Button>
               <NavLink to="/app/dashboard">Przejdź do aplikacji</NavLink>
-            </Button>
+            </Button> */}
             <FormControl isRequired mb="40px">
               <FormLabel>Podaj pesel:</FormLabel>
               <Input
@@ -155,7 +155,7 @@ export default function Hero() {
               _hover={{ bg: "purpleAlpha.500" }}
               onClick={handleSubmit}
             >
-              Zatwierdź
+              Zaloguj
             </Button>
           </Stack>
         </Stack>

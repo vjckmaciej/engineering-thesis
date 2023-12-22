@@ -64,7 +64,7 @@ public class PatientControllerImpl implements CrudController<PatientDTO> {
 
     @RequestMapping(path = "/pregnancyWeek/{pesel}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Integer getPregnancyWeekByPesel(@PathVariable String pesel) {
-        log.info("Starting getting pregnancy week of Patient with pesel" + pesel);
+        log.info("Starting getting pregnancy week of Patient with pesel: " + pesel);
         return patientService.getPregnancyWeekByPesel(pesel);
     }
 

@@ -22,12 +22,13 @@ import {
   Input,
   FormHelperText,
 } from "@chakra-ui/react";
-import { ViewIcon } from "@chakra-ui/icons";
+import { AddIcon, ViewIcon } from "@chakra-ui/icons";
 
 export default function Visits() {
   const navigate = useNavigate();
   const pesel = sessionStorage.getItem("pesel");
   const isDoctor = sessionStorage.getItem("isDoctor");
+  sessionStorage.setItem("visitId", 0);
   const [loading, setLoading] = useState(false);
   const [selectedPatientPesel, setSelectedPatientPesel] = useState("");
   const [myVisits, setMyVisits] = useState([]);
@@ -62,6 +63,7 @@ export default function Visits() {
           `http://localhost:8082/visit/visit/nearestPlannedVisit/${pesel}?isDoctor=${isDoctor}`
         );
         const data = await res.json();
+        console.log(data);
         setNearestPlannedVisit(data);
       } catch (error) {
         console.error(
@@ -75,6 +77,8 @@ export default function Visits() {
   }, [pesel]);
 
   const handleShowMore = (visitId) => {
+    sessionStorage.setItem("visitId", visitId);
+    console.log(visitId);
     navigate(`/app/visits/${visitId}`);
   };
 
@@ -119,10 +123,10 @@ export default function Visits() {
   return (
     <Box>
       <Heading mb="40px" textAlign="center">
-        Next visit
+        Następna wizyta
       </Heading>
 
-      {nearestPlannedVisit ? (
+      {nearestPlannedVisit && nearestPlannedVisit.visitId ? (
         <Card
           key={nearestPlannedVisit.visitId}
           borderTop="8px"
@@ -133,10 +137,10 @@ export default function Visits() {
             <Flex gap={5}>
               <Box>
                 <Heading as="h2" size="sm">
-                  Visit status: {nearestPlannedVisit.visitStatus}
+                  Status wizyty: {nearestPlannedVisit.visitStatus}
                 </Heading>
                 <Heading as="h2" size="sm">
-                  Visit date:{" "}
+                  Data wizyty:{" "}
                   {format(
                     new Date(nearestPlannedVisit.visitDate),
                     "yyyy-MM-dd HH:mm"
@@ -146,9 +150,7 @@ export default function Visits() {
             </Flex>
           </CardHeader>
           <CardBody color="gray.500" textAlign="center">
-            <Text>
-              Week of pregnancy: {nearestPlannedVisit.weekOfPregnancy}
-            </Text>
+            <Text>Tydzień ciąży: {nearestPlannedVisit.weekOfPregnancy}</Text>
             <Text>{nearestPlannedVisit.womanAge}</Text>
             <Text>{nearestPlannedVisit.doctorRecommendations}</Text>
           </CardBody>
@@ -160,57 +162,63 @@ export default function Visits() {
                 leftIcon={<ViewIcon />}
                 onClick={() => handleShowMore(nearestPlannedVisit.visitId)}
               >
-                Show more
+                Pokaż więcej{" "}
               </Button>
             </HStack>
           </CardFooter>
         </Card>
       ) : (
-        <Text>Loading next planned visit...</Text>
+        <Heading textAlign="center" size="md">
+          Brak umówionych wizyt.
+        </Heading>
       )}
 
       <Heading mb="40px" mt="100px" textAlign="center">
-        All visits
+        Wszystkie wizyty{" "}
       </Heading>
-      <FormControl mb="40px">
-        <FormLabel>Enter patient PESEL to filter visits:</FormLabel>
-        <Input
-          type="text"
-          name="selectedPatientPesel"
-          value={selectedPatientPesel}
-          onChange={handleInputChange}
-        />
-        <Button
-          bg={"pink.500"}
-          rounded={"full"}
-          color={"white"}
-          _hover={{ bg: "purple.300" }}
-          mt="5px"
-          onClick={findDoctorVisitWithGivenPatientPesel}
-        >
-          Find patient visits
-        </Button>
-        <Button
-          ml="10px"
-          bg={"blue.500"}
-          rounded={"full"}
-          color={"white"}
-          _hover={{ bg: "green.300" }}
-          mt="5px"
-          onClick={() => {
-            setSelectedPatientPesel("");
-            findDoctorVisitWithGivenPatientPesel;
-          }}
-        >
-          Clear
-        </Button>
-      </FormControl>
+      {isDoctor === "true" && (
+        <FormControl mb="40px">
+          <FormLabel>
+            Wprowadź PESEL pacjenta, aby przefiltrować wizyty:
+          </FormLabel>
+          <Input
+            type="text"
+            name="selectedPatientPesel"
+            value={selectedPatientPesel}
+            onChange={handleInputChange}
+          />
+          <Button
+            bg={"pink.500"}
+            rounded={"full"}
+            color={"white"}
+            _hover={{ bg: "purple.300" }}
+            mt="5px"
+            onClick={findDoctorVisitWithGivenPatientPesel}
+          >
+            Znajdź wizyty pacjenta
+          </Button>
+          <Button
+            ml="10px"
+            bg={"blue.500"}
+            rounded={"full"}
+            color={"white"}
+            _hover={{ bg: "green.300" }}
+            mt="5px"
+            onClick={() => {
+              setSelectedPatientPesel("");
+              findDoctorVisitWithGivenPatientPesel;
+            }}
+          >
+            Wyczyść
+          </Button>
+        </FormControl>
+      )}
       {isDoctor === "false" && (
         <>
           <Button bg="cyan" onClick={() => analyzeVisitsByOpenAI()}>
-            Click to analyze by OpenAI
+            Naciśnij przycisk, aby OpenAI przeanalizowało wizyty
           </Button>
-          <Text>Analysis result: {analysisResult}</Text>
+          <Text>Wynik analizy: {analysisResult}</Text>
         </>
       )}
 
@@ -230,10 +238,10 @@ export default function Visits() {
                   <Flex gap={5}>
                     <Box>
                       <Heading as="h2" size="sm">
-                        Visit status: {myvisit.visitStatus}
+                        Status wizyty: {myvisit.visitStatus}
                       </Heading>
                       <Heading as="h2" size="sm">
-                        Visit date:{" "}
+                        Data wizyty:{" "}
                         {format(
                           new Date(myvisit.visitDate),
                           "yyyy-MM-dd HH:mm"
@@ -244,7 +252,7 @@ export default function Visits() {
                   </Flex>
                 </CardHeader>
                 <CardBody color="gray.500" textAlign="center">
-                  <Text>Week of pregnancy: {myvisit.weekOfPregnancy}</Text>
+                  <Text> Tydzień ciąży: {myvisit.weekOfPregnancy}</Text>
                   <Text>{myvisit.womanAge}</Text>
                   <Text>{myvisit.doctorRecommendations}</Text>
                 </CardBody>
@@ -256,7 +264,7 @@ export default function Visits() {
                       leftIcon={<ViewIcon />}
                       onClick={() => handleShowMore(myvisit.visitId)}
                     >
-                      Show more
+                      Pokaż więcej
                     </Button>
                   </HStack>
                 </CardFooter>

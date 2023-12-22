@@ -20,8 +20,12 @@ export default function Profile() {
   return (
     <Tabs mt="40px" p="20px" variant="enclosed" colorScheme="purple">
       <TabList>
-        <Tab _selected={{ color: "white", bg: "purple.400" }}>Account Info</Tab>
-        <Tab _selected={{ color: "white", bg: "purple.400" }}>Task History</Tab>
+        <Tab _selected={{ color: "white", bg: "purple.400" }}>
+          Informacje o pacjencie
+        </Tab>
+        <Tab _selected={{ color: "white", bg: "purple.400" }}>
+          Informacje o doktorze
+        </Tab>
       </TabList>
 
       <TabPanels py="10px">
@@ -29,7 +33,7 @@ export default function Profile() {
           <List spacing={4}>
             <ListItem>
               <ListIcon as={EmailIcon} />
-              Email: mario@netninja.dev
+              Email: lorem ipsum
             </ListItem>
             <ListItem>
               <ListIcon as={ChatIcon} />

@@ -17,19 +17,19 @@ export default function Sidebar() {
       <ListItem>
         <NavLink to="profile">
           <ListIcon as={AtSignIcon} color="white" />
-          Profile
+          Profil
         </NavLink>
       </ListItem>
       <ListItem>
         <NavLink to="visits">
           <ListIcon as={CopyIcon} color="white" />
-          Visits
+          Wizyty
         </NavLink>
       </ListItem>
       <ListItem>
         <NavLink to="calendar">
           <ListIcon as={CalendarIcon} color="white" />
-          Calendar
+          Kalendarz
         </NavLink>
       </ListItem>
       <ListItem>
@@ -42,7 +42,7 @@ export default function Sidebar() {
         <ListItem>
           <NavLink to="dietplan">
             <ListIcon as={EditIcon} color="white" />
-            Diet plan
+            Plan dietetyczny
           </NavLink>
         </ListItem>
       )}
@@ -50,7 +50,7 @@ export default function Sidebar() {
         <ListItem>
           <NavLink to="visits/create">
             <ListIcon as={AddIcon} color="white" />
-            Add new visit
+            Dodaj nową wizytę
           </NavLink>
         </ListItem>
       )}

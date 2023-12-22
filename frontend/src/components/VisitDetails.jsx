@@ -8,16 +8,23 @@ import {
   Stack,
   CardBody,
   Container,
+  FormControl,
+  FormLabel,
+  Select,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
+import BloodTestForm from "../forms/BloodTestForm";
 
 export default function VisitDetails() {
   const isDoctor = sessionStorage.getItem("isDoctor");
+  const visitIdForm = sessionStorage.getItem("visitId");
   const { visitId } = useParams();
   const [visitDetails, setVisitDetails] = useState(null);
   const [medicalExaminations, setMedicalExaminations] = useState(null);
   const [resultsMap, setResultsMap] = useState({});
   const [analysisResult, setAnalysisResult] = useState("");
+  const [areResultsLoaded, setAreResultsLoaded] = useState(false);
+  const [selectedExaminationType, setSelectedExaminationType] = useState("");
 
   useEffect(() => {
     const fetchVisitDetails = async () => {
@@ -61,10 +68,13 @@ export default function VisitDetails() {
 
   const loadResultsForMedicalExamination = async (medicalExaminationId) => {
     const resultsData = await fetchResults(medicalExaminationId);
-    setResultsMap((prevResultsMap) => ({
-      ...prevResultsMap,
-      [medicalExaminationId]: resultsData,
-    }));
+    if (resultsData) {
+      setResultsMap((prevResultsMap) => ({
+        ...prevResultsMap,
+        [medicalExaminationId]: resultsData,
+      }));
+      setAreResultsLoaded(true);
+    }
   };
 
   const analyzeVisitByOpenAI = async () => {
@@ -79,11 +89,51 @@ export default function VisitDetails() {
     }
   };
 
+  const handleExaminationTypeChange = (event) => {
+    setSelectedExaminationType(event.target.value);
+  };
+
+  const handleSubmitMedicalExamination = async (formData) => {
+    event.preventDefault();
+
+    // Upewnij się, że wszystkie wymagane pola są uwzględnione
+    const medicalExaminationData = {
+      medicalExaminationName: selectedExaminationType, // Nazwa badania
+      visitId: visitIdForm, // ID wizyty
+      // Dodaj inne wymagane pola z examinationData
+    };
+
+    console.log("Dane wysyłane do serwera:", medicalExaminationData);
+
+    try {
+      const response = await fetch(
+        "http://localhost:8082/visit/medicalExamination",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(medicalExaminationData),
+        }
+      );
+
+      if (response.ok) {
+        console.log("Badanie medyczne dodane pomyślnie.");
+        // Dodaj odpowiednią logikę po sukcesie
+      } else {
+        console.error("Nie udało się dodać badania medycznego.");
+        // Dodaj odpowiednią logikę błędu
+      }
+    } catch (error) {
+      console.error("Wystąpił błąd:", error);
+    }
+  };
+
   return (
     <Box>
       {visitDetails ? (
         <>
-          <Heading mb="4">VisitId: {visitDetails.visitId}</Heading>
+          <Heading mb="4">ID Wizyty: {visitDetails.visitId}</Heading>
           <Card
             key={visitDetails.visitId}
             direction={{ base: "column", sm: "row" }}
@@ -93,14 +143,14 @@ export default function VisitDetails() {
             <Stack>
               <CardBody>
                 <Heading size="md">
-                  VisitStatus: {visitDetails.visitStatus}
+                  Status wizyty: {visitDetails.visitStatus}
                 </Heading>
-                <Text py="2">Visit date: {visitDetails.visitDate}</Text>
+                <Text py="2">Data wizyty: {visitDetails.visitDate}</Text>
                 <Text py="2">
-                  Week of pregnancy: {visitDetails.weekOfPregnancy}
+                  Tydzień ciąży: {visitDetails.weekOfPregnancy}
                 </Text>
                 <Text py="3">
-                  Doctor recommendations: {visitDetails.doctorRecommendations}
+                  Zalecenia lekarskie: {visitDetails.doctorRecommendations}
                 </Text>
               </CardBody>
             </Stack>
@@ -110,14 +160,70 @@ export default function VisitDetails() {
         <Text>Loading...</Text>
       )}
 
-      <Button bg="cyan" onClick={() => analyzeVisitByOpenAI()}>
-        Click to analyze this Visit by OpenAI
-      </Button>
+      {visitDetails && visitDetails.visitStatus === "SCHEDULED" && (
+        <Button
+          bg="purple.300"
+          color="white"
+          mt="30px"
+          onClick={() => analyzeVisitByOpenAI()}
+        >
+          Click to analyze this Visit by OpenAI
+        </Button>
+      )}
       <Text>Analysis result: {analysisResult}</Text>
 
       <Heading mb="4" mt="40px">
         All medical examinations
       </Heading>
+      <Box maxW="480px">
+        <FormControl mb="40px">
+          <FormLabel>Wybierz zestaw badań do dodania:</FormLabel>
+          <Select
+            name="medicalExaminationName"
+            placeholder="Wybierz kategorię"
+            onChange={handleExaminationTypeChange}
+          >
+            <option value="Badanie krwi">Badanie krwi</option>
+            <option value="Badanie moczu">Badanie moczu</option>
+            <option value="USG ciąży">USG ciąży</option>
+            <option value="Test tolerancji glukozy (OGTT)">
+              Test tolerancji glukozy (OGTT)
+            </option>
+            <option value="Badanie tarczycy (TSH, FT4)">
+              Badanie tarczycy (TSH, FT4)
+            </option>
+            <option value="Badanie poziomu witamin i minerałów">
+              Badanie poziomu witamin i minerałów
+            </option>
+            <option value="Kardiografia płodu (KTG)">
+              Kardiografia płodu (KTG)
+            </option>
+            <option value="Badanie ginekologiczne">
+              Badanie ginekologiczne
+            </option>
+            <option value="Badanie przeciwciał">Badanie przeciwciał</option>
+            <option value="Badanie grupy krwi">Badanie grupy krwi</option>
+            <option value="Badania na obecność infekcji">
+              Badania na obecność infekcji
+            </option>
+          </Select>
+        </FormControl>
+      </Box>
+      {selectedExaminationType === "Badanie krwi" && (
+        <BloodTestForm onSubmit={handleSubmitMedicalExamination} />
+      )}
+      {/* {!areResultsLoaded && ( */}
+      <Button
+        bg="purple.500"
+        color="white"
+        mt="30px"
+        onClick={() => handleAddResults()}
+        maxW="480px"
+        disabled={!selectedExaminationType}
+      >
+        Dodaj wyniki badań
+      </Button>
+      {/* )} */}
 
       {medicalExaminations &&
         medicalExaminations.map((medicalExamination) => (
@@ -148,7 +254,7 @@ export default function VisitDetails() {
                     )
                   }
                 >
-                  Load Results
+                  Pokaż wyniki
                 </Button>
 
                 {resultsMap[medicalExamination.medicalExaminationId] &&

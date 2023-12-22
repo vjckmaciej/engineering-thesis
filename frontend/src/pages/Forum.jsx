@@ -158,28 +158,30 @@ export default function Forum() {
   return (
     <Tabs variant="enclosed">
       <TabList>
-        <Tab _selected={{ color: "white", bg: "pink.400" }}>All threads</Tab>
-        <Tab _selected={{ color: "white", bg: "pink.400" }}>My threads</Tab>
+        <Tab _selected={{ color: "white", bg: "pink.400" }}>
+          Wszystkie wątki
+        </Tab>
+        <Tab _selected={{ color: "white", bg: "pink.400" }}>Moje wątki</Tab>
       </TabList>
 
       <TabPanels>
         <TabPanel>
           <Box>
-            <Heading mb="40px">All threads</Heading>
+            <Heading mb="40px">Wszystkie wątki</Heading>
             <Heading size="sm" mb="10px">
-              Choose category:
+              Wybierz kategorię:
             </Heading>
             <Select
-              placeholder="Select thread category"
+              placeholder="Wybierz kategorię wątku"
               onChange={handleChangeCategory}
               value={selectedCategory}
               mb="30px"
             >
-              <option value="">All</option>
-              <option value="Diet">Diet</option>
-              <option value="Medical consultation">Medical consultation</option>
-              <option value="Baby growing">Baby growing</option>
-              <option value="Pregnancy">Pregnancy</option>
+              <option value="">Wszystkie</option>
+              <option value="Diet">Dieta</option>
+              <option value="Medical consultation">Konsultacje medyczne</option>
+              <option value="Baby growing">Dorastanie dziecka</option>
+              <option value="Pregnancy">Ciąża</option>
             </Select>
 
             <Button
@@ -189,7 +191,7 @@ export default function Forum() {
               mb="30px"
               onClick={handleCreateNewThread}
             >
-              Create new thread
+              Dodaj nowy wątek
             </Button>
 
             {allThreads.map((thread) => (
@@ -202,11 +204,11 @@ export default function Forum() {
               >
                 <Stack>
                   <CardBody>
-                    <Heading size="md">Author: {thread.authorUsername}</Heading>
-                    <Heading size="md">Title: {thread.title}</Heading>
-                    <Text py="2">Category: {thread.category}</Text>
-                    <Text py="2">Content: {thread.content}</Text>
-                    Created:{" "}
+                    <Heading size="md">Autor: {thread.authorUsername}</Heading>
+                    <Heading size="md">Tytuł: {thread.title}</Heading>
+                    <Text py="2">Kategoria: {thread.category}</Text>
+                    <Text py="2">Treść: {thread.content}</Text>
+                    Utworzono:{" "}
                     {format(
                       new Date(thread.creationDate),
                       "yyyy-MM-dd HH:mm:ss"
@@ -219,7 +221,7 @@ export default function Forum() {
                         colorScheme="blue"
                         onClick={() => handleShowMore(thread.threadId)}
                       >
-                        Show more
+                        Pokaż więcej
                       </Button>
                       {thread.authorId === authorId && (
                         <Button
@@ -227,7 +229,7 @@ export default function Forum() {
                           colorScheme="red"
                           onClick={() => handleDelete(thread.threadId)}
                         >
-                          Delete
+                          Usuń
                         </Button>
                       )}
                     </HStack>
@@ -239,7 +241,7 @@ export default function Forum() {
         </TabPanel>
         <TabPanel>
           <Box>
-            <Heading mb="40px">My threads</Heading>
+            <Heading mb="40px">Moje</Heading>
             {myThreads.map((myThread) => (
               <Card
                 key={myThread.threadId}
@@ -252,7 +254,6 @@ export default function Forum() {
                   <CardBody>
                     <Heading size="md">Title: {myThread.title}</Heading>
                     <Text py="2">Category: {myThread.category}</Text>
-                    <Text py="2">Content: {myThread.content}</Text>
                     <Text py="2">Content: {myThread.content}</Text>
                   </CardBody>
 

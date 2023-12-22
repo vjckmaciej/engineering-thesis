@@ -67,30 +67,30 @@ export default function CreateThread() {
 
   return (
     <Box maxW="480px">
-      <Heading mb="40px">New thread</Heading>
+      <Heading mb="40px">Nowy wątek</Heading>
       <Form method="post" onSubmit={handleSubmit}>
         <FormControl isRequired mb="40px">
-          <FormLabel>Category</FormLabel>
-          <Select name="category" placeholder="Select category">
-            <option>Diet</option>
-            <option>Medical consultation</option>
-            <option>Baby growing</option>
-            <option>Pregnancy</option>
+          <FormLabel>Kategoria</FormLabel>
+          <Select name="category" placeholder="Wybierz kategorię">
+            <option>Dieta</option>
+            <option>Konsultacje medyczne</option>
+            <option>Dorastanie dziecka</option>
+            <option>Ciąża</option>
           </Select>
         </FormControl>
         <FormControl isRequired mb="40px">
-          <FormLabel>Thread title:</FormLabel>
+          <FormLabel>Tytuł wątku:</FormLabel>
           <Input type="text" name="title" />
           <FormHelperText>
-            Enter a descriptive thread title. It must contain at least 3
-            characters and at most 100 characters.
+            Wprowadź opisowy tytuł wątku. Musi zawierać co najmniej 3 znaków i
+            maksymalnie 100 znaków.
           </FormHelperText>
         </FormControl>
 
         <FormControl mb="40px">
-          <FormLabel>Thread content:</FormLabel>
+          <FormLabel>Treść wątku:</FormLabel>
           <Textarea
-            placeholder="Describe your problem or something you want to write about! Remember it must contain at least 3 characters and at most 1000 characters! :)"
+            placeholder="Opisz swój problem lub coś o czym chcesz napisać! Pamiętaj, że musi zawierać co najmniej 3 znaki i maksymalnie 1000 znaków! :)"
             name="content"
             onChange={(e) => setCharCounter(e.target.value.length)}
           />
@@ -100,7 +100,7 @@ export default function CreateThread() {
         {charCounter <= 1000 && charCounter >= 3 ? (
           <>
             <Button type="submit" variant="solid" colorScheme="green" mb="30px">
-              Create thread
+              Dodaj wątek
             </Button>
           </>
         ) : (
@@ -112,7 +112,7 @@ export default function CreateThread() {
               colorScheme="green"
               mb="30px"
             >
-              Create thread
+              Dodaj wątek
             </Button>
           </>
         )}
