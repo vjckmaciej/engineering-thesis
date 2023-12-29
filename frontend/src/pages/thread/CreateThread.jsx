@@ -37,15 +37,12 @@ export default function CreateThread() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // Add any additional headers if needed
         },
         body: JSON.stringify(threadData),
       });
 
       if (response.ok) {
-        // Handle success, e.g., redirect to a different page
         console.log("Thread created successfully");
-        // Add your redirect logic here
         threadAddedToast({
           title: "Thread successfully added!",
           status: "success",
@@ -57,7 +54,6 @@ export default function CreateThread() {
           window.location.reload();
         }, 2000);
       } else {
-        // Handle error, e.g., display an error message
         console.error("Failed to create thread");
       }
     } catch (error) {

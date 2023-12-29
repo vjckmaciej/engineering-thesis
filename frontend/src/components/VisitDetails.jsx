@@ -11,6 +11,7 @@ import {
   FormControl,
   FormLabel,
   Select,
+  useToast,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import BloodTestForm from "../forms/BloodTestForm";
@@ -35,6 +36,8 @@ export default function VisitDetails() {
   const [analysisResult, setAnalysisResult] = useState("");
   const [areResultsLoaded, setAreResultsLoaded] = useState(false);
   const [selectedExaminationType, setSelectedExaminationType] = useState("");
+  const resultDeletedToast = useToast();
+  const resultAddedToast = useToast();
 
   useEffect(() => {
     const fetchVisitDetails = async () => {
@@ -103,9 +106,85 @@ export default function VisitDetails() {
     setSelectedExaminationType(event.target.value);
   };
 
-  const handleSubmitMedicalExamination = async (formData) => {
-    event.preventDefault();
+  const handleDeleteMedicalExamination = async (medicalExaminationId) => {
+    try {
+      // API call to delete medical examination
+      const response = await fetch(
+        `http://localhost:8082/visit/medicalExamination/${medicalExaminationId}`,
+        {
+          method: "DELETE",
+        }
+      );
 
+      if (response.ok) {
+        console.log(
+          `Medical Examination with id ${medicalExaminationId} deleted successfully`
+        );
+
+        resultDeletedToast({
+          title: "Medical Examination successfully deleted!",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+
+        // Refresh the list of medical examinations
+        const updatedExaminations = medicalExaminations.filter(
+          (me) => me.medicalExaminationId !== medicalExaminationId
+        );
+        setMedicalExaminations(updatedExaminations);
+      } else {
+        throw new Error("Error while deleting medical examination.");
+      }
+    } catch (error) {
+      console.error(
+        "Error occurred while deleting medical examination:",
+        error
+      );
+    }
+  };
+
+  const handleDeleteResult = async (resultId, medicalExaminationId) => {
+    try {
+      // API call to delete the result
+      const response = await fetch(
+        `http://localhost:8082/visit/result/${resultId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (response.ok) {
+        console.log(`Result with resultId ${resultId} deleted successfully`);
+
+        resultDeletedToast({
+          title: "Result successfully deleted!",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+
+        const resultsForExamination = resultsMap[medicalExaminationId];
+        if (resultsForExamination.length === 1) {
+          await handleDeleteMedicalExamination(medicalExaminationId);
+        } else {
+          const updatedResults = resultsForExamination.filter(
+            (result) => result.resultId !== resultId
+          );
+          setResultsMap((prevResultsMap) => ({
+            ...prevResultsMap,
+            [medicalExaminationId]: updatedResults,
+          }));
+        }
+      } else {
+        throw new Error("Error while deleting result.");
+      }
+    } catch (error) {
+      console.error("Error occurred while deleting result:", error);
+    }
+  };
+
+  const handleSubmitMedicalExamination = async (formData) => {
     const medicalExaminationData = {
       medicalExaminationName: selectedExaminationType,
       visitId: visitIdForm,
@@ -208,7 +287,19 @@ export default function VisitDetails() {
             body: JSON.stringify(resultData),
           });
 
-          if (!response.ok) {
+          if (response.ok) {
+            console.log("Results created successfully");
+            resultAddedToast({
+              title: "Results successfully added!",
+              status: "success",
+              duration: 2000,
+              isClosable: true,
+            });
+
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          } else {
             console.error(`Błąd podczas dodawania wyniku dla badania: ${test}`);
           }
         }
@@ -355,7 +446,6 @@ export default function VisitDetails() {
                 <Heading size="md">
                   {medicalExamination.medicalExaminationName}
                 </Heading>
-
                 <Button
                   mb="20px"
                   mt="20px"
@@ -369,7 +459,6 @@ export default function VisitDetails() {
                 >
                   Pokaż wyniki
                 </Button>
-
                 {resultsMap[medicalExamination.medicalExaminationId] &&
                   resultsMap[medicalExamination.medicalExaminationId].map(
                     (result) => (
@@ -384,6 +473,19 @@ export default function VisitDetails() {
                         <Text>Jednostka: {result.unit}</Text>
                         <Text>Wynik opisowy: {result.descriptiveResult}</Text>
                         <Text>Notatka lekarza: {result.doctorNote}</Text>
+                        <Button
+                          size="sm"
+                          fontSize="xs"
+                          colorScheme="red"
+                          onClick={() =>
+                            handleDeleteResult(
+                              result.resultId,
+                              medicalExamination.medicalExaminationId
+                            )
+                          }
+                        >
+                          Usuń wynik
+                        </Button>
                       </Container>
                     )
                   )}
