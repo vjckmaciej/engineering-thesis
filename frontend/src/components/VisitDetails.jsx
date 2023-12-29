@@ -14,6 +14,16 @@ import {
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import BloodTestForm from "../forms/BloodTestForm";
+import UrineTestForm from "../forms/UrineTestForm";
+import FirstTrimesterUSGTestForm from "../forms/FirstTrimesterUSGTestForm";
+import SecondTrimesterUSGTestForm from "../forms/SecondTrimesterUSGTestForm";
+import ThirdTrimesterUSGTestForm from "../forms/ThirdTrimesterUSGTestForm";
+import BloodPressureTestForm from "../forms/BloodPressureTestForm";
+import GlucoseToleranceTestForm from "../forms/GlucoseToleranceTestForm";
+import ThyroidTestForm from "../forms/ThyroidTestForm";
+import VitaminsMineralsTestForm from "../forms/VitaminsMineralsTestForm";
+import FetalCardiographyTestForm from "../forms/FetalCardiographyTestForm";
+import GynecologicalExaminationTestForm from "../forms/GynecologicalExaminationTestForm";
 
 export default function VisitDetails() {
   const isDoctor = sessionStorage.getItem("isDoctor");
@@ -121,6 +131,7 @@ export default function VisitDetails() {
       const medicalExaminationId = examinationResponse.id;
 
       const tests = [
+        //Badanie krwi
         "hemoglobin",
         "whiteBloodCellCount",
         "plateletCount",
@@ -128,13 +139,56 @@ export default function VisitDetails() {
         "ironLevel",
         "infectionTest",
         "bloodGroup",
+
+        //Badanie moczu
+        "proteinLevel",
+        "sugarLevel",
+        "ketoneBodies",
+        "presenceOfBacteria",
+
+        //USG pierwszego trymestru
+        "nuchalTransluchency",
+        "anatomicalStructuresOfTheFetus",
+
+        //USG drugiego trymestru
+        "fetalSize",
+        "fetalHeadCircumference",
+        "fetalFemurLength",
+        "assessmentOfFetalOrgans",
+
+        //USG trzeciego trymestru
+        "fetalPosition",
+        "amnioticFluid",
+        "assessmentOfBloodFlowInTheUmbilicalCord",
+
+        //Badanie ciśnienia krwi
+        "systolicBloodPressure",
+        "diastolicBloodPressure",
+
+        //Badanie tolerancji glukozy
+        "fastingGlucoseLevel",
+        "glucoseLevelAfter2Hours",
+
+        //Badanie tarczycy
+        "tshLevel",
+        "ft4Level",
+
+        //Badanie witamin i minerałów
+        "vitaminDLevel",
+        "calciumLevel",
+
+        // Ocena rytmu serca płodu
+        "assessmentOfFetalHeartRhythm",
+
+        //Badanie ginekologiczne
+        "assessmentOfTheCervix",
+        "ultrasoundExaminationOfReproductiveOrgans",
       ];
 
       for (const test of tests) {
         const numericalResult = formData[`${test}NumericalResult`];
         const descriptiveResult = formData[`${test}DescriptiveResult`];
 
-        // Sprawdź, czy wynik liczbowy został wypełniony
         if (numericalResult || descriptiveResult) {
           const resultData = {
             resultName: test,
@@ -222,32 +276,66 @@ export default function VisitDetails() {
           >
             <option value="Badanie krwi">Badanie krwi</option>
             <option value="Badanie moczu">Badanie moczu</option>
-            <option value="USG ciąży">USG ciąży</option>
-            <option value="Test tolerancji glukozy (OGTT)">
-              Test tolerancji glukozy (OGTT)
+            <option value="USG pierwszego trymestru">
+              USG pierwszego trymestru
             </option>
-            <option value="Badanie tarczycy (TSH, FT4)">
-              Badanie tarczycy (TSH, FT4)
+            <option value="USG drugiego trymestru">
+              USG drugiego trymestru
             </option>
+            <option value="USG trzeciego trymestru">
+              USG trzeciego trymestru
+            </option>
+            <option value="Badanie ciśnienia krwi">
+              Badanie ciśnienia krwi
+            </option>
+            <option value="Badanie tolerancji glukozy">
+              Badanie tolerancji glukozy
+            </option>
+            <option value="Badanie tarczycy">Badanie tarczycy</option>
             <option value="Badanie poziomu witamin i minerałów">
               Badanie poziomu witamin i minerałów
             </option>
-            <option value="Kardiografia płodu (KTG)">
-              Kardiografia płodu (KTG)
-            </option>
+            <option value="Kardiografia płodu">Kardiografia płodu</option>
             <option value="Badanie ginekologiczne">
               Badanie ginekologiczne
-            </option>
-            <option value="Badanie przeciwciał">Badanie przeciwciał</option>
-            <option value="Badanie grupy krwi">Badanie grupy krwi</option>
-            <option value="Badania na obecność infekcji">
-              Badania na obecność infekcji
             </option>
           </Select>
         </FormControl>
       </Box>
       {selectedExaminationType === "Badanie krwi" && (
         <BloodTestForm onSubmit={handleSubmitMedicalExamination} />
+      )}
+      {selectedExaminationType === "Badanie moczu" && (
+        <UrineTestForm onSubmit={handleSubmitMedicalExamination} />
+      )}
+      {selectedExaminationType === "USG pierwszego trymestru" && (
+        <FirstTrimesterUSGTestForm onSubmit={handleSubmitMedicalExamination} />
+      )}
+      {selectedExaminationType === "USG drugiego trymestru" && (
+        <SecondTrimesterUSGTestForm onSubmit={handleSubmitMedicalExamination} />
+      )}
+      {selectedExaminationType === "USG trzeciego trymestru" && (
+        <ThirdTrimesterUSGTestForm onSubmit={handleSubmitMedicalExamination} />
+      )}
+      {selectedExaminationType === "Badanie ciśnienia krwi" && (
+        <BloodPressureTestForm onSubmit={handleSubmitMedicalExamination} />
+      )}
+      {selectedExaminationType === "Badanie tolerancji glukozy" && (
+        <GlucoseToleranceTestForm onSubmit={handleSubmitMedicalExamination} />
+      )}
+      {selectedExaminationType === "Badanie tarczycy" && (
+        <ThyroidTestForm onSubmit={handleSubmitMedicalExamination} />
+      )}
+      {selectedExaminationType === "Badanie poziomu witamin i minerałów" && (
+        <VitaminsMineralsTestForm onSubmit={handleSubmitMedicalExamination} />
+      )}
+      {selectedExaminationType === "Kardiografia płodu" && (
+        <FetalCardiographyTestForm onSubmit={handleSubmitMedicalExamination} />
+      )}
+      {selectedExaminationType === "Badanie ginekologiczne" && (
+        <GynecologicalExaminationTestForm
+          onSubmit={handleSubmitMedicalExamination}
+        />
       )}
 
       {medicalExaminations &&
@@ -308,6 +396,7 @@ export default function VisitDetails() {
 }
 
 const resultNameMapping = {
+  //Badanie krwi
   hemoglobin: "Hemoglobina",
   whiteBloodCellCount: "Liczba białych krwinek",
   plateletCount: "Liczba płytek krwi",
@@ -315,4 +404,49 @@ const resultNameMapping = {
   ironLevel: "Poziom żelaza",
   infectionTest: "Test na obecność infekcji",
   bloodGroup: "Grupa krwi",
+  rhFactor: "Czynnik Rh",
+
+  //Badanie moczu
+  proteinLevel: "Poziom białka",
+  sugarLevel: "Poziom cukru",
+  ketoneBodies: "Ciała ketonowe",
+  presenceOfBacteria: "Obecność bakterii",
+
+  //USG pierwszego trymestru
+  nuchalTransluchency: "Pomiar przezierności karkowej (NT)",
+  anatomicalStructuresOfTheFetus: "Ocena struktur anatomicznych płodu",
+
+  //USG drugiego trymestru
+  fetalSize: "Wielkość płodu",
+  fetalHeadCircumference: "Pomiar obwodu główki płodu",
+  fetalFemurLength: "Pomiar długości kości udowej płodu",
+  assessmentOfFetalOrgans: "Ocena narządów płodu",
+
+  //USG trzeciego trymestru
+  fetalPosition: "Pozycja płodu",
+  amnioticFluid: "Pomiar ilości płynu owodniowego",
+  assessmentOfBloodFlowInTheUmbilicalCord: "Ocena przepływu krwi w pępowinie",
+
+  //Badanie ciśnienia krwi
+  systolicBloodPressure: "Ciśnienie skurczowe",
+  diastolicBloodPressure: "Ciśnienie rozkurczowe",
+
+  //Badanie tolerancji glukozy
+  fastingGlucoseLevel: "Poziom glukozy na czczo",
+  glucoseLevelAfter2Hours: "Poziom glukozy po 2 godzinach",
+
+  //Badanie tarczycy
+  tshLevel: "Poziom TSH",
+  ft4Level: "Poziom FT4",
+
+  //Badanie poziomu witamin i minerałów
+  vitaminDLevel: "Poziom witaminy D",
+  calciumLevel: "Poziom wapnia",
+
+  //Kardiografia płodu
+  assessmentOfFetalHeartRhythm: "Ocena rytmu serca płodu",
+
+  //Badanie ginekologiczne
+  assessmentOfTheCervix: "Ocena szyjki macicy",
+  ultrasoundExaminationOfReproductiveOrgans: "Badanie USG narządów rodnych",
 };

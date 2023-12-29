@@ -8,6 +8,7 @@ import {
   Box,
   Heading,
 } from "@chakra-ui/react";
+import { Form } from "react-router-dom";
 
 const BloodTestForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -49,6 +50,10 @@ const BloodTestForm = ({ onSubmit }) => {
     bloodGroupDescription: "",
     bloodGroupDescriptiveResult: "",
     bloodGroupDoctorNote: "",
+    // Czynnik Rh
+    rhFactorDescription: "",
+    rhFactorDescriptiveResult: "",
+    rhFactorDoctorNote: "",
   });
 
   const handleChange = (event) => {
@@ -60,10 +65,9 @@ const BloodTestForm = ({ onSubmit }) => {
     onSubmit(formData);
   };
 
-  // Renderowanie formularza z odpowiednimi polami dla każdego badania
   return (
     <Box maxW="480px">
-      <form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <Stack spacing={4}>
           <Heading size="md" mt="15px">
             Hemoglobina
@@ -300,12 +304,39 @@ const BloodTestForm = ({ onSubmit }) => {
               onChange={handleChange}
             />
           </FormControl>
+          <Heading size="md" mt="15px">
+            Czynnik Rh
+          </Heading>
+          <FormControl>
+            <FormLabel>Opis badania</FormLabel>
+            <Input
+              name="rhFactorDescription"
+              value={formData.rhFactorDescription}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Wynik opisowy</FormLabel>
+            <Input
+              name="rhFactorDescriptiveResult"
+              value={formData.rhFactorDescriptiveResult}
+              onChange={handleChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Notatka lekarza</FormLabel>
+            <Input
+              name="rhFactorDoctorNote"
+              value={formData.rhFactorDoctorNote}
+              onChange={handleChange}
+            />
+          </FormControl>
 
           <Button type="submit" colorScheme="pink">
             Zapisz wyniki badania krwi
           </Button>
         </Stack>
-      </form>
+      </Form>
     </Box>
   );
 };
