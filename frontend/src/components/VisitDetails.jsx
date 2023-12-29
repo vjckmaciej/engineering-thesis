@@ -122,7 +122,7 @@ export default function VisitDetails() {
         );
 
         resultDeletedToast({
-          title: "Medical Examination successfully deleted!",
+          title: "Zestaw badań został usunięty!",
           status: "success",
           duration: 2000,
           isClosable: true,
@@ -146,7 +146,6 @@ export default function VisitDetails() {
 
   const handleDeleteResult = async (resultId, medicalExaminationId) => {
     try {
-      // API call to delete the result
       const response = await fetch(
         `http://localhost:8082/visit/result/${resultId}`,
         {
@@ -158,7 +157,7 @@ export default function VisitDetails() {
         console.log(`Result with resultId ${resultId} deleted successfully`);
 
         resultDeletedToast({
-          title: "Result successfully deleted!",
+          title: "Wynik badań został usunięty!",
           status: "success",
           duration: 2000,
           isClosable: true,
@@ -290,7 +289,7 @@ export default function VisitDetails() {
           if (response.ok) {
             console.log("Results created successfully");
             resultAddedToast({
-              title: "Results successfully added!",
+              title: "Wynik badań pomyślnie dodany!",
               status: "success",
               duration: 2000,
               isClosable: true,

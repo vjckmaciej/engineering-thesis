@@ -44,7 +44,7 @@ export default function CreateThread() {
       if (response.ok) {
         console.log("Thread created successfully");
         threadAddedToast({
-          title: "Thread successfully added!",
+          title: "Wątek pomyślnie dodany!",
           status: "success",
           duration: 2000,
           isClosable: true,
