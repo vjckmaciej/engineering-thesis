@@ -356,42 +356,44 @@ export default function VisitDetails() {
       <Heading mb="4" mt="40px">
         Wszystkie badania
       </Heading>
-      <Box maxW="480px" mb="30px">
-        <FormControl>
-          <FormLabel>Wybierz zestaw badań do dodania:</FormLabel>
-          <Select
-            name="medicalExaminationName"
-            placeholder="Wybierz kategorię"
-            onChange={handleExaminationTypeChange}
-          >
-            <option value="Badanie krwi">Badanie krwi</option>
-            <option value="Badanie moczu">Badanie moczu</option>
-            <option value="USG pierwszego trymestru">
-              USG pierwszego trymestru
-            </option>
-            <option value="USG drugiego trymestru">
-              USG drugiego trymestru
-            </option>
-            <option value="USG trzeciego trymestru">
-              USG trzeciego trymestru
-            </option>
-            <option value="Badanie ciśnienia krwi">
-              Badanie ciśnienia krwi
-            </option>
-            <option value="Badanie tolerancji glukozy">
-              Badanie tolerancji glukozy
-            </option>
-            <option value="Badanie tarczycy">Badanie tarczycy</option>
-            <option value="Badanie poziomu witamin i minerałów">
-              Badanie poziomu witamin i minerałów
-            </option>
-            <option value="Kardiografia płodu">Kardiografia płodu</option>
-            <option value="Badanie ginekologiczne">
-              Badanie ginekologiczne
-            </option>
-          </Select>
-        </FormControl>
-      </Box>
+      {isDoctor === "true" && (
+        <Box maxW="480px" mb="30px">
+          <FormControl>
+            <FormLabel>Wybierz zestaw badań do dodania:</FormLabel>
+            <Select
+              name="medicalExaminationName"
+              placeholder="Wybierz kategorię"
+              onChange={handleExaminationTypeChange}
+            >
+              <option value="Badanie krwi">Badanie krwi</option>
+              <option value="Badanie moczu">Badanie moczu</option>
+              <option value="USG pierwszego trymestru">
+                USG pierwszego trymestru
+              </option>
+              <option value="USG drugiego trymestru">
+                USG drugiego trymestru
+              </option>
+              <option value="USG trzeciego trymestru">
+                USG trzeciego trymestru
+              </option>
+              <option value="Badanie ciśnienia krwi">
+                Badanie ciśnienia krwi
+              </option>
+              <option value="Badanie tolerancji glukozy">
+                Badanie tolerancji glukozy
+              </option>
+              <option value="Badanie tarczycy">Badanie tarczycy</option>
+              <option value="Badanie poziomu witamin i minerałów">
+                Badanie poziomu witamin i minerałów
+              </option>
+              <option value="Kardiografia płodu">Kardiografia płodu</option>
+              <option value="Badanie ginekologiczne">
+                Badanie ginekologiczne
+              </option>
+            </Select>
+          </FormControl>
+        </Box>
+      )}
       {selectedExaminationType === "Badanie krwi" && (
         <BloodTestForm onSubmit={handleSubmitMedicalExamination} />
       )}
