@@ -12,6 +12,7 @@ import {
   FormControl,
   Button,
   Textarea,
+  Spinner,
 } from "@chakra-ui/react";
 import { Form } from "react-router-dom";
 
@@ -22,9 +23,11 @@ export default function DietPlan() {
   const [caloriesRange, setCaloriesRange] = useState("1000-1500");
   const [allergens, setAllergens] = useState("");
   const [proposedDietPlan, setProposedDietPlan] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
 
     const dietPlanData = {
       daysNumber: parseInt(daysNumber, 10),
@@ -50,6 +53,7 @@ export default function DietPlan() {
       if (response.ok) {
         const dietPlan = await response.json();
         console.log(dietPlan);
+        setIsLoading(false);
         setProposedDietPlan(dietPlan);
       } else {
         console.error("Failed to create diet plan");
@@ -62,11 +66,11 @@ export default function DietPlan() {
   return (
     <Box>
       <Heading size="xl" textAlign="center">
-        Create your own diet plan!
+        Stwórz swój własny plan dietetyczny!
       </Heading>
 
       <Heading size="md" mt="20px" mb="20px">
-        For how many days do you want a diet plan?
+        Na ile dni chcesz dostać plan dietetyczny?
       </Heading>
       <NumberInput
         value={daysNumber}
@@ -82,7 +86,7 @@ export default function DietPlan() {
       </NumberInput>
 
       <Heading size="md" mt="20px" mb="20px">
-        How many dishes per day do you want?
+        Ile posiłków dziennie ma zawierać plan dietetyczny?
       </Heading>
       <NumberInput
         value={dishesNumber}
@@ -98,11 +102,11 @@ export default function DietPlan() {
       </NumberInput>
 
       <Heading size="md" mt="20px" mb="20px">
-        How many calories do you want to eat per day?
+        Ile kcal dziennie chcesz spożywać?
       </Heading>
       <Form method="post" onSubmit={handleSubmit}>
         <FormControl isRequired mb="40px">
-          <FormLabel>Calories range</FormLabel>
+          <FormLabel>Liczba kcal</FormLabel>
           <Select
             value={caloriesRange}
             onChange={(e) => setCaloriesRange(e.target.value)}
@@ -118,19 +122,20 @@ export default function DietPlan() {
         </FormControl>
 
         <FormControl mb="40px">
-          <FormLabel>Allergens:</FormLabel>
+          <FormLabel>Alergeny:</FormLabel>
           <Textarea
             value={allergens}
             onChange={(e) => setAllergens(e.target.value)}
-            placeholder="Write all your allergens and ingredients you want to avoid here :)"
+            placeholder="Wypisz tutaj wszystkie alergeny i składniki, których nie chcesz w swojej diecie :)"
             name="allergens"
           />
         </FormControl>
 
         <Button type="submit" variant="solid" colorScheme="green" mb="30px">
-          Create diet plan with OpenAI!
+          Kliknij tutaj, aby OpenAI stworzyło specjalny plan dietetyczny!
         </Button>
       </Form>
+      {isLoading && <Spinner size="xl" />}
 
       {proposedDietPlan.map((day) => (
         <Box key={day.dayName} mt="40px">
@@ -146,7 +151,9 @@ export default function DietPlan() {
               </ul>
             </Box>
           ))}
-          <Heading size="md">Choice reason: {day.choiceReason}</Heading>
+          <Heading size="md" mt="10px">
+            Uzasadnienie: {day.choiceReason}
+          </Heading>
         </Box>
       ))}
     </Box>

@@ -50,7 +50,9 @@ export default function Calendar() {
     <Box>
       {isDoctor === "false" && patientCalendarWeek && (
         <Box>
-          <Heading mb="40px">Your calendar week</Heading>
+          <Heading mb="40px" textAlign="center">
+            Twój tydzień ciąży
+          </Heading>
           <Card
             key={patientCalendarWeek.calendarWeekId}
             borderTop="8px"
@@ -61,7 +63,7 @@ export default function Calendar() {
               <Flex gap={5}>
                 <Box>
                   <Heading as="h2" size="sm">
-                    Hi future mum! You are in pregnancy week number:{" "}
+                    Cześć przyszła Mamo! Jesteś w tygodniu ciąży numer:{" "}
                     {patientCalendarWeek.pregnancyWeek}
                   </Heading>
                 </Box>
@@ -71,17 +73,17 @@ export default function Calendar() {
               <Text>{patientCalendarWeek.description}</Text>
             </CardBody>
             <Divider borderColor="gray.200" />
-            <CardFooter>
+            {/* <CardFooter>
               <Button variant="ghost" leftIcon={<ViewIcon />}>
-                Show more
+                Pokaż
               </Button>
-            </CardFooter>
+            </CardFooter> */}
           </Card>
         </Box>
       )}
 
-      <Heading mb="40px" mt="30px">
-        All calendar weeks
+      <Heading mb="40px" mt="30px" textAlign="center">
+        Wszystkie tygodnie ciąży
       </Heading>
       {loading ? (
         <Spinner />
@@ -99,7 +101,7 @@ export default function Calendar() {
                   <Flex gap={5}>
                     <Box>
                       <Heading as="h2" size="sm">
-                        Pregnancy week number: {calendarWeek.pregnancyWeek}
+                        Tydzień ciąży numer: {calendarWeek.pregnancyWeek}
                       </Heading>
                     </Box>
                   </Flex>
@@ -108,13 +110,13 @@ export default function Calendar() {
                   <Text>{calendarWeek.description}</Text>
                 </CardBody>
                 <Divider borderColor="gray.200" />
-                <CardFooter>
+                {/* <CardFooter>
                   <HStack>
                     <Button variant="ghost" leftIcon={<ViewIcon />}>
-                      Show more
+                      Pokaż więcej
                     </Button>
                   </HStack>
-                </CardFooter>
+                </CardFooter> */}
               </Card>
             ))}
         </SimpleGrid>

@@ -1,36 +1,37 @@
-import {
-  Flex,
-  Heading,
-  Box,
-  Text,
-  Button,
-  Spacer,
-  HStack,
-} from "@chakra-ui/react";
-import { NavLink } from "react-router-dom";
 import React from "react";
+import { Flex, Text, Button, Spacer, HStack, Divider } from "@chakra-ui/react";
 
 export default function Navbar() {
   const pesel = sessionStorage.getItem("pesel");
   const isDoctor = sessionStorage.getItem("isDoctor");
-  console.log("calendar isDoctor: " + isDoctor);
+  const username = sessionStorage.getItem("username");
+
+  const handleLogout = () => {
+    sessionStorage.clear();
+    window.location.href = "http://localhost:5173";
+  };
 
   return (
-    <Flex as="nav" p="10px" mb="60px" alignItems="center">
-      <Spacer />
-
-      <HStack spacing="20px">
-        <Box bg="gray.200" p="10px 15px" borderRadius="50%">
-          M
-        </Box>
-        {isDoctor === "true" ? (
-          <Text fontWeight="bold">Typ użytkownika: Doktor</Text>
-        ) : (
-          <Text fontWeight="bold">Typ użytkownika: Pacjent</Text>
-        )}
-        <Heading size="xs">Pesel: {pesel}</Heading>
-        <Button colorScheme="purple">Logout</Button>
-      </HStack>
-    </Flex>
+    <>
+      <Flex as="nav" mb="30px" alignItems="center">
+        <Spacer />
+        <HStack spacing="20px">
+          {isDoctor === "true" ? (
+            <Text fontWeight="bold">
+              Witaj! Korzystasz jako Doktor pod nazwą użytkownika: {username}!
+            </Text>
+          ) : (
+            <Text fontWeight="bold">
+              Witaj! Korzystasz jako Pacjentka pod nazwą użytkownika: {username}
+              !
+            </Text>
+          )}
+          <Button colorScheme="purple" onClick={handleLogout}>
+            Wyloguj
+          </Button>
+        </HStack>
+      </Flex>
+      <Divider borderColor="gray.400" mb="50px" />
+    </>
   );
 }

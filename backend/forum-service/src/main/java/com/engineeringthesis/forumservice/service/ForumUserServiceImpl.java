@@ -64,6 +64,10 @@ public class ForumUserServiceImpl implements CrudService<ForumUser> {
         return forumUserRepository.findUsernameByForumUserId(authorId);
     }
 
+    public String getForumUserUsernameByPesel(String pesel) {
+        return forumUserRepository.findUsernameByPesel(pesel);
+    }
+
     @Override
     public void update(ForumUser forumUser) {
         Long forumUserId = forumUser.getForumUserId();

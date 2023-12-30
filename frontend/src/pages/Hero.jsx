@@ -45,13 +45,12 @@ export default function Hero() {
       console.log("isDoctor: " + isDoctor);
       let res;
       if (isDoctor) {
-        console.log("I'ma a Doctor");
+        console.log("I'm a Doctor");
         res = await fetch(
           `http://localhost:8081/user/doctor/existsByPesel/${pesel}`
         );
       } else {
         console.log("I'm a patient");
-
         res = await fetch(
           `http://localhost:8081/user/patient/existsByPesel/${pesel}`
         );
@@ -60,6 +59,12 @@ export default function Hero() {
       const data = await res.json();
 
       if (typeof data === "boolean" && data === true) {
+        const usernameRes = await fetch(
+          `http://localhost:8084/forum/forumUser/getForumUserUsernameByPesel/${pesel}`
+        );
+        const usernameData = await usernameRes.text();
+        sessionStorage.setItem("username", usernameData);
+
         navigate("/app/calendar");
       } else {
         loginFailedToast({

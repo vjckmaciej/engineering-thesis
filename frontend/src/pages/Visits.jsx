@@ -34,6 +34,7 @@ export default function Visits() {
   const [myVisits, setMyVisits] = useState([]);
   const [analysisResult, setAnalysisResult] = useState("");
   const [nearestPlannedVisit, setNearestPlannedVisit] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchVisits = async () => {
@@ -83,12 +84,14 @@ export default function Visits() {
   };
 
   const analyzeVisitsByOpenAI = async () => {
+    setIsLoading(true);
     try {
       const res = await fetch(
         `http://localhost:8082/visit/visit/analyzeReportsByPesel/${pesel}`
       );
       const data = await res.text();
       setAnalysisResult(data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Błąd pobierania danych:", error);
     }
@@ -173,7 +176,7 @@ export default function Visits() {
         </Heading>
       )}
 
-      <Heading mb="40px" mt="100px" textAlign="center">
+      <Heading mb="30px" mt="100px" textAlign="center">
         Wszystkie wizyty{" "}
       </Heading>
       {isDoctor === "true" && (
@@ -214,12 +217,24 @@ export default function Visits() {
         </FormControl>
       )}
       {isDoctor === "false" && (
-        <>
-          <Button bg="cyan" onClick={() => analyzeVisitsByOpenAI()}>
-            Naciśnij przycisk, aby OpenAI przeanalizowało wizyty
+        <Flex
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          mt="10px"
+        >
+          <Button
+            bg="purple.300"
+            color="white"
+            onClick={() => analyzeVisitsByOpenAI()}
+          >
+            Kliknij tutaj, aby OpenAI przeanalizowało wszystkie wizyty
           </Button>
-          <Text>Wynik analizy: {analysisResult}</Text>
-        </>
+          {isLoading && <Spinner size="xl" mt="20px" />}
+          <Text mt="20px" textAlign="center" mb="20px">
+            {analysisResult}
+          </Text>
+        </Flex>
       )}
 
       {loading ? (

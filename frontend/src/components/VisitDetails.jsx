@@ -12,6 +12,9 @@ import {
   FormLabel,
   Select,
   useToast,
+  Spinner,
+  Flex,
+  Input,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import BloodTestForm from "../forms/BloodTestForm";
@@ -38,6 +41,12 @@ export default function VisitDetails() {
   const [selectedExaminationType, setSelectedExaminationType] = useState("");
   const resultDeletedToast = useToast();
   const resultAddedToast = useToast();
+  const resultUpdatedToast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [updatedVisitStatus, setUpdatedVisitStatus] = useState("");
+  const [updatedDoctorRecommendations, setUpdatedDoctorRecommendations] =
+    useState("");
 
   useEffect(() => {
     const fetchVisitDetails = async () => {
@@ -91,12 +100,14 @@ export default function VisitDetails() {
   };
 
   const analyzeVisitByOpenAI = async () => {
+    setIsLoading(true);
     try {
       const res = await fetch(
         `http://localhost:8082/visit/visit/analyzeVisitByOpenAI/${visitId}`
       );
       const data = await res.text();
       setAnalysisResult(data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Błąd pobierania danych:", error);
     }
@@ -108,7 +119,6 @@ export default function VisitDetails() {
 
   const handleDeleteMedicalExamination = async (medicalExaminationId) => {
     try {
-      // API call to delete medical examination
       const response = await fetch(
         `http://localhost:8082/visit/medicalExamination/${medicalExaminationId}`,
         {
@@ -128,7 +138,6 @@ export default function VisitDetails() {
           isClosable: true,
         });
 
-        // Refresh the list of medical examinations
         const updatedExaminations = medicalExaminations.filter(
           (me) => me.medicalExaminationId !== medicalExaminationId
         );
@@ -183,7 +192,48 @@ export default function VisitDetails() {
     }
   };
 
+  const handleEdit = () => {
+    setEditMode(true);
+    setUpdatedVisitStatus(visitDetails.visitStatus);
+    setUpdatedDoctorRecommendations(visitDetails.doctorRecommendations);
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const updateData = {
+        ...visitDetails,
+        visitStatus: updatedVisitStatus,
+        doctorRecommendations: updatedDoctorRecommendations,
+      };
+
+      console.log(updateData);
+
+      const response = await fetch(`http://localhost:8082/visit/visit`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updateData),
+      });
+
+      if (response.ok) {
+        resultUpdatedToast({
+          title: "Wizyta pomyślnie zaktualizowana!",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+        setVisitDetails(updateData);
+        setEditMode(false);
+      } else {
+        throw new Error("Error while updating result.");
+      }
+    } catch (error) {
+      console.error("Błąd aktualizacji wizyty:", error);
+    }
+  };
+
   const handleSubmitMedicalExamination = async (formData) => {
+    setIsLoading(true);
+
     const medicalExaminationData = {
       medicalExaminationName: selectedExaminationType,
       visitId: visitIdForm,
@@ -207,6 +257,7 @@ export default function VisitDetails() {
 
       const examinationResponse = await response.json();
       const medicalExaminationId = examinationResponse.id;
+      setIsLoading(false);
 
       const tests = [
         //Badanie krwi
@@ -340,18 +391,63 @@ export default function VisitDetails() {
       ) : (
         <Text>Loading...</Text>
       )}
-
-      {visitDetails && visitDetails.visitStatus === "SCHEDULED" && (
-        <Button
-          bg="purple.300"
-          color="white"
-          mt="30px"
-          onClick={() => analyzeVisitByOpenAI()}
-        >
-          Kliknij tutaj, aby OpenAI przeanalizowało wizytę
-        </Button>
+      {isDoctor === "true" && (
+        <>
+          {!editMode && (
+            <Button colorScheme="pink" onClick={handleEdit} mt="20px">
+              Edytuj wizytę
+            </Button>
+          )}
+          {editMode && (
+            <Box mt="20px">
+              <FormControl>
+                <FormLabel>Status wizyty:</FormLabel>
+                <Select
+                  value={updatedVisitStatus}
+                  onChange={(e) => setUpdatedVisitStatus(e.target.value)}
+                >
+                  <option value="SCHEDULED">Zaplanowana</option>
+                  <option value="COMPLETED">Zakończona</option>
+                  <option value="CANCELLED">Anulowana</option>
+                </Select>
+              </FormControl>
+              <FormControl mb="4" mt="10px">
+                <FormLabel>Zalecenia lekarskie:</FormLabel>
+                <Input
+                  value={updatedDoctorRecommendations}
+                  onChange={(e) =>
+                    setUpdatedDoctorRecommendations(e.target.value)
+                  }
+                />
+              </FormControl>
+              <Button colorScheme="green" onClick={handleUpdate} mb="4">
+                Aktualizuj
+              </Button>
+            </Box>
+          )}
+        </>
       )}
-      <Text>Wynik analizy: {analysisResult}</Text>
+
+      {visitDetails && (
+        <Flex
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          mt="30px"
+        >
+          <Button
+            bg="purple.300"
+            color="white"
+            onClick={() => analyzeVisitByOpenAI()}
+          >
+            Kliknij tutaj, aby OpenAI przeanalizowało wizytę
+          </Button>
+          {isLoading && <Spinner size="xl" mt="20px" />}
+          <Text mt="20px" textAlign="center">
+            {analysisResult}
+          </Text>
+        </Flex>
+      )}
 
       <Heading mb="4" mt="40px">
         Wszystkie badania
@@ -438,6 +534,7 @@ export default function VisitDetails() {
             overflow="hidden"
             variant="outline"
             mb="2"
+            mt="20px"
           >
             <Stack>
               <CardBody>

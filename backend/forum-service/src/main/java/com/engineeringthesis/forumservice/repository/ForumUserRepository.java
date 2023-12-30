@@ -29,6 +29,9 @@ public interface ForumUserRepository extends JpaRepository<ForumUser, Long> {
     @Query("SELECT fu.username FROM ForumUser fu WHERE fu.forumUserId = :forumUserId")
     String findUsernameByForumUserId(@Param("forumUserId") Long forumUserId);
 
+    @Query("SELECT fu.username FROM ForumUser fu WHERE fu.pesel = :pesel")
+    String findUsernameByPesel(@Param("pesel") String pesel);
+
     //
     List<ForumUser> deleteByForumUserId(Long forumId);
 //
