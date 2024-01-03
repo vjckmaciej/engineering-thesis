@@ -1,14 +1,31 @@
 import React from "react";
-import { Flex, Text, Button, Spacer, HStack, Divider } from "@chakra-ui/react";
+import {
+  Flex,
+  Text,
+  Button,
+  Spacer,
+  HStack,
+  Divider,
+  useToast,
+} from "@chakra-ui/react";
 
 export default function Navbar() {
   const pesel = sessionStorage.getItem("pesel");
   const isDoctor = sessionStorage.getItem("isDoctor");
   const username = sessionStorage.getItem("username");
+  const loggedOutToast = useToast();
 
   const handleLogout = () => {
     sessionStorage.clear();
-    window.location.href = "http://localhost:5173";
+    loggedOutToast({
+      title: "Pomyślnie wylogowano z portalu.",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
+    setTimeout(() => {
+      window.location.href = "http://localhost:5173";
+    }, 2000);
   };
 
   return (

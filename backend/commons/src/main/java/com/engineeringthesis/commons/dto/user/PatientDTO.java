@@ -33,7 +33,7 @@ public class PatientDTO {
     @Pattern(regexp = "\\d{9}", message = "Phone number must contain 9 digits!")
     private String phoneNumber;
 
-    @NotNull(message = "DoctorID must not be null!")
-    @Positive(message = "DoctorID must be a positive number!")
+//    @NotNull(message = "DoctorID must not be null!")
+//    @Positive(message = "DoctorID must be a positive number!")
     private Long doctorId;
 }

@@ -14,13 +14,13 @@ public interface ForumUserRepository extends JpaRepository<ForumUser, Long> {
         ForumUser save(ForumUser forumUser);
 //
     Optional<ForumUser> findByForumUserId(Long forumId);
-//
-//    Optional<ForumUser> findByPesel(String pesel);
-//
+
+    Optional<ForumUser> findForumUserByPesel(String pesel);
+
     boolean existsByForumUserId(Long forumId);
-//
+
     boolean existsByPesel(String PESEL);
-//
+
     List<ForumUser> findAll();
 
     @Query("SELECT fu.forumUserId FROM ForumUser fu WHERE fu.pesel = :pesel")

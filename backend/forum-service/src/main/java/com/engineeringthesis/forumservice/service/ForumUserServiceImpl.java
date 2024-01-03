@@ -1,5 +1,6 @@
 package com.engineeringthesis.forumservice.service;
 
+import com.engineeringthesis.commons.auth.LoginCredentials;
 import com.engineeringthesis.commons.exception.DataSaveException;
 import com.engineeringthesis.commons.exception.DeleteException;
 import com.engineeringthesis.commons.model.CrudService;
@@ -16,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -118,6 +120,16 @@ public class ForumUserServiceImpl implements CrudService<ForumUser> {
             log.error(e.getLocalizedMessage());
             String message = String.format("Cannot delete ForumUser with this forumUserId: %d", id);
             throw new DeleteException(message);
+        }
+    }
+
+    public boolean checkCredentials(LoginCredentials loginCredentials) {
+        String pesel = loginCredentials.getPesel();
+        if (forumUserRepository.existsByPesel(pesel)) {
+            Optional<ForumUser> forumUser = forumUserRepository.findForumUserByPesel(pesel);
+            return (forumUser.isPresent() && forumUser.get().getPassword().equals(loginCredentials.getPassword()));
+        } else {
+            return false;
         }
     }
 }

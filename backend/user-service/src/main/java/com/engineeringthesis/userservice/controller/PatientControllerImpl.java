@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +32,7 @@ public class PatientControllerImpl implements CrudController<PatientDTO> {
         Long patientId = patientDTO.getPatientId();
         log.info("Starting saving Patient with patientId: " + patientId);
         Patient patient = patientMapper.patientDTOToPatient(patientDTO);
-//        patient.setRegistryDate(LocalDate.now()); //not needed (we have annotation in patient entity class
+        patient.setRegistryDate(LocalDate.now());
         patientService.save(patient);
         return ResponseEntity.ok(new CrudResponse(patient.getPatientId(), "Patient added to database!"));
     }

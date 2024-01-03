@@ -1,5 +1,6 @@
 package com.engineeringthesis.forumservice.controller;
 
+import com.engineeringthesis.commons.auth.LoginCredentials;
 import com.engineeringthesis.commons.dto.forum.ForumUserDTO;
 import com.engineeringthesis.commons.dto.user.PatientDTO;
 import com.engineeringthesis.commons.model.CrudController;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,25 +40,27 @@ public class ForumUserControllerImpl implements CrudController<ForumUserDTO> {
     public ResponseEntity<CrudResponse> add(@Valid @RequestBody ForumUserDTO forumUserDTO) {
         Long forumUserId = forumUserDTO.getForumUserId();
         log.info("Starting saving ForumUser with forumUserId: " + forumUserId);
-
-        String forumUserPesel = forumUserDTO.getPesel();
-
-        try {
-            ResponseEntity<PatientDTO> optionalPatientDTO = userServiceClient.getPatientByPesel(forumUserPesel);
-            if (optionalPatientDTO.getStatusCode().equals(HttpStatus.OK)) {
-                ForumUser forumUser = forumUserMapper.forumUserDTOToForumUser(forumUserDTO);
-                forumUserService.save(forumUser);
-                return ResponseEntity.ok(new CrudResponse(forumUser.getForumUserId(), "ForumUser added to database!"));
-            } else {
-                String message = String.format("ForumUser with this PESEL: %s already exists in database!", forumUserPesel);
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
-            }
-        } catch (Exception e) {
-            String message = e.getMessage();
-            log.error(message);
-            CrudResponse crudResponse = new CrudResponse(forumUserId, message);
-            return new ResponseEntity<>(crudResponse, HttpStatus.NOT_FOUND);
-        }
+//
+//        String forumUserPesel = forumUserDTO.getPesel();
+//
+//        try {
+//            ResponseEntity<PatientDTO> optionalPatientDTO = userServiceClient.getPatientByPesel(forumUserPesel);
+//            if (optionalPatientDTO.getStatusCode().equals(HttpStatus.OK)) {
+//                ForumUser forumUser = forumUserMapper.forumUserDTOToForumUser(forumUserDTO);
+//                forumUserService.save(forumUser);
+//                return ResponseEntity.ok(new CrudResponse(forumUser.getForumUserId(), "ForumUser added to database!"));
+//            } else {
+//                String message = String.format("ForumUser with this PESEL: %s already exists in database!", forumUserPesel);
+//                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
+//            }
+//        } catch (Exception e) {
+//            String message = e.getMessage();
+//            log.error(message);
+//            CrudResponse crudResponse = new CrudResponse(forumUserId, message);
+        ForumUser forumUser = forumUserMapper.forumUserDTOToForumUser(forumUserDTO);
+        forumUser.setRegistrationDate(LocalDate.now());
+        forumUserService.save(forumUser);
+        return ResponseEntity.ok(new CrudResponse(forumUser.getForumUserId(),"Forum user added to database!"));
     }
 
     @Override
@@ -112,5 +116,11 @@ public class ForumUserControllerImpl implements CrudController<ForumUserDTO> {
         forumUserService.deleteById(forumUserId);
         String message = String.format("ForumUser with forumUserId: %d deleted!", forumUserId);
         return ResponseEntity.ok(new CrudResponse(forumUserId, message));
+    }
+
+    @RequestMapping(path="/checkCredentials", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public boolean areLoginCredentialsCorrect(@RequestBody LoginCredentials loginCredentials) {
+        log.info("Starting checking credentials for forum user with PESEL: " + loginCredentials.getPesel());
+        return forumUserService.checkCredentials(loginCredentials);
     }
 }

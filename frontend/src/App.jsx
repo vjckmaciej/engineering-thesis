@@ -20,13 +20,16 @@ import CreateThread from "./pages/thread/CreateThread";
 import CreateVisit from "./pages/visit/CreateVisit";
 import VisitDetails from "./components/VisitDetails";
 import DietPlan from "./pages/DietPlan";
+import LoginHero from "./auth/LoginHero";
+import Register from "./auth/Register";
 
 // router and routes
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<HeroLayout />}>
       {/* <Route index element={<Dashboard />} loader={tasksLoader} /> */}
-      <Route index element={<Hero />} />
+      <Route index element={<LoginHero />} />
+      <Route path="register" element={<Register />} />
       <Route path="app" element={<RootLayout />}>
         <Route path="calendar" element={<Calendar />} loader={tasksLoader} />
         <Route path="forum" element={<Forum />} loader={threadsLoader} />
