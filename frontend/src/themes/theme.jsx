@@ -8,9 +8,8 @@ const theme = extendTheme({
     white: "#fff",
   },
   fonts: {
-    heading: "Roboto, sans-serif",
-    body: "Roboto, sans-serif",
-    mono: "Menlo, monospace",
+    heading: "Roboto",
+    body: "Roboto",
   },
   fontSizes: {
     xs: "0.75rem",

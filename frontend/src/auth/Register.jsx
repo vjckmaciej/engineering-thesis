@@ -146,7 +146,6 @@ export default function Register() {
 
     try {
       console.log("isDoctor: " + isDoctor);
-      console.log(typeof isDoctor);
       let doesUserAlreadyExist;
       if (isDoctor) {
         console.log("I'm a Doctor");

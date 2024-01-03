@@ -81,9 +81,9 @@ export default function CreateVisit() {
 
   return (
     <Box maxW="550px">
-      <Heading mb="40px">New visit</Heading>
+      <Heading mb="40px">Nowa wizyta</Heading>
       <Box mb="20px">
-        <Heading size="md">Choose date:</Heading>
+        <Heading size="md">Wybierz datę:</Heading>
         <DatePicker
           selected={visitDatePicker}
           onChange={(date) => {
@@ -98,16 +98,16 @@ export default function CreateVisit() {
 
       <Form method="post" onSubmit={handleSubmit}>
         <FormControl isRequired mb="40px">
-          <FormLabel>Patient PESEL:</FormLabel>
+          <FormLabel>PESEL pacjentki:</FormLabel>
           <Input
-            placeholder="Enter patient's PESEL"
+            placeholder="Wprowadź PESEL pacjentki"
             type="text"
             name="patientPesel"
           />
         </FormControl>
 
         <Button type="submit" variant="solid" colorScheme="green" mb="30px">
-          Create
+          Dodaj
         </Button>
       </Form>
     </Box>

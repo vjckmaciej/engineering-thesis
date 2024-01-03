@@ -204,7 +204,9 @@ export default function LoginHero() {
                     required
                     onChange={handlePeselChange}
                   />
-                  <FormHelperText mb="20px">Wprowadź PESEL</FormHelperText>
+                  <FormHelperText mb="20px">
+                    Wprowadź swój PESEL.
+                  </FormHelperText>
                   <FormLabel fontWeight="bold">Hasło</FormLabel>
                   <InputGroup>
                     <InputRightElement>

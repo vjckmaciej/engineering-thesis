@@ -286,7 +286,7 @@ export default function Visits() {
               </Card>
             ))
           ) : (
-            <Text>No visits available.</Text>
+            <Text>Brak wizyt.</Text>
           )}
         </SimpleGrid>
       )}

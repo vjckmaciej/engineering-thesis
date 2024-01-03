@@ -241,7 +241,7 @@ export default function Forum() {
         </TabPanel>
         <TabPanel>
           <Box>
-            <Heading mb="40px">Moje</Heading>
+            <Heading mb="40px">Moje wątki</Heading>
             {myThreads.map((myThread) => (
               <Card
                 key={myThread.threadId}
