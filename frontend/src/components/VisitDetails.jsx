@@ -571,19 +571,21 @@ export default function VisitDetails() {
                         <Text>Jednostka: {result.unit}</Text>
                         <Text>Wynik opisowy: {result.descriptiveResult}</Text>
                         <Text>Notatka lekarza: {result.doctorNote}</Text>
-                        <Button
-                          size="sm"
-                          fontSize="xs"
-                          colorScheme="red"
-                          onClick={() =>
-                            handleDeleteResult(
-                              result.resultId,
-                              medicalExamination.medicalExaminationId
-                            )
-                          }
-                        >
-                          Usuń wynik
-                        </Button>
+                        {isDoctor === "true" && (
+                          <Button
+                            size="sm"
+                            fontSize="xs"
+                            colorScheme="red"
+                            onClick={() =>
+                              handleDeleteResult(
+                                result.resultId,
+                                medicalExamination.medicalExaminationId
+                              )
+                            }
+                          >
+                            Usuń wynik
+                          </Button>
+                        )}
                       </Container>
                     )
                   )}

@@ -1,5 +1,6 @@
 package com.engineeringthesis.openaianalysisservice.controller;
 
+import com.engineeringthesis.openaianalysisservice.model.ConversationRequest;
 import com.engineeringthesis.openaianalysisservice.model.QueryRequest;
 import com.engineeringthesis.openaianalysisservice.service.OpenAIAnalysisServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -52,5 +53,12 @@ public class OpenAIAnalysisControllerImpl {
         log.info("Starting query: " + queryRequest.getQuery());
 
         return openAIAnalysisService.analyzeReport(queryRequest.getQuery());
+    }
+
+    @PostMapping("/askQuestion")
+    public String askQuestion(@RequestBody ConversationRequest conversationRequest) {
+        String conversationHistory = String.join("\n", conversationRequest.getConversationHistory());
+        log.info("Starting analyzing question from patient: " + conversationHistory);
+        return openAIAnalysisService.analyzeReport(conversationHistory);
     }
 }

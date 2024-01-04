@@ -15,12 +15,10 @@ import {
   Divider,
   Button,
   Spinner,
-  Container,
   Spacer,
   FormControl,
   FormLabel,
   Input,
-  FormHelperText,
 } from "@chakra-ui/react";
 import { AddIcon, ViewIcon } from "@chakra-ui/icons";
 
@@ -32,9 +30,14 @@ export default function Visits() {
   const [loading, setLoading] = useState(false);
   const [selectedPatientPesel, setSelectedPatientPesel] = useState("");
   const [myVisits, setMyVisits] = useState([]);
+  const [conversation, setConversation] = useState([]);
   const [analysisResult, setAnalysisResult] = useState("");
   const [nearestPlannedVisit, setNearestPlannedVisit] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [userQuestion, setUserQuestion] = useState("");
+  const [isAnswerForUserQuestionLoading, setIsAnswerForUserQuestionLoading] =
+    useState("");
+  const [answerForUserQuestion, setAnswerForUserQuestion] = useState("");
 
   useEffect(() => {
     const fetchVisits = async () => {
@@ -83,19 +86,65 @@ export default function Visits() {
     navigate(`/app/visits/${visitId}`);
   };
 
+  const removePolishCharacters = (str) => {
+    const polishChars = {
+      ą: "a",
+      ć: "c",
+      ę: "e",
+      ł: "l",
+      ń: "n",
+      ó: "o",
+      ś: "s",
+      ź: "z",
+      ż: "z",
+    };
+    return str.replace(/[ąćęłńóśźż]/g, (match) => polishChars[match]);
+  };
+
   const analyzeVisitsByOpenAI = async () => {
     setIsLoading(true);
+
     try {
+      const visitsResultsReportResponse = await fetch(
+        `http://localhost:8082/visit/visit/generateReportPatientPesel/${pesel}`
+      );
+      const visitsResultsObject = await visitsResultsReportResponse.json();
+      const visitsResultsString = JSON.stringify(visitsResultsObject);
+
+      setConversation((prevConversation) => {
+        let entryTextForOpenAI =
+          "Prowadzisz konwersacje z pacjentka w ciazy. To lista jej wizyt: ";
+        const updated = [...prevConversation];
+        updated[0] = entryTextForOpenAI + visitsResultsString;
+        return updated;
+      });
+
       const res = await fetch(
         `http://localhost:8082/visit/visit/analyzeReportsByPesel/${pesel}`
       );
-      const data = await res.text();
-      setAnalysisResult(data);
+      const analyzeString = await res.text();
+
+      const cleanedAnalysisResult = removePolishCharacters(analyzeString);
+
+      setConversation((prevConversation) => {
+        let analyzedTextEntryForOpenAI =
+          "Przeanalizowales wizyty i to jest Twoja analiza: ";
+        const updated = [...prevConversation];
+        updated[1] = analyzedTextEntryForOpenAI + cleanedAnalysisResult;
+        return updated;
+      });
+
+      setAnalysisResult(analyzeString);
       setIsLoading(false);
     } catch (error) {
       console.error("Błąd pobierania danych:", error);
+      setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    console.log("Zaktualizowane conversation:", conversation);
+  }, [conversation]);
 
   const handleInputChange = (e) => {
     setSelectedPatientPesel(e.target.value);
@@ -121,6 +170,52 @@ export default function Visits() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleQuestionChange = (e) => {
+    setUserQuestion(e.target.value);
+  };
+
+  const handleSubmitQuestion = async () => {
+    setIsAnswerForUserQuestionLoading(true);
+
+    const userQuestionEntryOpenAI = "Odpowiedz na pytanie pacjentki: ";
+    let updatedConversation = [...conversation];
+
+    // Jeśli długość conversation wynosi mniej niż 2, dodaj puste miejsca
+    while (updatedConversation.length < 2) {
+      updatedConversation.push("");
+    }
+
+    const cleanedUserQuestion = removePolishCharacters(userQuestion);
+    updatedConversation[2] = userQuestionEntryOpenAI + cleanedUserQuestion;
+
+    // setUserQuestion("");
+    const requestBody = JSON.stringify({
+      conversationHistory: updatedConversation,
+    });
+    console.log(requestBody);
+    try {
+      const answerForUserQuestionResponse = await fetch(
+        `http://localhost:8083/api/v1/askQuestion`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+          },
+          body: requestBody,
+        }
+      );
+      const answerForUserQuestionString =
+        await answerForUserQuestionResponse.text();
+      setAnswerForUserQuestion(answerForUserQuestionString);
+      setIsAnswerForUserQuestionLoading(false);
+    } catch (error) {
+      console.error("Błąd pobierania danych:", error);
+      setIsAnswerForUserQuestionLoading(false);
+    }
+
+    setConversation(updatedConversation);
   };
 
   return (
@@ -233,6 +328,34 @@ export default function Visits() {
           {isLoading && <Spinner size="xl" mt="20px" />}
           <Text mt="20px" textAlign="center" mb="20px">
             {analysisResult}
+          </Text>
+        </Flex>
+      )}
+
+      {isDoctor === "false" && analysisResult !== "" && (
+        <Flex
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          mt="10px"
+        >
+          <FormControl>
+            <FormLabel textAlign="center" fontWeight="bold" size="xl">
+              Zadaj pytanie AI:
+            </FormLabel>
+            <Input
+              placeholder="Napisz nurtujące Cię pytanie :)"
+              type="text"
+              value={userQuestion}
+              onChange={handleQuestionChange}
+            />
+          </FormControl>
+          <Button mt="10px" colorScheme="blue" onClick={handleSubmitQuestion}>
+            Wyślij pytanie
+          </Button>
+          {isAnswerForUserQuestionLoading && <Spinner size="xl" mt="20px" />}
+          <Text mt="20px" textAlign="center" mb="20px">
+            {answerForUserQuestion}
           </Text>
         </Flex>
       )}

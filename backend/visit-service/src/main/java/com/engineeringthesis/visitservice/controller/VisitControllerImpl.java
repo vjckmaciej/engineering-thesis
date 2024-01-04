@@ -77,7 +77,7 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
 
         long totalDays = periodFromStartOfPregnancy.getDays();
         long totalWeeks = (periodFromStartOfPregnancy.toTotalMonths() * 4) + (totalDays / 7);
-        Integer totalWeeksInteger = Math.toIntExact(totalWeeks);
+        Integer totalWeeksInteger = Math.toIntExact(totalWeeks) + 1; //Starting from week 1
 
         int maxPregnancyWeek = 44;
         if (totalWeeksInteger > maxPregnancyWeek) {
@@ -194,23 +194,25 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         List<VisitResultsReportDTO> allVisitResultsReportDTO = new ArrayList<>();
 
         for (Visit visit : allVisitsWithGivenPatientPesel) {
-            VisitResultsReportDTO visitResultsReportDTO = new VisitResultsReportDTO();
-            visitResultsReportDTO.setWeekOfPregnancy(visit.getWeekOfPregnancy());
+            if (visit.getVisitStatus().equals(VisitStatus.COMPLETED)) {
+                VisitResultsReportDTO visitResultsReportDTO = new VisitResultsReportDTO();
+                visitResultsReportDTO.setWeekOfPregnancy(visit.getWeekOfPregnancy());
 
-            visitResultsReportDTO.setWomanAge(visit.getWomanAge());
-            visitResultsReportDTO.setDoctorRecommendations(visit.getDoctorRecommendations());
-            visitResultsReportDTO.setVisitDate(visit.getVisitDate());
+                visitResultsReportDTO.setWomanAge(visit.getWomanAge());
+                visitResultsReportDTO.setDoctorRecommendations(visit.getDoctorRecommendations());
+                visitResultsReportDTO.setVisitDate(visit.getVisitDate());
 
-            for (MedicalExamination medicalExamination : visit.getMedicalExaminations()) {
-                String medicalExaminationName = medicalExamination.getMedicalExaminationName();
-                List<Result> medicalExaminationResultsGroup = medicalExamination.getExactResults();
+                for (MedicalExamination medicalExamination : visit.getMedicalExaminations()) {
+                    String medicalExaminationName = medicalExamination.getMedicalExaminationName();
+                    List<Result> medicalExaminationResultsGroup = medicalExamination.getExactResults();
 //            List<ResultDTO> medicalExaminationResultsGroupDTO = medicalExaminationResultsGroup.stream().map((resultMapper::resultToResultDTO)).toList();
-                List<ResultsReportDTO> medicalExaminationResultsGroupDTO = medicalExaminationResultsGroup.stream().map((resultMapper::resultToResultsReportDTO)).toList();
+                    List<ResultsReportDTO> medicalExaminationResultsGroupDTO = medicalExaminationResultsGroup.stream().map((resultMapper::resultToResultsReportDTO)).toList();
 
-                visitResultsReportDTO.getResults().put(medicalExaminationName, medicalExaminationResultsGroupDTO);
+                    visitResultsReportDTO.getResults().put(medicalExaminationName, medicalExaminationResultsGroupDTO);
+                }
+
+                allVisitResultsReportDTO.add(visitResultsReportDTO);
             }
-
-            allVisitResultsReportDTO.add(visitResultsReportDTO);
         }
 
         return ResponseEntity.ok(allVisitResultsReportDTO);
