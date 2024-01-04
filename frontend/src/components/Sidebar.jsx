@@ -15,12 +15,6 @@ export default function Sidebar() {
   return (
     <List color="white" fontSize="1.2em" spacing={6}>
       <ListItem>
-        <NavLink to="profile">
-          <ListIcon as={AtSignIcon} color="white" />
-          Profil
-        </NavLink>
-      </ListItem>
-      <ListItem>
         <NavLink to="visits">
           <ListIcon as={CopyIcon} color="white" />
           Wizyty

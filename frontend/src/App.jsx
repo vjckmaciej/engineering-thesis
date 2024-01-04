@@ -9,7 +9,6 @@ import {
 import RootLayout from "./layouts/RootLayout";
 import Dashboard, { tasksLoader } from "./pages/Dashboard";
 // import Create, { createAction } from './pages/Create'
-import Profile from "./pages/Profile";
 import Hero from "./pages/Hero";
 import Visits from "./pages/Visits";
 import HeroLayout from "./layouts/HeroLayout";
@@ -27,7 +26,6 @@ import Register from "./auth/Register";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<HeroLayout />}>
-      {/* <Route index element={<Dashboard />} loader={tasksLoader} /> */}
       <Route index element={<LoginHero />} />
       <Route path="register" element={<Register />} />
       <Route path="app" element={<RootLayout />}>
@@ -36,14 +34,11 @@ const router = createBrowserRouter(
         <Route path="forum/:threadId" element={<ThreadDetails />} />
         <Route path="forum/create" element={<CreateThread />} />
         <Route path="dashboard" element={<Dashboard />} loader={tasksLoader} />
-        {/* <Route path="create" element={<Create />} action={createAction} /> */}
         <Route path="dietplan" element={<DietPlan />} />
-        <Route path="profile" element={<Profile />} />
         <Route path="visits" element={<Visits />} />
         <Route path="visits/create" element={<CreateVisit />} />
         <Route path="visits/:visitId" element={<VisitDetails />} />
       </Route>
-      {/* <Route path="start" element={<Hero />} /> */}
     </Route>
   )
 );
