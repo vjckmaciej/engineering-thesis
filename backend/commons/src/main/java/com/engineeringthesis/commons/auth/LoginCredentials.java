@@ -11,8 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginCredentials {
-    @Pattern(regexp = "\\d{11}", message = "PESEL must contain 11 digits!")
-    private String pesel;
+//    @Pattern(regexp = "\\d{11}", message = "PESEL must contain 11 digits!")
+//    private String pesel;
+    @NotBlank(message = "Username must not be blank!")
+    @Size(min = 5, max = 20, message = "Username must contain minimum of 5 characters and maximum of 20 characters!")
+    private String username;
 
     @NotBlank(message = "Password must not be blank!")
     @Size(min = 5, max = 20, message = "Password must contain minimum of 5 characters and maximum of 20 characters!")

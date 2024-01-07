@@ -99,6 +99,18 @@ public class ForumUserControllerImpl implements CrudController<ForumUserDTO> {
         return forumUserService.getForumUserUsernameByPesel(pesel);
     }
 
+    @RequestMapping(path="/getForumUserPeselByUsername/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getForumUserPeselByUsername(@PathVariable String username) {
+        log.info("Starting getting forum user pesel by username: " + username);
+        return forumUserService.getForumUserPeselByUsername(username);
+    }
+
+    @RequestMapping(path = "/existsByUsername/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public boolean existsByUsername(@PathVariable String username) {
+        log.info("Checking if forum user exists by given username: " + username);
+        return forumUserService.existsByUsername(username);
+    }
+
     @Override
     @RequestMapping(method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CrudResponse> update(@RequestBody ForumUserDTO forumUserDTO) {
@@ -120,7 +132,7 @@ public class ForumUserControllerImpl implements CrudController<ForumUserDTO> {
 
     @RequestMapping(path="/checkCredentials", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean areLoginCredentialsCorrect(@RequestBody LoginCredentials loginCredentials) {
-        log.info("Starting checking credentials for forum user with PESEL: " + loginCredentials.getPesel());
+        log.info("Starting checking credentials for forum user with username: " + loginCredentials.getUsername());
         return forumUserService.checkCredentials(loginCredentials);
     }
 }

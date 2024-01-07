@@ -31,14 +31,18 @@ import { NavLink, useNavigate } from "react-router-dom";
 export default function LoginHero() {
   const navigate = useNavigate();
   const [pesel, setPesel] = useState("");
+  const [username, setUsername] = useState("");
   const [isDoctor, setIsDoctor] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordOpen, setIsPasswordOpen] = useState(false);
   const peselFailedToast = useToast();
   const passwordFailedToast = useToast();
 
-  const handlePeselChange = (e) => {
-    setPesel(e.target.value);
+  // const handlePeselChange = (e) => {
+  //   setPesel(e.target.value);
+  // };
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -47,12 +51,14 @@ export default function LoginHero() {
 
   const handleLogin = async () => {
     // Save pesel in sessionStorage
-    sessionStorage.setItem("pesel", pesel);
+    // sessionStorage.setItem("pesel", pesel);
+    sessionStorage.setItem("username", username);
     sessionStorage.setItem("isDoctor", isDoctor.toString());
 
-    if (pesel.length !== 11) {
+    if (username.length < 5 || username.length > 20) {
       peselFailedToast({
-        title: "Nieprawidłowy PESEL! PESEL musi składać się z 11 cyfr.",
+        title:
+          "Nieprawidłowa nazwa użytkownika! Musi ona składać się minimum 5 znaków, a maksymalnie z 20 znaków.",
         status: "error",
         duration: 2000,
         isClosable: true,
@@ -61,54 +67,33 @@ export default function LoginHero() {
     }
 
     try {
-      let res;
-      if (isDoctor) {
-        console.log("I'm a Doctor");
-        res = await fetch(
-          `http://localhost:8081/user/doctor/existsByPesel/${pesel}`
-        );
-      } else {
-        console.log("I'm a patient");
-        res = await fetch(
-          `http://localhost:8081/user/patient/existsByPesel/${pesel}`
-        );
-      }
-      const data = await res.json();
-      if (typeof data === "boolean" && data === true) {
-        let loginCredentialsData = {
-          pesel,
-          password,
-        };
-        const areCredentialsCorrectResponse = await fetch(
-          "http://localhost:8084/forum/forumUser/checkCredentials",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(loginCredentialsData),
-          }
-        );
-
-        const isAuthenticated = await areCredentialsCorrectResponse.json();
-
-        if (typeof isAuthenticated === "boolean" && isAuthenticated === true) {
-          const usernameRes = await fetch(
-            `http://localhost:8084/forum/forumUser/getForumUserUsernameByPesel/${pesel}`
-          );
-          const usernameData = await usernameRes.text();
-          sessionStorage.setItem("username", usernameData);
-
-          navigate("/app/calendar");
-        } else {
-          peselFailedToast({
-            title:
-              "Podano niewłaściwe hasło lub użytkownik o tym numerze PESEL nie istnieje!",
-            status: "error",
-            duration: 2000,
-            isClosable: true,
-          });
+      let loginCredentialsData = {
+        username,
+        password,
+      };
+      const areCredentialsCorrectResponse = await fetch(
+        "http://localhost:8084/forum/forumUser/checkCredentials",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(loginCredentialsData),
         }
+      );
+
+      const isAuthenticated = await areCredentialsCorrectResponse.json();
+
+      if (typeof isAuthenticated === "boolean" && isAuthenticated === true) {
+        const peselRes = await fetch(
+          `http://localhost:8084/forum/forumUser/getForumUserPeselByUsername/${username}`
+        );
+        const peselData = await peselRes.text();
+
+        sessionStorage.setItem("pesel", peselData);
+        console.log(peselData);
+
+        navigate("/app/calendar");
       } else {
         peselFailedToast({
           title:
@@ -196,16 +181,16 @@ export default function LoginHero() {
                       <Radio value="false">Pacjentka</Radio>
                     </Stack>
                   </RadioGroup>
-                  <FormLabel fontWeight="bold">PESEL</FormLabel>
+                  <FormLabel fontWeight="bold">Nazwa użytkownika</FormLabel>
                   <Input
                     type="text"
-                    name="pesel"
-                    value={pesel}
+                    name="username"
+                    value={username}
                     required
-                    onChange={handlePeselChange}
+                    onChange={handleUsernameChange}
                   />
                   <FormHelperText mb="20px">
-                    Wprowadź swój PESEL.
+                    Wprowadź swoją nazwę użytkownika.
                   </FormHelperText>
                   <FormLabel fontWeight="bold">Hasło</FormLabel>
                   <InputGroup>

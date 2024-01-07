@@ -15,11 +15,13 @@ public interface ForumUserRepository extends JpaRepository<ForumUser, Long> {
 //
     Optional<ForumUser> findByForumUserId(Long forumId);
 
-    Optional<ForumUser> findForumUserByPesel(String pesel);
+    Optional<ForumUser> findForumUserByUsername(String username);
 
     boolean existsByForumUserId(Long forumId);
 
     boolean existsByPesel(String PESEL);
+
+    boolean existsByUsername(String username);
 
     List<ForumUser> findAll();
 
@@ -31,6 +33,9 @@ public interface ForumUserRepository extends JpaRepository<ForumUser, Long> {
 
     @Query("SELECT fu.username FROM ForumUser fu WHERE fu.pesel = :pesel")
     String findUsernameByPesel(@Param("pesel") String pesel);
+
+    @Query("SELECT fu.pesel FROM ForumUser fu WHERE fu.username = :username")
+    String findPeselByUsername(@Param("username") String username);
 
     //
     List<ForumUser> deleteByForumUserId(Long forumId);

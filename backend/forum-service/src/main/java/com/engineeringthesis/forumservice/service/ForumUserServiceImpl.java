@@ -70,6 +70,10 @@ public class ForumUserServiceImpl implements CrudService<ForumUser> {
         return forumUserRepository.findUsernameByPesel(pesel);
     }
 
+    public String getForumUserPeselByUsername(String username) {
+        return forumUserRepository.findPeselByUsername(username);
+    }
+
     @Override
     public void update(ForumUser forumUser) {
         Long forumUserId = forumUser.getForumUserId();
@@ -124,12 +128,16 @@ public class ForumUserServiceImpl implements CrudService<ForumUser> {
     }
 
     public boolean checkCredentials(LoginCredentials loginCredentials) {
-        String pesel = loginCredentials.getPesel();
-        if (forumUserRepository.existsByPesel(pesel)) {
-            Optional<ForumUser> forumUser = forumUserRepository.findForumUserByPesel(pesel);
+        String username = loginCredentials.getUsername();
+        if (forumUserRepository.existsByUsername(username)) {
+            Optional<ForumUser> forumUser = forumUserRepository.findForumUserByUsername(username);
             return (forumUser.isPresent() && forumUser.get().getPassword().equals(loginCredentials.getPassword()));
         } else {
             return false;
         }
+    }
+
+    public boolean existsByUsername(String username) {
+        return forumUserRepository.existsByUsername(username);
     }
 }
