@@ -126,7 +126,7 @@ export default function LoginHero() {
   return (
     <Flex
       w={"full"}
-      h={"100vh"}
+      minH={useBreakpointValue({ base: "auto", md: "100vh" })}
       backgroundColor="cyan"
       backgroundSize={"cover"}
       backgroundPosition={"center center"}
@@ -136,11 +136,11 @@ export default function LoginHero() {
       <Container
         maxW="lg"
         py={{
-          base: "12",
-          md: "24",
+          base: "6",
+          md: "12",
         }}
         px={{
-          base: "0",
+          base: "4",
           sm: "8",
         }}
       >

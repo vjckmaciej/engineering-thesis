@@ -17,8 +17,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class OpenAIAnalysisControllerImpl {
     private final OpenAIAnalysisServiceImpl openAIAnalysisService;
 
+    private String replacePolishCharacters(String input) {
+        String[][] chars = {{"ą", "a"}, {"ć", "c"}, {"ę", "e"}, {"ł", "l"}, {"ń", "n"}, {"ó", "o"}, {"ś", "s"}, {"ź", "z"}, {"ż", "z"},
+                {"Ą", "A"}, {"Ć", "C"}, {"Ę", "E"}, {"Ł", "L"}, {"Ń", "N"}, {"Ó", "O"}, {"Ś", "S"}, {"Ź", "Z"}, {"Ż", "Z"}};
+        for (String[] aChar : chars) {
+            input = input.replace(aChar[0], aChar[1]);
+        }
+        return input;
+    }
+
     @PostMapping("/analyzeReport")
     public String analyzeReport(@RequestBody String query) {
+        query = replacePolishCharacters(query);
         QueryRequest queryRequest = new QueryRequest();
         queryRequest.setQuery(
                 "Prosze przeanalizowac raporty z wizyt kobiety u ginekologa i ocenic ryzyko zagrozenia ciazy na podstawie podanych raportow z wizyt:"
@@ -31,6 +41,7 @@ public class OpenAIAnalysisControllerImpl {
 
     @PostMapping("/analyzeVisit")
     public String analyzeVisit(@RequestBody String query) {
+        query = replacePolishCharacters(query);
         QueryRequest queryRequest = new QueryRequest();
         queryRequest.setQuery(
                 "Prosze przeanalizowac raport z podanej wizyty kobiety u ginekologa i ocenic ryzyko zagrozenia ciazy na podstawie podanych danych:"
@@ -43,6 +54,7 @@ public class OpenAIAnalysisControllerImpl {
 
     @PostMapping("/generateDietPlan")
     public String generateDietPlan(@RequestBody String query) {
+        query = replacePolishCharacters(query);
         QueryRequest queryRequest = new QueryRequest();
         queryRequest.setQuery(
                 "Wygeneruj plan dietetyczny dla kobiety w ciazy z podanymi ponizej wynikami badan." +
@@ -58,6 +70,7 @@ public class OpenAIAnalysisControllerImpl {
     @PostMapping("/askQuestion")
     public String askQuestion(@RequestBody ConversationRequest conversationRequest) {
         String conversationHistory = String.join("\n", conversationRequest.getConversationHistory());
+        conversationHistory = replacePolishCharacters(conversationHistory);
         log.info("Starting analyzing question from patient: " + conversationHistory);
         return openAIAnalysisService.analyzeReport(conversationHistory);
     }

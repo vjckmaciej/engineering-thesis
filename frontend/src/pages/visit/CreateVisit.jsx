@@ -68,7 +68,7 @@ export default function CreateVisit() {
 
         visitFailedToast({
           title:
-            "Hi Doctor! Patient with this PESEL doesn't exist in database or you have already booked visit for this date before!",
+            "Pacjentka z tym PESELem nie istnieje w bazie danych lub masz już umówioną wizytę w tym terminie.",
           status: "error",
           duration: 2000,
           isClosable: true,

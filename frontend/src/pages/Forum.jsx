@@ -264,14 +264,14 @@ export default function Forum() {
                         colorScheme="blue"
                         onClick={() => handleShowMore(myThread.threadId)}
                       >
-                        Show more
+                        Pokaż więcej
                       </Button>
                       <Button
                         variant="solid"
                         colorScheme="red"
                         onClick={() => handleDelete(myThread.threadId)}
                       >
-                        Delete
+                        Usuń
                       </Button>
                     </HStack>
                   </CardFooter>

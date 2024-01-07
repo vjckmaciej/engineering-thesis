@@ -110,7 +110,7 @@ export default function DietPlan() {
           <Select
             value={caloriesRange}
             onChange={(e) => setCaloriesRange(e.target.value)}
-            placeholder="Select calories range"
+            placeholder="Wybierz przedział kaloryczny"
           >
             <option value="1000-1500">1000-1500</option>
             <option value="1500-2000">1500-2000</option>

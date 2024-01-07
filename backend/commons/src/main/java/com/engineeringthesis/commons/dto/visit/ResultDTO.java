@@ -21,7 +21,7 @@ public class ResultDTO {
     @Size(max = 300, message = "Result description must contain maximum of 300 characters!")
     private String resultDescription;
 
-    private Integer numericalResult;
+    private Float numericalResult;
 
     @Size(max = 50, message = "Unit must contain maximum of 50 characters!")
     private String unit;

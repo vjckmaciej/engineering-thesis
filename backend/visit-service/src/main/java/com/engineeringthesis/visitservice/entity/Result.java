@@ -23,7 +23,7 @@ public class Result {
     private String resultDescription;
 
     @Column
-    private Integer numericalResult;
+    private Float numericalResult;
 
     @Column
     private String unit;

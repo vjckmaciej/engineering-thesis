@@ -375,7 +375,7 @@ export default function Register() {
                     dropdownMode="select"
                     maxDate={today}
                   />
-                  {isDoctor && (
+                  {!isDoctor && (
                     <>
                       <FormLabel fontWeight="bold" mt="20px">
                         Data rozpoczęcia ciąży

@@ -238,6 +238,9 @@ export default function Visits() {
                   Status wizyty: {nearestPlannedVisit.visitStatus}
                 </Heading>
                 <Heading as="h2" size="sm">
+                  PESEL pacjentki: {nearestPlannedVisit.patientPesel}
+                </Heading>
+                <Heading as="h2" size="sm">
                   Data wizyty:{" "}
                   {format(
                     new Date(nearestPlannedVisit.visitDate),
@@ -332,7 +335,7 @@ export default function Visits() {
         </Flex>
       )}
 
-      {isDoctor === "false" && analysisResult !== "" && (
+      {analysisResult !== "" && (
         <Flex
           direction="column"
           justifyContent="center"
@@ -377,6 +380,9 @@ export default function Visits() {
                     <Box>
                       <Heading as="h2" size="sm">
                         Status wizyty: {myvisit.visitStatus}
+                      </Heading>
+                      <Heading as="h2" size="sm">
+                        PESEL pacjentki: {myvisit.patientPesel}
                       </Heading>
                       <Heading as="h2" size="sm">
                         Data wizyty:{" "}

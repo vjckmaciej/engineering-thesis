@@ -31,7 +31,7 @@ import GynecologicalExaminationTestForm from "../forms/GynecologicalExaminationT
 
 export default function VisitDetails() {
   const isDoctor = sessionStorage.getItem("isDoctor");
-  const visitIdForm = sessionStorage.getItem("visitId");
+  // const visitIdForm = sessionStorage.getItem("visitId");
   const { visitId } = useParams();
   const [visitDetails, setVisitDetails] = useState(null);
   const [medicalExaminations, setMedicalExaminations] = useState(null);
@@ -43,6 +43,7 @@ export default function VisitDetails() {
   const resultAddedToast = useToast();
   const resultUpdatedToast = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [isResultsSubmitLoading, setIsResultsSubmitLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [updatedVisitStatus, setUpdatedVisitStatus] = useState("");
   const [updatedDoctorRecommendations, setUpdatedDoctorRecommendations] =
@@ -232,20 +233,19 @@ export default function VisitDetails() {
   };
 
   const handleSubmitMedicalExamination = async (formData) => {
-    setIsLoading(true);
+    setIsResultsSubmitLoading(true);
 
     const medicalExaminationData = {
       medicalExaminationName: selectedExaminationType,
-      visitId: visitIdForm,
+      visitId,
     };
-
     try {
       let response = await fetch(
         "http://localhost:8082/visit/medicalExamination",
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json; charset: UTF-8",
           },
           body: JSON.stringify(medicalExaminationData),
         }
@@ -257,7 +257,7 @@ export default function VisitDetails() {
 
       const examinationResponse = await response.json();
       const medicalExaminationId = examinationResponse.id;
-      setIsLoading(false);
+      setIsResultsSubmitLoading(false);
 
       const tests = [
         //Badanie krwi
@@ -376,6 +376,9 @@ export default function VisitDetails() {
               <CardBody>
                 <Heading size="md">
                   Status wizyty: {visitDetails.visitStatus}
+                </Heading>
+                <Heading size="md">
+                  PESEL pacjentki: {visitDetails.patientPesel}
                 </Heading>
                 <Text py="2">Data wizyty: {visitDetails.visitDate}</Text>
                 <Text py="2">

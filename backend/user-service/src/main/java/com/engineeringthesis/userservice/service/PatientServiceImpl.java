@@ -66,7 +66,7 @@ public class PatientServiceImpl implements CrudService<Patient> {
     public Integer getPregnancyWeekByPesel(String pesel) {
         String message = String.format("Patient with this PESEL: %s doesn't exist in database!", pesel);
         Patient optionalPatient = patientRepository.findByPesel(pesel).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, message));
-        return Math.toIntExact(ChronoUnit.WEEKS.between(optionalPatient.getPregnancyStartDate(), LocalDate.now()));
+        return Math.toIntExact(ChronoUnit.WEEKS.between(optionalPatient.getPregnancyStartDate(), LocalDate.now())) + 1; //Cause we start from 1
     }
 
     @Override

@@ -270,8 +270,8 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         frontendStringBuilder.append("\nSumarycznie dieta na dany dzien musi sie zawierac liczbe kcal z przedzialu: " + dietPlanRequestDTO.getCaloriesRange() + " kcal");
         frontendStringBuilder.append("\nAlergeny: " + dietPlanRequestDTO.getAllergens());
 
-        frontendStringBuilder.append("\nDiete podaj mi w odpowiednim formacie jako lista obiektow klasy " + DietPlanDayResponseDTO.class.getName() + " w postaci JSON: " + Arrays.toString(DietPlanDayResponseDTO.class.getDeclaredFields()));
-        frontendStringBuilder.append("\nKlasa " + DishDTO.class.getName() + " wyglada tak: " + Arrays.toString(DishDTO.class.getDeclaredFields()));
+        frontendStringBuilder.append("\nDiete podaj mi koniecznie w odpowiednim formacie jako lista obiektow klasy " + DietPlanDayResponseDTO.class.getName() + " w postaci JSON: " + Arrays.toString(DietPlanDayResponseDTO.class.getDeclaredFields()));
+        frontendStringBuilder.append("\nKlasa " + DishDTO.class.getName() + " ma taka strukture: " + Arrays.toString(DishDTO.class.getDeclaredFields()));
 
 
         log.info("visitResultReportString: " + visitResultReportString);

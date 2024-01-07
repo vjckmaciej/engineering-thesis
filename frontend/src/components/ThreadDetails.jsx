@@ -29,6 +29,7 @@ export default function ThreadDetails() {
   const commentAddedToast = useToast();
   const commentDeletedToast = useToast();
   const [charCounter, setCharCounter] = useState(0);
+  const [threadAuthorUsername, setThreadAuthorUsername] = useState("");
 
   const fetchComments = async () => {
     try {
@@ -56,8 +57,18 @@ export default function ThreadDetails() {
         const res = await fetch(
           `http://localhost:8084/forum/thread/${threadId}`
         );
-        const data = await res.json();
-        setThreadDetails(data);
+        const threadData = await res.json();
+
+        try {
+          const threadAuthorUsername = await fetchAuthorUsername(
+            threadData.authorId
+          );
+          setThreadAuthorUsername(threadAuthorUsername);
+        } catch (error) {
+          console.error("Błąd pobierania nazwy użytkownika autora:", error);
+        }
+
+        setThreadDetails(threadData);
       } catch (error) {
         console.error("Błąd pobierania danych:", error);
       }
@@ -102,7 +113,7 @@ export default function ThreadDetails() {
         console.log("Comment added successfully");
 
         commentAddedToast({
-          title: "Comment successfully added!",
+          title: "Komentarz pomyślnie dodany!",
           status: "success",
           duration: 2000,
           isClosable: true,
@@ -160,7 +171,7 @@ export default function ThreadDetails() {
     <Box>
       {threadDetails ? (
         <>
-          <Heading mb="4">Title: {threadDetails.title}</Heading>
+          <Heading mb="4">Tytuł: {threadDetails.title}</Heading>
           <Card
             key={threadDetails.threadId}
             direction={{ base: "column", sm: "row" }}
@@ -169,11 +180,13 @@ export default function ThreadDetails() {
           >
             <Stack>
               <CardBody>
-                <Heading size="md">Title: {threadDetails.title}</Heading>
-                <Text py="2">Category: {threadDetails.category}</Text>
-                <Text py="2">Content: {threadDetails.content}</Text>
+                <Heading size="md">Autor: {threadAuthorUsername}</Heading>
+                <Text py="2" fontWeight="bold">
+                  Kategoria: {threadDetails.category}
+                </Text>
+                <Text py="2">Treść: {threadDetails.content}</Text>
                 <Text py="3">
-                  Created:{" "}
+                  Utworzono:{" "}
                   {format(
                     new Date(threadDetails.creationDate),
                     "yyyy-MM-dd HH:mm:ss"
@@ -187,7 +200,7 @@ export default function ThreadDetails() {
         <Text>Loading...</Text>
       )}
       <Heading mb="4" mt="40px">
-        All comments
+        Wszystkie komentarze
       </Heading>
       {allComments &&
         allComments.map((comment) => (
@@ -201,11 +214,11 @@ export default function ThreadDetails() {
             <Stack>
               <CardBody>
                 <Heading size="sm" mb="5px">
-                  Author: {comment.authorUsername}
+                  Autor: {comment.authorUsername}
                 </Heading>
                 <Text py="3">{comment.content}</Text>
                 <Text py="3">
-                  Added:{" "}
+                  Dodano:{" "}
                   {format(new Date(comment.creationDate), "yyyy-MM-dd HH:mm")}
                 </Text>
               </CardBody>
@@ -216,7 +229,7 @@ export default function ThreadDetails() {
                     colorScheme="red"
                     onClick={() => handleDelete(comment.commentId)}
                   >
-                    Delete your comment
+                    Usuń swój komentarz
                   </Button>
                 )}
               </CardFooter>
@@ -226,9 +239,9 @@ export default function ThreadDetails() {
 
       <Form method="post" onSubmit={handleSubmit}>
         <FormControl mb="10px">
-          <FormLabel mt="40px">New comment:</FormLabel>
+          <FormLabel mt="40px">Nowy komentarz:</FormLabel>
           <Textarea
-            placeholder="Write your comment here... It must contain at least 3 characters and at most 1000 characters! Remember to be kind to others! :)"
+            placeholder="Napisz tu swój komentarz... Musi zawierać conajmniej 3, a maksymalnie 1000 znaków! Pamiętaj by zachować kulturę wypowiedzi! :)"
             name="content"
             onChange={(e) => setCharCounter(e.target.value.length)}
           />
@@ -243,10 +256,10 @@ export default function ThreadDetails() {
                 colorScheme="blue"
                 leftIcon={<AddIcon />}
               >
-                Add comment
+                Dodaj komentarz
               </Button>
               <Spacer />
-              <p>Characters counter: {charCounter}</p>
+              <p>Licznik znaków: {charCounter}</p>
             </>
           ) : (
             <>
@@ -257,10 +270,10 @@ export default function ThreadDetails() {
                 isDisabled="true"
                 leftIcon={<AddIcon />}
               >
-                Add comment
+                Dodaj komentarz
               </Button>
               <Spacer />
-              <p>Characters counter: {charCounter}</p>
+              <p>Licznik znaków: {charCounter}</p>
             </>
           )}
         </Flex>
