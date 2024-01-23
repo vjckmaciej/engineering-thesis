@@ -149,7 +149,7 @@ export default function ThreadDetails() {
         console.log(`Comment with commentId ${commentId} deleted successfully`);
 
         commentDeletedToast({
-          title: "Comment successfully deleted!",
+          title: "Komentarz pomyślnie usunięty!",
           status: "success",
           duration: 2000,
           isClosable: true,

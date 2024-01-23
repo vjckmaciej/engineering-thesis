@@ -19,6 +19,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  useToast,
 } from "@chakra-ui/react";
 import { AddIcon, ViewIcon } from "@chakra-ui/icons";
 
@@ -31,6 +32,8 @@ export default function Visits() {
   const [selectedPatientPesel, setSelectedPatientPesel] = useState("");
   const [myVisits, setMyVisits] = useState([]);
   const [conversation, setConversation] = useState([]);
+  const [searchedPatientPeselToAnalyze, setSearchedPatientPeselToAnalyze] =
+    useState("");
   const [analysisResult, setAnalysisResult] = useState("");
   const [nearestPlannedVisit, setNearestPlannedVisit] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,6 +41,7 @@ export default function Visits() {
   const [isAnswerForUserQuestionLoading, setIsAnswerForUserQuestionLoading] =
     useState("");
   const [answerForUserQuestion, setAnswerForUserQuestion] = useState("");
+  const invalidPeselToast = useToast();
 
   useEffect(() => {
     const fetchVisits = async () => {
@@ -105,9 +109,26 @@ export default function Visits() {
     setIsLoading(true);
 
     try {
-      const visitsResultsReportResponse = await fetch(
-        `http://localhost:8082/visit/visit/generateReportPatientPesel/${pesel}`
-      );
+      let visitsResultsReportResponse;
+      if (isDoctor === "true") {
+        if (searchedPatientPeselToAnalyze.length === 11) {
+          visitsResultsReportResponse = await fetch(
+            `http://localhost:8082/visit/visit/generateReportPatientPesel/${searchedPatientPeselToAnalyze}`
+          );
+        } else {
+          invalidPeselToast({
+            title: "Wprowadzono nieprawidłowy PESEL!",
+            status: "error",
+            duration: 2000,
+            isClosable: true,
+          });
+        }
+      } else {
+        visitsResultsReportResponse = await fetch(
+          `http://localhost:8082/visit/visit/generateReportPatientPesel/${pesel}`
+        );
+      }
+
       const visitsResultsObject = await visitsResultsReportResponse.json();
       const visitsResultsString = JSON.stringify(visitsResultsObject);
 
@@ -119,9 +140,26 @@ export default function Visits() {
         return updated;
       });
 
-      const res = await fetch(
-        `http://localhost:8082/visit/visit/analyzeReportsByPesel/${pesel}`
-      );
+      let res;
+      if (isDoctor === "true") {
+        if (searchedPatientPeselToAnalyze.length === 11) {
+          res = await fetch(
+            `http://localhost:8082/visit/visit/analyzeReportsByPesel/${searchedPatientPeselToAnalyze}`
+          );
+        } else {
+          invalidPeselToast({
+            title: "Wprowadzono nieprawidłowy PESEL!",
+            status: "error",
+            duration: 2000,
+            isClosable: true,
+          });
+        }
+      } else {
+        res = await fetch(
+          `http://localhost:8082/visit/visit/analyzeReportsByPesel/${pesel}`
+        );
+      }
+
       const analyzeString = await res.text();
 
       const cleanedAnalysisResult = removePolishCharacters(analyzeString);
@@ -141,10 +179,6 @@ export default function Visits() {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    console.log("Zaktualizowane conversation:", conversation);
-  }, [conversation]);
 
   const handleInputChange = (e) => {
     setSelectedPatientPesel(e.target.value);
@@ -174,6 +208,10 @@ export default function Visits() {
 
   const handleQuestionChange = (e) => {
     setUserQuestion(e.target.value);
+  };
+
+  const handleSearchedPatientPeselToAnalyzeChange = (e) => {
+    setSearchedPatientPeselToAnalyze(e.target.value);
   };
 
   const handleSubmitQuestion = async () => {
@@ -328,6 +366,35 @@ export default function Visits() {
           >
             Kliknij tutaj, aby OpenAI przeanalizowało wszystkie wizyty
           </Button>
+          {isLoading && <Spinner size="xl" mt="20px" />}
+          <Text mt="20px" textAlign="center" mb="20px">
+            {analysisResult}
+          </Text>
+        </Flex>
+      )}
+      {isDoctor === "true" && (
+        <Flex
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          mt="10px"
+        >
+          <Input
+            placeholder="Wpisz PESEL pacjenta, którego wizyty przeanalizuje OpenAI."
+            type="text"
+            value={searchedPatientPeselToAnalyze}
+            onChange={handleSearchedPatientPeselToAnalyzeChange}
+            width="35%"
+            mb="20px"
+          />
+          <Button
+            bg="purple.300"
+            color="white"
+            onClick={() => analyzeVisitsByOpenAI()}
+          >
+            Przeanalizuj wizyty
+          </Button>
+
           {isLoading && <Spinner size="xl" mt="20px" />}
           <Text mt="20px" textAlign="center" mb="20px">
             {analysisResult}

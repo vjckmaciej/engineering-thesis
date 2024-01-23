@@ -54,7 +54,7 @@ export default function CreateVisit() {
         console.log("Visit created successfully");
 
         visitAddedToast({
-          title: "Visit successfully added!",
+          title: "Wizyta pomyślnie dodana!",
           status: "success",
           duration: 2000,
           isClosable: true,
@@ -88,7 +88,6 @@ export default function CreateVisit() {
           selected={visitDatePicker}
           onChange={(date) => {
             setVisitDatePicker(date);
-            console.log(visitDatePicker);
           }}
           showTimeSelect
           filterTime={filterPassedTime}

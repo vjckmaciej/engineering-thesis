@@ -178,10 +178,10 @@ export default function Forum() {
               mb="30px"
             >
               <option value="">Wszystkie</option>
-              <option value="Diet">Dieta</option>
-              <option value="Medical consultation">Konsultacje medyczne</option>
-              <option value="Baby growing">Dorastanie dziecka</option>
-              <option value="Pregnancy">Ciąża</option>
+              <option value="Dieta">Dieta</option>
+              <option value="Konsultacje medyczne">Konsultacje medyczne</option>
+              <option value="Dorastanie dziecka">Dorastanie dziecka</option>
+              <option value="Ciąża">Ciąża</option>
             </Select>
 
             <Button
@@ -252,9 +252,9 @@ export default function Forum() {
               >
                 <Stack>
                   <CardBody>
-                    <Heading size="md">Title: {myThread.title}</Heading>
-                    <Text py="2">Category: {myThread.category}</Text>
-                    <Text py="2">Content: {myThread.content}</Text>
+                    <Heading size="md">Tytuł: {myThread.title}</Heading>
+                    <Text py="2">Kategoria: {myThread.category}</Text>
+                    <Text py="2">Treść: {myThread.content}</Text>
                   </CardBody>
 
                   <CardFooter>
