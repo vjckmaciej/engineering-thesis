@@ -97,7 +97,7 @@ export default function LoginHero() {
       } else {
         peselFailedToast({
           title:
-            "Podano niewłaściwe hasło lub użytkownik o tym numerze PESEL nie istnieje!",
+            "Podano niewłaściwe hasło lub użytkownik o takiej nazwie użytkownika nie istnieje!",
           status: "error",
           duration: 2000,
           isClosable: true,

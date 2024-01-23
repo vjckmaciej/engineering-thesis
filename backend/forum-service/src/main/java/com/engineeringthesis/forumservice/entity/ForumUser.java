@@ -42,3 +42,5 @@ public class ForumUser {
     @OneToMany(mappedBy = "author")
     private List<Comment> comments;
 }
+
+

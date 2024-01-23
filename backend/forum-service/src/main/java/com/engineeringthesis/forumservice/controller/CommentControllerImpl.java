@@ -5,6 +5,7 @@ import com.engineeringthesis.commons.model.CrudController;
 import com.engineeringthesis.commons.model.CrudResponse;
 import com.engineeringthesis.forumservice.entity.Comment;
 import com.engineeringthesis.forumservice.mapper.CommentMapper;
+import com.engineeringthesis.forumservice.mapper.CommentMapperImpl;
 import com.engineeringthesis.forumservice.service.CommentServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "/comment")
 public class CommentControllerImpl implements CrudController<CommentDTO> {
     private final CommentServiceImpl commentService;
-    private final CommentMapper commentMapper;
+    private final CommentMapperImpl commentMapper;
 
 
     @Override

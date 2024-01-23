@@ -2,22 +2,17 @@ package com.engineeringthesis.forumservice.controller;
 
 import com.engineeringthesis.commons.auth.LoginCredentials;
 import com.engineeringthesis.commons.dto.forum.ForumUserDTO;
-import com.engineeringthesis.commons.dto.user.PatientDTO;
 import com.engineeringthesis.commons.model.CrudController;
 import com.engineeringthesis.commons.model.CrudResponse;
-import com.engineeringthesis.forumservice.client.UserServiceClient;
 import com.engineeringthesis.forumservice.mapper.ForumUserMapper;
 import com.engineeringthesis.forumservice.entity.ForumUser;
 import com.engineeringthesis.forumservice.service.ForumUserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -31,32 +26,11 @@ public class ForumUserControllerImpl implements CrudController<ForumUserDTO> {
     private final ForumUserServiceImpl forumUserService;
     private final ForumUserMapper forumUserMapper;
 
-    @Autowired
-    private UserServiceClient userServiceClient;
-
-
     @Override
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CrudResponse> add(@Valid @RequestBody ForumUserDTO forumUserDTO) {
         Long forumUserId = forumUserDTO.getForumUserId();
         log.info("Starting saving ForumUser with forumUserId: " + forumUserId);
-//
-//        String forumUserPesel = forumUserDTO.getPesel();
-//
-//        try {
-//            ResponseEntity<PatientDTO> optionalPatientDTO = userServiceClient.getPatientByPesel(forumUserPesel);
-//            if (optionalPatientDTO.getStatusCode().equals(HttpStatus.OK)) {
-//                ForumUser forumUser = forumUserMapper.forumUserDTOToForumUser(forumUserDTO);
-//                forumUserService.save(forumUser);
-//                return ResponseEntity.ok(new CrudResponse(forumUser.getForumUserId(), "ForumUser added to database!"));
-//            } else {
-//                String message = String.format("ForumUser with this PESEL: %s already exists in database!", forumUserPesel);
-//                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
-//            }
-//        } catch (Exception e) {
-//            String message = e.getMessage();
-//            log.error(message);
-//            CrudResponse crudResponse = new CrudResponse(forumUserId, message);
         ForumUser forumUser = forumUserMapper.forumUserDTOToForumUser(forumUserDTO);
         forumUser.setRegistrationDate(LocalDate.now());
         forumUserService.save(forumUser);

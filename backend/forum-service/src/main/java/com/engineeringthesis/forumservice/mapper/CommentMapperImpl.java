@@ -17,12 +17,10 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class CommentMapperImpl implements CommentMapper {
+public class CommentMapperImpl {
     private final ThreadRepository threadRepository;
     private final ForumUserRepository forumUserRepository;
 
-
-    @Override
     public Comment commentDTOToComment(CommentDTO commentDTO) {
         if (commentDTO == null) {
             return null;
@@ -61,7 +59,6 @@ public class CommentMapperImpl implements CommentMapper {
         return comment;
     }
 
-    @Override
     public CommentDTO commentToCommentDTO(Comment comment) {
         if (comment == null) {
             return null;

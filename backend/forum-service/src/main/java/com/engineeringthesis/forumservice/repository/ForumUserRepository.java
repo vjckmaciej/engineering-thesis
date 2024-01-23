@@ -11,8 +11,8 @@ import java.util.Optional;
 
 @Repository
 public interface ForumUserRepository extends JpaRepository<ForumUser, Long> {
-        ForumUser save(ForumUser forumUser);
-//
+    ForumUser save(ForumUser forumUser);
+
     Optional<ForumUser> findByForumUserId(Long forumId);
 
     Optional<ForumUser> findForumUserByUsername(String username);
@@ -37,8 +37,6 @@ public interface ForumUserRepository extends JpaRepository<ForumUser, Long> {
     @Query("SELECT fu.pesel FROM ForumUser fu WHERE fu.username = :username")
     String findPeselByUsername(@Param("username") String username);
 
-    //
     List<ForumUser> deleteByForumUserId(Long forumId);
-//
-//    void deleteByPesel(String pesel);
 }
+

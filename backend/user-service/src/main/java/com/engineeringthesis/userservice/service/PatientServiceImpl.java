@@ -122,7 +122,6 @@ public class PatientServiceImpl implements CrudService<Patient> {
         try {
             Patient oldPatient = patientRepository.findByPesel(pesel).orElseThrow(() -> {
                 String message = String.format("%s with this PESEL: %s doesn't exist in database!", patient.getClass().getName(), pesel);
-//                return new EntityIdDoesNotExistException(message);
                 return new ResponseStatusException(HttpStatus.NOT_FOUND, message);
             });
 

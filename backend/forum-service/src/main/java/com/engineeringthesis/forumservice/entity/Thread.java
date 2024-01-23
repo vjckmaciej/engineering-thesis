@@ -43,3 +43,5 @@ public class Thread {
     @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
     private List<Comment> comments;
 }
+
+

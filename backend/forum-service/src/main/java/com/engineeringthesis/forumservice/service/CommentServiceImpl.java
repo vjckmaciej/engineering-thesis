@@ -22,7 +22,6 @@ import java.util.List;
 public class CommentServiceImpl implements CrudService<Comment> {
     private final CommentRepository commentRepository;
 
-
     @Override
     public void save(Comment comment) {
         Long commentId = comment.getCommentId();
@@ -32,7 +31,6 @@ public class CommentServiceImpl implements CrudService<Comment> {
                 log.error(message);
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
             }
-
             commentRepository.save(comment);
         } catch (DataAccessException e) {
             log.error(e.getLocalizedMessage());
@@ -54,7 +52,8 @@ public class CommentServiceImpl implements CrudService<Comment> {
 
     public List<Comment> getAllCommentsByThreadId(Long threadId) {
         String message = String.format("Comments with this threadId: %d don't exist in database!", threadId);
-        return commentRepository.findAllByThreadIdReferenceOrderByCreationDateAsc(threadId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, message));
+        return commentRepository.findAllByThreadIdReferenceOrderByCreationDateAsc(threadId).
+                orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, message));
     }
 
     @Override
@@ -63,7 +62,6 @@ public class CommentServiceImpl implements CrudService<Comment> {
         try {
             Comment oldComment = commentRepository.findByCommentId(commentId).orElseThrow(() -> {
                 String message = String.format("%s with this commentId: %d doesn't exist in database!", comment.getClass().getName(), commentId);
-//                return new EntityIdDoesNotExistException(message);
                 return new ResponseStatusException(HttpStatus.NOT_FOUND, message);
             });
 
@@ -83,7 +81,6 @@ public class CommentServiceImpl implements CrudService<Comment> {
         try {
             if (!commentRepository.existsByCommentId(id)) {
                 String message = String.format("Cannot delete Comment with commentId: %d! Object doesn't exist in database!", id);
-                //            throw new DeleteException(message);
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, message);
             }
             commentRepository.deleteByCommentId(id);

@@ -159,9 +159,20 @@ export default function Register() {
         );
       }
 
-      const data = await doesUserAlreadyExist.json();
+      const doesUserAlreadyExistBoolean = await doesUserAlreadyExist.json();
 
-      if (typeof data === "boolean" && data === false) {
+      let isUsernameAlreadyTaken = await fetch(
+        `http://localhost:8084/forum/forumUser/existsByUsername/${username}`
+      );
+
+      const isUsernameAlreadyTakenBoolean = await isUsernameAlreadyTaken.json();
+
+      if (
+        typeof doesUserAlreadyExistBoolean === "boolean" &&
+        doesUserAlreadyExistBoolean === false &&
+        typeof isUsernameAlreadyTakenBoolean === "boolean" &&
+        isUsernameAlreadyTakenBoolean === false
+      ) {
         let doctorData;
         let patientData;
         let response;
@@ -230,7 +241,8 @@ export default function Register() {
         }
       } else {
         registerFailedToast({
-          title: "Użytkownik o tym PESELu istnieje już w bazie danych.",
+          title:
+            "Użytkownik o tym PESELu lub nazwie użytkownika istnieje już w bazie danych.",
           status: "error",
           duration: 2000,
           isClosable: true,
