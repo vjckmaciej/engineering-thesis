@@ -7,7 +7,6 @@ import {
 
 import RootLayout from "./layouts/RootLayout";
 import Dashboard, { tasksLoader } from "./pages/Dashboard";
-import Hero from "./pages/Hero";
 import Visits from "./pages/Visits";
 import HeroLayout from "./layouts/HeroLayout";
 import Calendar from "./pages/Calendar";

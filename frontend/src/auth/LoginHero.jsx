@@ -30,7 +30,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 export default function LoginHero() {
   const navigate = useNavigate();
-  const [pesel, setPesel] = useState("");
   const [username, setUsername] = useState("");
   const [isDoctor, setIsDoctor] = useState("");
   const [password, setPassword] = useState("");
