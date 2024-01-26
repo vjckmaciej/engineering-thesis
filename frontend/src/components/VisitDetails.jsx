@@ -461,7 +461,7 @@ export default function VisitDetails() {
             <FormLabel>Wybierz zestaw badań do dodania:</FormLabel>
             <Select
               name="medicalExaminationName"
-              placeholder="Wybierz kategorię"
+              placeholder="Wybierz zestaw"
               onChange={handleExaminationTypeChange}
             >
               <option value="Badanie krwi">Badanie krwi</option>

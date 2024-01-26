@@ -13,6 +13,7 @@ import {
   Button,
   Textarea,
   Spinner,
+  useToast,
 } from "@chakra-ui/react";
 import { Form } from "react-router-dom";
 
@@ -24,6 +25,7 @@ export default function DietPlan() {
   const [allergens, setAllergens] = useState("");
   const [proposedDietPlan, setProposedDietPlan] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const dietPlanGeneratingFailed = useToast();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -56,6 +58,13 @@ export default function DietPlan() {
         setIsLoading(false);
         setProposedDietPlan(dietPlan);
       } else {
+        setIsLoading(false);
+        dietPlanGeneratingFailed({
+          title: "Niestety nie udało się wygenerować planu dietetycznego.",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
         console.error("Failed to create diet plan");
       }
     } catch (error) {
@@ -138,14 +147,16 @@ export default function DietPlan() {
       {isLoading && <Spinner size="xl" />}
 
       {proposedDietPlan.map((day) => (
-        <Box key={day.dayName} mt="40px">
-          <Heading size="lg">{day.dayName}</Heading>
+        <Box key={day.dayOfTheWeekName} mt="40px">
+          <Heading size="lg">{day.dayOfTheWeekName}</Heading>
           {day.dishDTO.map((dish) => (
-            <Box key={dish.name} mt="20px">
-              <Heading size="md">{dish.name}</Heading>
-              <p>Liczba kalorii: {dish.caloriesNumber}</p>
+            <Box key={dish.dishName} mt="20px">
+              <Heading size="md">{dish.mealName}</Heading>
+              <Heading size="sm">{dish.dishName}</Heading>
+              <p>Liczba kalorii: {dish.dishCaloriesNumber}</p>
+              <p>Składniki: </p>
               <ul>
-                {dish.ingredients.map((ingredient, index) => (
+                {dish.quantityWithIngredient.map((ingredient, index) => (
                   <li key={index}>{ingredient}</li>
                 ))}
               </ul>

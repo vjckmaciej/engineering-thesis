@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DietPlanDayResponseDTO {
-    private String dayName;
+    private String dayOfTheWeekName;
     private List<DishDTO> dishDTO;
     private String choiceReason;
 }

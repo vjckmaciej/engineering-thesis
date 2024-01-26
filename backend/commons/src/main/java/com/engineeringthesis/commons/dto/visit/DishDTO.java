@@ -10,7 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DishDTO {
-    private String name;
-    private Integer caloriesNumber;
-    private List<String> ingredients;
+    private String dishName;
+    private String mealName;
+    private Integer dishCaloriesNumber;
+    private List<String> quantityWithIngredient;
 }

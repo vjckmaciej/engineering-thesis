@@ -19,11 +19,10 @@ export default function VisitDetails() {
   const [selectedExaminationId, setSelectedExaminationId] = useState(null);
 
   useEffect(() => {
-    // Tutaj załaduj dane wizyty i badania (symulacja)
-    setVisitDetails({ visitId, visitStatus: "SCHEDULED" }); // Przykładowe dane
+    setVisitDetails({ visitId, visitStatus: "SCHEDULED" });
     setMedicalExaminations([
       { medicalExaminationId: 1, medicalExaminationName: "Badanie Krwi" },
-    ]); // Przykładowe dane
+    ]);
   }, [visitId]);
 
   const handleAddResultsClick = (medicalExaminationId) => {

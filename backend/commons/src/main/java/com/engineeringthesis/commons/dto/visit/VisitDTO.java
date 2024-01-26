@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class VisitDTO {
     private Long visitId;
-//    private Long patientId;
-//    private Long doctorId;
 
     @NotBlank(message = "Patient PESEL must not be blank!")
     @Pattern(regexp = "\\d{11}", message = "Patient PESEL must be a string of 11 digits!")

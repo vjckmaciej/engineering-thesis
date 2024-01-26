@@ -33,7 +33,6 @@ public class PatientServiceImpl implements CrudService<Patient> {
                 String message = String.format("Patient with this PESEL: %s already exists in database!", PESEL);
 //                throw new EntityIdAlreadyExistException(message);
                 log.error(message);
-                //TODO: check handling exceptions
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
             }
 

@@ -31,7 +31,8 @@ public class OpenAIAnalysisControllerImpl {
         query = replacePolishCharacters(query);
         QueryRequest queryRequest = new QueryRequest();
         queryRequest.setQuery(
-                "Prosze przeanalizowac raporty z wizyt kobiety u ginekologa i ocenic ryzyko zagrozenia ciazy na podstawie podanych raportow z wizyt:"
+                "Prosze przeanalizowac raporty z wizyt kobiety u ginekologa i ocenic ryzyko " +
+                        "zagrozenia ciazy na podstawie podanych raportow z wizyt:"
                 + query);
 
         log.info("Starting query: " + queryRequest.getQuery());

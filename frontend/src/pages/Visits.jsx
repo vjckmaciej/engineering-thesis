@@ -228,7 +228,6 @@ export default function Visits() {
     const cleanedUserQuestion = removePolishCharacters(userQuestion);
     updatedConversation[2] = userQuestionEntryOpenAI + cleanedUserQuestion;
 
-    // setUserQuestion("");
     const requestBody = JSON.stringify({
       conversationHistory: updatedConversation,
     });
@@ -318,7 +317,7 @@ export default function Visits() {
       {isDoctor === "true" && (
         <FormControl mb="40px">
           <FormLabel>
-            Wprowadź PESEL pacjenta, aby przefiltrować wizyty:
+            Wprowadź PESEL pacjentki, aby przefiltrować wizyty:
           </FormLabel>
           <Input
             type="text"
@@ -380,11 +379,11 @@ export default function Visits() {
           mt="10px"
         >
           <Input
-            placeholder="Wpisz PESEL pacjenta, którego wizyty przeanalizuje OpenAI."
+            placeholder="Wpisz PESEL pacjentki, której wizyty przeanalizuje OpenAI."
             type="text"
             value={searchedPatientPeselToAnalyze}
             onChange={handleSearchedPatientPeselToAnalyzeChange}
-            width="35%"
+            width="500px"
             mb="20px"
           />
           <Button

@@ -5,10 +5,8 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-// layouts and pages
 import RootLayout from "./layouts/RootLayout";
 import Dashboard, { tasksLoader } from "./pages/Dashboard";
-// import Create, { createAction } from './pages/Create'
 import Hero from "./pages/Hero";
 import Visits from "./pages/Visits";
 import HeroLayout from "./layouts/HeroLayout";

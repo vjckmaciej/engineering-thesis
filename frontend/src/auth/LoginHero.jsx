@@ -38,9 +38,6 @@ export default function LoginHero() {
   const peselFailedToast = useToast();
   const passwordFailedToast = useToast();
 
-  // const handlePeselChange = (e) => {
-  //   setPesel(e.target.value);
-  // };
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };

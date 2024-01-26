@@ -93,7 +93,7 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         }
 
         if (visit.getDoctorRecommendations() == null) {
-            visit.setDoctorRecommendations("There are no any doctor recommendations yet!");
+            visit.setDoctorRecommendations("Dla tej wizyty nie ma jeszcze żadnych zaleceń.");
         }
 
         visitService.save(visit);
@@ -138,12 +138,6 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
     public ResponseEntity<List<VisitDTO>> getAllMyVisits(@PathVariable String pesel, @RequestParam Boolean isDoctor) {
         log.info("Starting getting list of all my Visit objects with PESEL: " + pesel);
 
-//        List<Visit> allVisits;
-//        if (patientPesel != null) {
-//            allVisits = visitService.getAllVisitsByPesel(pesel, isDoctor);
-//        } else {
-//            allVisits = visitService.getAllVisitsByPeselWithGivenPatientPesel(pesel, patientPesel);
-//        }
         List<Visit> allVisits = visitService.getAllVisitsByPesel(pesel, isDoctor);
 
         List<VisitDTO> allPlannedVisitDTOS = allVisits.stream().map((visitMapper::visitToVisitDTO)).collect(Collectors.toList());
@@ -154,12 +148,6 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
     public ResponseEntity<List<VisitDTO>> getAllMyVisitsWithMyPatientPesel(@PathVariable String pesel, @RequestParam String patientPesel) {
         log.info("Starting getting list of all my Visit objects with PESEL: " + pesel);
 
-//        List<Visit> allVisits;
-//        if (patientPesel != null) {
-//            allVisits = visitService.getAllVisitsByPesel(pesel, isDoctor);
-//        } else {
-//            allVisits = visitService.getAllVisitsByPeselWithGivenPatientPesel(pesel, patientPesel);
-//        }
         List<Visit> allVisits = visitService.getAllVisitsByPeselWithGivenPatientPesel(pesel, patientPesel);
 
         List<VisitDTO> allPlannedVisitDTOS = allVisits.stream().map((visitMapper::visitToVisitDTO)).collect(Collectors.toList());
@@ -228,7 +216,6 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
             resultStringBuilder.append(reportDTO.toString()).append("\n");
         }
 
-
         String visitResultReportString = resultStringBuilder.toString();
         log.info("visitResultReportString: " + visitResultReportString);
         String response = openAIClient.analyzeVisit(visitResultReportString);
@@ -271,15 +258,15 @@ public class VisitControllerImpl implements CrudController<VisitDTO> {
         frontendStringBuilder.append("\nAlergeny: " + dietPlanRequestDTO.getAllergens());
 
         frontendStringBuilder.append("\nDiete podaj mi koniecznie w odpowiednim formacie jako lista obiektow klasy " + DietPlanDayResponseDTO.class.getName() + " w postaci JSON: " + Arrays.toString(DietPlanDayResponseDTO.class.getDeclaredFields()));
+        frontendStringBuilder.append("\nW skladnikach oprocz nazwy skladnika dopisz rowniez jego  ilosc lub jego wage.");
         frontendStringBuilder.append("\nKlasa " + DishDTO.class.getName() + " ma taka strukture: " + Arrays.toString(DishDTO.class.getDeclaredFields()));
-
-
-        log.info("visitResultReportString: " + visitResultReportString);
-        log.info("frontendStringBuilder" + frontendStringBuilder);
-
+        frontendStringBuilder.append("\nSwoje propozycje odpowiednio uzasadnij w polu choiceReason odwolujac sie do wynikow badan.");
         StringBuilder combinedStringBuilder = new StringBuilder();
         combinedStringBuilder.append(frontendStringBuilder).append(visitResultReportString);
+        log.info("combinedStringBuilder");
+        log.info(String.valueOf(combinedStringBuilder));
         String responseString = openAIClient.generateDietPlan(combinedStringBuilder.toString());
+
         responseString = responseString.replace("Odpowiedz:", "").trim();
 
         log.info("Response string: " + responseString);
